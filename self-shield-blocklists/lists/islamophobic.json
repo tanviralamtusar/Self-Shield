@@ -1,0 +1,10 @@
+{
+  "id": "sys-islamophobic-001",
+  "name": "Islamophobic Sites",
+  "version": 1,
+  "type": "hostname",
+  "entries": [
+    "jihadwatch.org", "faithfreedom.org", "thereligionofpeace.com",
+    "answeringislam.org", "prophetofdoom.net"
+  ]
+}

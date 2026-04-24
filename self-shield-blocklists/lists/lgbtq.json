@@ -1,0 +1,12 @@
+{
+  "id": "sys-lgbtq-001",
+  "name": "LGBTQ+ Content",
+  "version": 1,
+  "type": "hostname",
+  "entries": [
+    "grindr.com", "scruff.com", "jackd.com", "hornet.app",
+    "her.app", "lgbtqnation.com", "queerty.com",
+    "out.com", "advocate.com", "pride.com",
+    "gaytimes.co.uk", "pinknews.co.uk"
+  ]
+}

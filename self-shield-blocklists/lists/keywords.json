@@ -1,0 +1,18 @@
+{
+  "id": "sys-keywords-001",
+  "name": "Harmful Keywords",
+  "version": 1,
+  "type": "keyword",
+  "entries": [
+    { "value": "porn", "is_regex": false },
+    { "value": "xxx", "is_regex": false },
+    { "value": "sex video", "is_regex": false },
+    { "value": "nude", "is_regex": false },
+    { "value": "naked", "is_regex": false },
+    { "value": "casino", "is_regex": false },
+    { "value": "bet now", "is_regex": false },
+    { "value": "free spins", "is_regex": false },
+    { "value": "\\bxnxx\\b", "is_regex": true },
+    { "value": "\\bxvideos\\b", "is_regex": true }
+  ]
+}

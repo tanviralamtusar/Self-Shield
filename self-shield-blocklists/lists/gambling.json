@@ -1,0 +1,14 @@
+{
+  "id": "sys-gamble-001",
+  "name": "Gambling & Betting",
+  "version": 1,
+  "type": "hostname",
+  "entries": [
+    "bet365.com", "betway.com", "draftkings.com", "fanduel.com",
+    "pokerstars.com", "888casino.com", "williamhill.com",
+    "ladbrokes.com", "unibet.com", "betfair.com",
+    "bovada.lv", "mybookie.ag", "betonline.ag",
+    "casino.com", "partypoker.com", "fulltiltpoker.com",
+    "sportsbettingcommunity.com", "pinnacle.com"
+  ]
+}

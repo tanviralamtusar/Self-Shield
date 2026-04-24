@@ -1,0 +1,46 @@
+{
+  "version": 3,
+  "patterns": [
+    {
+      "app": "com.instagram.android",
+      "targets": [
+        { "type": "view_id", "value": "com.instagram.android:id/clips_tab", "block_type": "reels" },
+        { "type": "view_id", "value": "com.instagram.android:id/reel_viewer_root", "block_type": "reels" }
+      ]
+    },
+    {
+      "app": "com.google.android.youtube",
+      "targets": [
+        { "type": "content_desc", "value": "Shorts", "block_type": "shorts" },
+        { "type": "view_id", "value": "com.google.android.youtube:id/reel_player_page_container", "block_type": "shorts" }
+      ]
+    },
+    {
+      "app": "com.whatsapp",
+      "targets": [
+        { "type": "content_desc", "value": "Status", "block_type": "status" },
+        { "type": "view_id", "value": "com.whatsapp:id/status_list_main_view", "block_type": "status" },
+        { "type": "content_desc", "value": "Channels", "block_type": "channels" }
+      ]
+    },
+    {
+      "app": "com.zhiliaoapp.musically",
+      "targets": [
+        { "type": "full_block", "value": true, "block_type": "feed" }
+      ]
+    },
+    {
+      "app": "com.facebook.katana",
+      "targets": [
+        { "type": "content_desc", "value": "Reels", "block_type": "reels" },
+        { "type": "view_id", "value": "com.facebook.katana:id/video_reels_tab", "block_type": "reels" }
+      ]
+    },
+    {
+      "app": "com.twitter.android",
+      "targets": [
+        { "type": "content_desc", "value": "For you", "block_type": "feed" }
+      ]
+    }
+  ]
+}

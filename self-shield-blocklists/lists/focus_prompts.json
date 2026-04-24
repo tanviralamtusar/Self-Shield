@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "prompts": [
+    {
+      "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+      "transliteration": "Bismillahir rahmanir raheem",
+      "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
+    },
+    {
+      "arabic": "وَمَا خَلَقْتُ الْجِنَّ وَالْإِنسَ إِلَّا لِيَعْبُدُونِ",
+      "transliteration": "Wa maa khalaqtul jinna wal insa illaa liya'budoon",
+      "translation": "I did not create jinn and humans except to worship Me. (51:56)"
+    },
+    {
+      "arabic": "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+      "transliteration": "Alaa bidhikrillahi tatma-innul quloob",
+      "translation": "Verily, in the remembrance of Allah do hearts find rest. (13:28)"
+    }
+  ]
+}
