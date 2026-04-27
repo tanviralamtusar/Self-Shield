@@ -74,16 +74,15 @@ export function AppSidebar() {
           </SidebarGroup>
         </SidebarContent>
         <SidebarRail />
-        <div className="mt-auto p-4 border-t flex items-center justify-between gap-2">
-          <SidebarMenu className="flex-1">
+        <div className="mt-auto p-4 border-t">
+          <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={handleLogout}>
+              <SidebarMenuButton onClick={handleLogout} className="text-muted-foreground hover:text-destructive transition-colors">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sign Out</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-          <ThemeToggle />
         </div>
       </Sidebar>
     </>
