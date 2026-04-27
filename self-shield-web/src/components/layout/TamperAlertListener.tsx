@@ -8,8 +8,9 @@ export function TamperAlertListener() {
   const supabase = createClient();
 
   useEffect(() => {
+    const channelId = `audit-log-live-${Math.random().toString(36).substring(7)}`;
     const channel = supabase
-      .channel('audit-log-changes')
+      .channel(channelId)
       .on(
         'postgres_changes',
         {

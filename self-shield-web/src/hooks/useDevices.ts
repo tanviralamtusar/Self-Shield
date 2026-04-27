@@ -18,8 +18,9 @@ export function useDevices() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    const channelId = `devices-live-${Math.random().toString(36).substring(7)}`;
     const channel = supabase
-      .channel('devices-live')
+      .channel(channelId)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'devices' },
