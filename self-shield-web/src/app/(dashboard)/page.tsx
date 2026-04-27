@@ -2,6 +2,7 @@ import { StatCards } from '@/components/dashboard/StatCards';
 import { DeviceStatusTable } from '@/components/dashboard/DeviceStatusTable';
 import { RecentAuditFeed } from '@/components/dashboard/RecentAuditFeed';
 import { QuickActions } from '@/components/dashboard/QuickActions';
+import { CategoryDistribution } from '@/components/dashboard/CategoryDistribution';
 import { Zap } from 'lucide-react';
 
 export default function DashboardOverview() {
@@ -24,11 +25,17 @@ export default function DashboardOverview() {
 
       <StatCards />
 
-      <div className="grid gap-6 md:grid-cols-7">
-        <div className="md:col-span-4 lg:col-span-5">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+        <div className="md:col-span-1 lg:col-span-5">
           <DeviceStatusTable />
         </div>
-        <div className="md:col-span-3 lg:col-span-2">
+        <div className="md:col-span-1 lg:col-span-2">
+          <CategoryDistribution />
+        </div>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-7">
+        <div className="md:col-span-7">
           <RecentAuditFeed />
         </div>
       </div>

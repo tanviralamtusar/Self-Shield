@@ -5,11 +5,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDevices } from '@/hooks/useDevices';
-import { Settings, Shield, User, Bell, Mail } from 'lucide-react';
+import { useMasterLockdown } from '@/hooks/useMasterLockdown';
+import { Settings, Shield, User, Bell, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const { data: devices } = useDevices();
+  const masterLockdown = useMasterLockdown();
+
+  const handleMasterLockdown = async () => {
+    if (!confirm('Are you sure you want to lock ALL devices? This will prevent any access until manually unlocked from the dashboard.')) return;
+    
+    try {
+      await masterLockdown.mutateAsync();
+      toast.success('Lockdown commands sent to all devices');
+    } catch (error: any) {
+      toast.error('Failed to trigger lockdown', { description: error.message });
+    }
+  };
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,8 +142,19 @@ export default function SettingsPage() {
               <p className="text-sm text-muted-foreground mb-4">
                 Instantly lock all devices linked to this account. Useful for emergency situations.
               </p>
-              <Button variant="destructive">
-                Lock All Devices
+              <Button 
+                variant="destructive" 
+                onClick={handleMasterLockdown}
+                disabled={masterLockdown.isPending}
+              >
+                {masterLockdown.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Locking Down...
+                  </>
+                ) : (
+                  'Lock All Devices'
+                )}
               </Button>
             </div>
             
