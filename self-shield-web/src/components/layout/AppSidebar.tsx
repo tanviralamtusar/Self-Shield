@@ -79,7 +79,7 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={handleLogout} 
-                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-destructive/5 text-destructive transition-all duration-300 hover:bg-destructive hover:text-white hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] active:scale-95"
+                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-primary/5 text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:shadow-[0_0_15px_rgba(45,127,249,0.4)] active:scale-95"
               >
                 <div className="flex items-center justify-center w-full gap-2 font-semibold">
                   <LogOut className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
