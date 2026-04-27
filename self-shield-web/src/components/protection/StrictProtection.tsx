@@ -98,45 +98,41 @@ export function StrictProtection() {
               </CardContent>
            </Card>
 
-           {/* System Persistence */}
-           <Card className={`border-none transition-all duration-500 flex flex-col ${settings.tamperProtection ? 'bg-primary/5 ring-1 ring-primary/30' : 'bg-secondary/30 ring-1 ring-white/10'}`}>
+           {/* Accessibility Smart Engine */}
+           <Card className={`border-none transition-all duration-500 flex flex-col ${settings.lockAccessibility ? 'bg-indigo-500/5 ring-1 ring-indigo-500/30 shadow-2xl shadow-indigo-500/5' : 'bg-secondary/30 ring-1 ring-white/10'}`}>
              <CardHeader className="pb-4">
                <div className="flex items-center justify-between">
-                 <div className={`p-3 rounded-2xl transition-colors duration-500 ${settings.tamperProtection ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
-                   <Lock className="h-6 w-6" />
+                 <div className={`p-3 rounded-2xl transition-colors duration-500 ${settings.lockAccessibility ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'bg-muted text-muted-foreground'}`}>
+                   <ShieldCheck className="h-6 w-6" />
                  </div>
                  <Switch 
-                   checked={settings.tamperProtection}
-                   onCheckedChange={() => toggleSetting('tamperProtection')}
+                   checked={settings.lockAccessibility}
+                   onCheckedChange={() => toggleSetting('lockAccessibility')}
                  />
                </div>
-               <CardTitle className="text-xl mt-4">System Persistence</CardTitle>
+               <CardTitle className="text-xl mt-4">Smart Engine (No VPN)</CardTitle>
                <CardDescription className="text-xs">
-                 Prevents disabling core protection components.
+                 Monitors on-screen content and browser URLs directly using Accessibility Services.
                </CardDescription>
              </CardHeader>
-             <CardContent>
-                {settings.tamperProtection ? (
-                  <div className="space-y-2 ml-2 border-l border-primary/20 pl-4 py-1">
-                    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-background/40 transition-colors">
-                       <Label className="text-[10px] font-bold uppercase tracking-wider">Accessibility</Label>
-                       <Switch checked={settings.lockAccessibility} onCheckedChange={() => toggleSetting('lockAccessibility')} className="scale-75" />
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-background/40 transition-colors">
-                       <Label className="text-[10px] font-bold uppercase tracking-wider">Settings</Label>
-                       <Switch checked={settings.blockSystemSettings} onCheckedChange={() => toggleSetting('blockSystemSettings')} className="scale-75" />
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-background/40 transition-colors">
-                       <Label className="text-[10px] font-bold uppercase tracking-wider">Device Admin</Label>
-                       <Switch checked={settings.preventUninstall} onCheckedChange={() => toggleSetting('preventUninstall')} className="scale-75" />
-                    </div>
+             <CardContent className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                   <Badge variant="secondary" className="text-[9px] bg-indigo-500/10 text-indigo-400 border-none">Battery Efficient</Badge>
+                   <Badge variant="secondary" className="text-[9px] bg-indigo-500/10 text-indigo-400 border-none">No VPN Icon</Badge>
+                </div>
+                <div className="space-y-2 ml-2 border-l border-indigo-500/20 pl-4 py-1">
+                  <div className="flex items-center justify-between p-2 rounded-lg hover:bg-background/40 transition-colors">
+                     <Label className="text-[10px] font-bold uppercase tracking-wider">URL Interceptor</Label>
+                     <div className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-4 text-center opacity-50 grayscale">
-                     <ShieldAlert className="h-8 w-8 text-muted-foreground" />
-                     <p className="text-[10px] font-medium">Persistence Disabled</p>
+                  <div className="flex items-center justify-between p-2 rounded-lg hover:bg-background/40 transition-colors">
+                     <div className="space-y-0.5">
+                        <Label className="text-[10px] font-bold uppercase tracking-wider">System Lock</Label>
+                        <p className="text-[8px] text-muted-foreground">Blocks settings & admin removal</p>
+                     </div>
+                     <Switch checked={settings.blockSystemSettings} onCheckedChange={() => toggleSetting('blockSystemSettings')} className="scale-75" />
                   </div>
-                )}
+                </div>
              </CardContent>
            </Card>
         </div>
@@ -250,8 +246,8 @@ export function StrictProtection() {
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
                <ShieldCheck className="h-5 w-5 text-primary" />
             </div>
-            <h4 className="font-bold text-sm">Always-On VPN</h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">Locks network traffic through Self-Shield, preventing DNS bypass even with 5G/LTE.</p>
+            <h4 className="font-bold text-sm">Smart Engine (No VPN)</h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">Uses Accessibility Services to monitor URLs and app content directly, without requiring a permanent VPN connection.</p>
          </div>
       </div>
     </div>
