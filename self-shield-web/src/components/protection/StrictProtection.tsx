@@ -5,155 +5,178 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { ShieldCheck, ShieldAlert, Zap, Globe, Search, Lock } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Zap, Globe, Search, Lock, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function StrictProtection() {
-  const [isSafeSearchEnabled, setIsSafeSearchEnabled] = useState(false);
-  const [isTamperProof, setIsTamperProof] = useState(true);
+  const [settings, setSettings] = useState({
+    safeSearch: false,
+    tamperProtection: true,
+    preventUninstall: true,
+    lockAccessibility: true,
+    blockSystemSettings: false,
+  });
 
-  const handleToggleSafeSearch = (checked: boolean) => {
-    setIsSafeSearchEnabled(checked);
-    if (checked) {
-      toast.success('Universal SafeSearch Enabled', {
-        description: 'Strict filtering is now active on all search engines.',
+  const toggleSetting = (key: keyof typeof settings) => {
+    const newValue = !settings[key];
+    setSettings(prev => ({ ...prev, [key]: newValue }));
+    
+    if (newValue) {
+      toast.success(`${key.replace(/([A-Z])/g, ' $1').trim()} Enabled`, {
+        description: 'Protection policy updated successfully.',
       });
     } else {
-      toast.warning('SafeSearch Disabled', {
-        description: 'Search results are no longer filtered.',
+      toast.warning(`${key.replace(/([A-Z])/g, ' $1').trim()} Disabled`, {
+        description: 'Device security level decreased.',
       });
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-          Strict Protection
-        </h2>
-        <p className="text-muted-foreground text-lg">
-          Enforce high-level security and filtering across all devices.
-        </p>
+    <div className="max-w-5xl mx-auto space-y-10">
+      {/* Header section with glassmorphism */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-transparent to-primary/5 border border-primary/20 backdrop-blur-xl relative overflow-hidden">
+        <div className="relative z-10 space-y-2">
+          <Badge variant="outline" className="border-primary/50 text-primary bg-primary/5 animate-in fade-in slide-in-from-left-4 duration-1000">Strict Enforcement Mode</Badge>
+          <h2 className="text-4xl font-black tracking-tight text-foreground">Advanced Protection</h2>
+          <p className="text-muted-foreground max-w-md">Deploy military-grade tamper protection and global filtering policies.</p>
+        </div>
+        <div className="relative z-10 flex items-center gap-4">
+           <div className="flex flex-col items-end">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Security Level</span>
+              <span className="text-xl font-black text-primary italic">LEVEL 4 / MAX</span>
+           </div>
+           <div className="h-12 w-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 animate-pulse">
+              <Zap className="h-6 w-6 text-white" />
+           </div>
+        </div>
+        {/* Abstract background shapes */}
+        <div className="absolute -right-20 -top-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Universal SafeSearch Card */}
-        <Card className={`relative overflow-hidden border-2 transition-all duration-500 ${isSafeSearchEnabled ? 'border-primary shadow-lg shadow-primary/10' : 'border-border'}`}>
-          {isSafeSearchEnabled && (
-            <div className="absolute top-0 right-0 p-4">
-              <div className="animate-pulse flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-widest">
-                <Zap className="h-3 w-3 fill-primary" />
-                Active
-              </div>
-            </div>
-          )}
-          <CardHeader>
-            <div className="p-3 rounded-2xl bg-primary/10 w-fit mb-4">
-              <Search className="h-6 w-6 text-primary" />
-            </div>
-            <CardTitle className="text-2xl">Universal SafeSearch</CardTitle>
-            <CardDescription>
-              Force strict filtering on Google, Bing, YouTube, and all major search engines.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-              <div className="space-y-0.5">
-                <Label className="text-base">Strict Mode</Label>
-                <p className="text-sm text-muted-foreground">Force SafeSearch globally</p>
-              </div>
-              <Switch 
-                checked={isSafeSearchEnabled}
-                onCheckedChange={handleToggleSafeSearch}
-                className="data-[state=checked]:bg-primary"
-              />
-            </div>
-            
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="h-4 w-4 text-success" />
-                <span>Redirects all search queries to safe counterparts</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="h-4 w-4 text-success" />
-                <span>Blocks adult images & videos in results</span>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="bg-muted/30 border-t py-4">
-            <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-              <Globe className="h-3.5 w-3.5" />
-              Works on all browsers & apps
-            </div>
-          </CardFooter>
-        </Card>
-
-        {/* Tamper Protection Card */}
-        <Card className="border-2 border-border hover:border-primary/20 transition-all duration-300">
-          <CardHeader>
-            <div className="p-3 rounded-2xl bg-orange-500/10 w-fit mb-4">
-              <Lock className="h-6 w-6 text-orange-500" />
-            </div>
-            <CardTitle className="text-2xl">Tamper Protection</CardTitle>
-            <CardDescription>
-              Prevent the user from disabling protection or changing settings.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
-              <div className="space-y-0.5">
-                <Label className="text-base">Force Enforce</Label>
-                <p className="text-sm text-muted-foreground">Cannot be turned off locally</p>
-              </div>
-              <Switch 
-                checked={isTamperProof}
-                onCheckedChange={setIsTamperProof}
-                disabled
-                className="data-[state=checked]:bg-orange-500"
-              />
-            </div>
-            <div className="p-4 rounded-lg bg-orange-500/5 border border-orange-500/10">
-              <p className="text-sm text-orange-600 dark:text-orange-400 flex gap-2 font-medium">
-                <ShieldAlert className="h-5 w-5 shrink-0" />
-                Device Owner mode is active. This device is managed by Self-Shield and settings are locked.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="rounded-2xl bg-primary p-8 text-primary-foreground relative overflow-hidden shadow-2xl">
-        <div className="relative z-10 space-y-4">
-          <Badge className="bg-white/20 hover:bg-white/30 text-white border-transparent">New Feature</Badge>
-          <h3 className="text-2xl font-bold">One-Click Strict Mode</h3>
-          <p className="text-primary-foreground/80 max-w-2xl text-lg leading-relaxed">
-            By enabling Universal SafeSearch, you are activating a network-level policy that automatically modifies search engine traffic. This is more effective than DNS because it handles encrypted SNI and prevents local bypasses.
-          </p>
-          <div className="pt-4 flex gap-4">
-            <div className="flex flex-col items-center gap-1">
-              <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md">
-                <Globe className="h-6 w-6" />
-              </div>
-              <span className="text-[10px] font-medium opacity-70 uppercase tracking-tighter">Web</span>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md">
+      <div className="grid gap-8 lg:grid-cols-2 items-stretch">
+        {/* Universal SafeSearch */}
+        <Card className="h-full border-none bg-secondary/30 backdrop-blur-md shadow-2xl shadow-black/5 ring-1 ring-white/10 overflow-hidden group flex flex-col">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div className="p-3 rounded-2xl bg-primary/10 text-primary">
                 <Search className="h-6 w-6" />
               </div>
-              <span className="text-[10px] font-medium opacity-70 uppercase tracking-tighter">Search</span>
+              <Switch 
+                checked={settings.safeSearch}
+                onCheckedChange={() => toggleSetting('safeSearch')}
+              />
             </div>
-            <div className="flex flex-col items-center gap-1">
-              <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md">
+            <CardTitle className="text-2xl mt-4">Universal SafeSearch</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Force strict filtering on Google, Bing, YouTube, and all major search engines. Cannot be bypassed via private browsing.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 space-y-4">
+             <div className="p-4 rounded-xl bg-background/50 border border-white/5 space-y-3">
+                <div className="flex items-center gap-3 text-xs font-medium text-muted-foreground">
+                   <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
+                   Force Restricted Mode on YouTube
+                </div>
+                <div className="flex items-center gap-3 text-xs font-medium text-muted-foreground">
+                   <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
+                   Bypass Proxy/VPN Search Redirects
+                </div>
+             </div>
+          </CardContent>
+        </Card>
+
+        {/* Tamper Protection Main Toggle */}
+        <Card className={`h-full border-none transition-all duration-500 flex flex-col ${settings.tamperProtection ? 'bg-primary/5 ring-1 ring-primary/30' : 'bg-secondary/30 ring-1 ring-white/10'}`}>
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div className={`p-3 rounded-2xl transition-colors duration-500 ${settings.tamperProtection ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-muted text-muted-foreground'}`}>
                 <Lock className="h-6 w-6" />
               </div>
-              <span className="text-[10px] font-medium opacity-70 uppercase tracking-tighter">Secure</span>
+              <Switch 
+                checked={settings.tamperProtection}
+                onCheckedChange={() => toggleSetting('tamperProtection')}
+              />
             </div>
-          </div>
-        </div>
-        
-        {/* Background Decoration */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-64 w-64 rounded-full bg-blue-400/20 blur-3xl"></div>
+            <CardTitle className="text-2xl mt-4">Tamper Protection</CardTitle>
+            <CardDescription>
+              Prevents users from disabling Self-Shield, changing system settings, or removing the app.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1">
+             {settings.tamperProtection ? (
+               <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
+                  <div className="grid gap-2 ml-4 py-2">
+                    <div className="flex items-center justify-between p-3 rounded-xl hover:bg-background/40 transition-colors group/item">
+                      <div className="space-y-0.5">
+                        <Label className="text-xs font-bold uppercase tracking-wider">Prevent Uninstall</Label>
+                        <p className="text-[10px] text-muted-foreground">Locks Device Admin & App Removal</p>
+                      </div>
+                      <Switch 
+                        checked={settings.preventUninstall}
+                        onCheckedChange={() => toggleSetting('preventUninstall')}
+                        className="scale-75 data-[state=checked]:bg-primary"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 rounded-xl hover:bg-background/40 transition-colors group/item">
+                      <div className="space-y-0.5">
+                        <Label className="text-xs font-bold uppercase tracking-wider">Lock Accessibility</Label>
+                        <p className="text-[10px] text-muted-foreground">Prevents disabling the core engine</p>
+                      </div>
+                      <Switch 
+                        checked={settings.lockAccessibility}
+                        onCheckedChange={() => toggleSetting('lockAccessibility')}
+                        className="scale-75 data-[state=checked]:bg-primary"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 rounded-xl hover:bg-background/40 transition-colors group/item">
+                      <div className="space-y-0.5">
+                        <Label className="text-xs font-bold uppercase tracking-wider">Settings Lock</Label>
+                        <p className="text-[10px] text-muted-foreground">Block access to System Settings</p>
+                      </div>
+                      <Switch 
+                        checked={settings.blockSystemSettings}
+                        onCheckedChange={() => toggleSetting('blockSystemSettings')}
+                        className="scale-75 data-[state=checked]:bg-primary"
+                      />
+                    </div>
+                  </div>
+               </div>
+             ) : (
+               <div className="flex flex-col items-center justify-center h-full py-6 text-center space-y-3 opacity-50 grayscale">
+                  <ShieldAlert className="h-10 w-10 text-muted-foreground" />
+                  <p className="text-xs font-medium">Protection is currently offline.<br/>The device is vulnerable to tampering.</p>
+               </div>
+             )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* OS Compatibility Footer */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+         <div className="p-6 rounded-2xl bg-muted/20 border border-border/50 flex flex-col items-center text-center space-y-2">
+            <div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center mb-2">
+               <Globe className="h-5 w-5 text-blue-500" />
+            </div>
+            <h4 className="font-bold text-sm">Android Enterprise</h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">Device Owner mode prevents Settings bypass and Safe Mode tampering.</p>
+         </div>
+         <div className="p-6 rounded-2xl bg-muted/20 border border-border/50 flex flex-col items-center text-center space-y-2">
+            <div className="h-10 w-10 rounded-full bg-slate-500/10 flex items-center justify-center mb-2">
+               <Smartphone className="h-5 w-5 text-slate-500" />
+            </div>
+            <h4 className="font-bold text-sm">iOS Supervised</h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">MDM integration enforces non-removable management profile and global HTTP proxy.</p>
+         </div>
+         <div className="p-6 rounded-2xl bg-muted/20 border border-border/50 flex flex-col items-center text-center space-y-2">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+               <ShieldCheck className="h-5 w-5 text-primary" />
+            </div>
+            <h4 className="font-bold text-sm">Always-On VPN</h4>
+            <p className="text-xs text-muted-foreground leading-relaxed">Locks network traffic through Self-Shield, preventing DNS bypass even with 5G/LTE.</p>
+         </div>
       </div>
     </div>
   );
