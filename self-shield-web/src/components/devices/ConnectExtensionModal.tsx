@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Chrome, Copy, Check, Loader2, ShieldCheck } from 'lucide-react';
+import { Globe, Copy, Check, Loader2, ShieldCheck, Plus } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
@@ -67,7 +67,7 @@ export function ConnectExtensionModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button variant="outline" className="border-primary/20 hover:bg-primary/5" />}>
-        <Chrome className="w-4 h-4 mr-2 text-primary" />
+        <Globe className="w-4 h-4 mr-2 text-primary" />
         Connect Extension
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
@@ -137,5 +137,3 @@ export function ConnectExtensionModal() {
     </Dialog>
   );
 }
-
-import { Plus } from 'lucide-react';
