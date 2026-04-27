@@ -94,12 +94,10 @@ export function DNSFilteringTools() {
               <Button 
                 variant="outline" 
                 className="w-full gap-2 group-hover:bg-primary group-hover:text-white transition-all duration-300"
-                asChild
+                render={<a href={tool.url} target="_blank" rel="noopener noreferrer" />}
               >
-                <a href={tool.url} target="_blank" rel="noopener noreferrer">
-                  Visit Website
-                  <ExternalLink className="h-4 w-4" />
-                </a>
+                Visit Website
+                <ExternalLink className="h-4 w-4" />
               </Button>
             </CardContent>
           </Card>
