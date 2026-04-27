@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,20 +36,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleSignUp = async () => {
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success('Check your email to confirm your account.');
-    }
-    setLoading(false);
-  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/40 p-4">
@@ -95,9 +83,9 @@ export default function LoginPage() {
         <CardFooter className="flex flex-col space-y-4 text-center">
           <div className="text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <button type="button" onClick={handleSignUp} className="text-primary hover:underline font-medium">
+            <Link href="/signup" className="text-primary hover:underline font-medium">
               Sign up
-            </button>
+            </Link>
           </div>
         </CardFooter>
       </Card>
