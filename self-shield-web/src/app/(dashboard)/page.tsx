@@ -2,12 +2,9 @@ import { StatCards } from '@/components/dashboard/StatCards';
 import { DeviceStatusTable } from '@/components/dashboard/DeviceStatusTable';
 import { RecentAuditFeed } from '@/components/dashboard/RecentAuditFeed';
 import { QuickActions } from '@/components/dashboard/QuickActions';
-import { useReportStats } from '@/hooks/useReports';
 import { Zap } from 'lucide-react';
 
 export default function DashboardOverview() {
-  const { data: stats, isLoading } = useReportStats();
-
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div>
