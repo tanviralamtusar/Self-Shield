@@ -6,6 +6,7 @@ import { Smartphone } from 'lucide-react';
 import { useDevices } from '@/hooks/useDevices';
 import { DeviceCard } from '@/components/devices/DeviceCard';
 import { PairDeviceModal } from '@/components/devices/PairDeviceModal';
+import { ConnectExtensionModal } from '@/components/devices/ConnectExtensionModal';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DevicesPage() {
@@ -20,7 +21,10 @@ export default function DevicesPage() {
             Manage your linked devices and their protection rules.
           </p>
         </div>
-        <PairDeviceModal />
+        <div className="flex items-center gap-2">
+          <ConnectExtensionModal />
+          <PairDeviceModal />
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
