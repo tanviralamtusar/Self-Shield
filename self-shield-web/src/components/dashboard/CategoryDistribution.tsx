@@ -1,14 +1,19 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAppRules } from '@/hooks/useAppRules';
 import { useDevices } from '@/hooks/useDevices';
 
 export function CategoryDistribution() {
+  const [mounted, setMounted] = useState(false);
   const { data: devices } = useDevices();
-  const { data: appRules, isLoading } = useAppRules(devices?.[0]?.id || ''); // Just for demo, use first device
+  const { data: appRules } = useAppRules(devices?.[0]?.id || '');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const data = useMemo(() => {
     // In a real app, we'd aggregate across all devices
@@ -30,8 +35,8 @@ export function CategoryDistribution() {
         <CardDescription>Intensity of blocking across different content categories.</CardDescription>
       </CardHeader>
       <CardContent className="h-[300px]">
-        {isLoading ? (
-          <div className="h-full flex items-center justify-center text-muted-foreground">Loading...</div>
+        {!mounted ? (
+          <div className="h-full w-full bg-muted/5 animate-pulse rounded-full" />
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
@@ -43,6 +48,7 @@ export function CategoryDistribution() {
                 stroke="var(--color-primary)"
                 fill="var(--color-primary)"
                 fillOpacity={0.4}
+                animationDuration={500}
               />
             </RadarChart>
           </ResponsiveContainer>

@@ -4,13 +4,8 @@ import { StatCards } from '@/components/dashboard/StatCards';
 import { DeviceStatusTable } from '@/components/dashboard/DeviceStatusTable';
 import { RecentAuditFeed } from '@/components/dashboard/RecentAuditFeed';
 import { QuickActions } from '@/components/dashboard/QuickActions';
-import dynamic from 'next/dynamic';
+import { CategoryDistribution } from '@/components/dashboard/CategoryDistribution';
 import { Zap } from 'lucide-react';
-
-const CategoryDistribution = dynamic(
-  () => import('@/components/dashboard/CategoryDistribution').then(mod => mod.CategoryDistribution),
-  { ssr: false }
-);
 
 export default function DashboardOverview() {
   return (
