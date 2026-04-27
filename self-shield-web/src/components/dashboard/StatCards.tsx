@@ -40,47 +40,64 @@ export function StatCards() {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group border-none bg-muted/10">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-2">
-          <CardTitle className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground group-hover:text-primary transition-colors">Active Devices</CardTitle>
-          <Smartphone className="h-3 w-3 text-muted-foreground group-hover:text-primary transition-colors" />
+      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 border border-primary/10 bg-gradient-to-br from-card to-card/50">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 transition-transform duration-500 group-hover:scale-110"></div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
+          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Devices</CardTitle>
+          <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+            <Smartphone className="h-4 w-4" />
+          </div>
         </CardHeader>
-        <CardContent className="pb-3">
-          <div className="text-xl font-bold">{activeDevices}</div>
+        <CardContent className="pb-4 relative z-10">
+          <div className="text-3xl font-black tracking-tight">{activeDevices}</div>
+          <div className="flex items-center gap-1 mt-1 text-[10px] text-success font-medium uppercase tracking-tighter">
+            <span className="h-1 w-1 rounded-full bg-success animate-pulse"></span>
+            Online
+          </div>
         </CardContent>
       </Card>
       
-      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group border-none bg-muted/10">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-2">
-          <CardTitle className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground group-hover:text-success transition-colors">Protected Apps</CardTitle>
-          <Shield className="h-3 w-3 text-muted-foreground group-hover:text-success transition-colors" />
+      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-success/10 border border-success/10 bg-gradient-to-br from-card to-card/50">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-success/5 rounded-full -mr-12 -mt-12"></div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
+          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Protection</CardTitle>
+          <div className="p-1.5 rounded-lg bg-success/10 text-success">
+            <Shield className="h-4 w-4" />
+          </div>
         </CardHeader>
-        <CardContent className="pb-3">
-          <div className="text-xl font-bold">{protectedAppsCount}</div>
+        <CardContent className="pb-4 relative z-10">
+          <div className="text-3xl font-black tracking-tight">{protectedAppsCount}</div>
+          <p className="text-[10px] text-muted-foreground uppercase font-bold mt-1 tracking-tighter">Apps Secured</p>
         </CardContent>
       </Card>
       
-      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group border-none bg-muted/10">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-2">
-          <CardTitle className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground group-hover:text-warning transition-colors">Pending Overrides</CardTitle>
-          <Clock className="h-3 w-3 text-muted-foreground group-hover:text-warning transition-colors" />
+      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-warning/10 border border-warning/10 bg-gradient-to-br from-card to-card/50">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-warning/5 rounded-full -mr-12 -mt-12"></div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
+          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Requests</CardTitle>
+          <div className="p-1.5 rounded-lg bg-warning/10 text-warning">
+            <Clock className="h-4 w-4" />
+          </div>
         </CardHeader>
-        <CardContent className="pb-3">
-          <div className="text-xl font-bold">{pendingOverrides}</div>
+        <CardContent className="pb-4 relative z-10">
+          <div className="text-3xl font-black tracking-tight">{pendingOverrides}</div>
+          <p className="text-[10px] text-warning uppercase font-bold mt-1 tracking-tighter">Requires Action</p>
         </CardContent>
       </Card>
       
-      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group border-none bg-muted/10">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-2">
-          <CardTitle className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground group-hover:text-destructive transition-colors">Total Blocks</CardTitle>
-          <ShieldAlert className="h-3 w-3 text-muted-foreground group-hover:text-destructive transition-colors" />
+      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-destructive/10 border border-destructive/10 bg-gradient-to-br from-card to-card/50">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-destructive/5 rounded-full -mr-12 -mt-12"></div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
+          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Neutralized</CardTitle>
+          <div className="p-1.5 rounded-lg bg-destructive/10 text-destructive">
+            <ShieldAlert className="h-4 w-4" />
+          </div>
         </CardHeader>
-        <CardContent className="pb-3">
-          <div className="text-xl font-bold">{totalBlocks.toLocaleString()}</div>
+        <CardContent className="pb-4 relative z-10">
+          <div className="text-3xl font-black tracking-tight">{totalBlocks.toLocaleString()}</div>
+          <p className="text-[10px] text-destructive uppercase font-bold mt-1 tracking-tighter">Threats Blocked</p>
         </CardContent>
       </Card>
-
-
     </div>
   );
 }

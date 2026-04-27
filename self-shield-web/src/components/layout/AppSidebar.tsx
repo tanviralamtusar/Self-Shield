@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { Shield, LayoutDashboard, ShieldBan, Lock, FileText, Settings, LogOut, Activity, MonitorSmartphone } from 'lucide-react';
+import { Shield, LayoutDashboard, ShieldBan, Lock, FileText, Settings, LogOut, Activity, MonitorSmartphone, Globe, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
@@ -25,6 +25,7 @@ const menuItems = [
   { title: 'Overview', url: '/', icon: LayoutDashboard },
   { title: 'Devices', url: '/devices', icon: MonitorSmartphone },
   { title: 'Blocklists', url: '/blocklists', icon: ShieldBan },
+  { title: 'Strict Mode', url: '/protection', icon: Zap },
   { title: 'Overrides', url: '/overrides', icon: Lock },
   { title: 'Reports', url: '/reports', icon: FileText },
   { title: 'Audit Log', url: '/audit', icon: Activity },
@@ -47,10 +48,15 @@ export function AppSidebar() {
       <TamperAlertListener />
       <OverrideNotificationListener />
       <Sidebar>
-        <SidebarHeader className="h-14 border-b px-4 flex items-center shrink-0">
-          <div className="flex items-center gap-2 font-semibold text-primary">
-            <Shield className="h-6 w-6" />
-            <span className="text-lg">Self-Shield</span>
+        <SidebarHeader className="h-16 border-b px-6 flex flex-col justify-center shrink-0 bg-gradient-to-b from-primary/5 to-transparent">
+          <div className="flex items-center gap-3 font-bold text-primary">
+            <div className="p-2 rounded-xl bg-primary shadow-lg shadow-primary/20">
+              <Shield className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg leading-none tracking-tight">Self-Shield</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Admin Authority</span>
+            </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
