@@ -63,11 +63,9 @@ export function PairDeviceModal() {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Pair Device
-        </Button>
+      <DialogTrigger render={<Button />}>
+        <Plus className="w-4 h-4 mr-2" />
+        Pair Device
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

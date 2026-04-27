@@ -54,10 +54,8 @@ export function DeviceCard({ device }: { device: Device }) {
         </div>
       </CardContent>
       <CardFooter className="pt-0">
-        <Button asChild variant="outline" className="w-full">
-          <Link href={`/devices/${device.id}`}>
-            Manage Rules
-          </Link>
+        <Button render={<Link href={`/devices/${device.id}`} />} variant="outline" className="w-full">
+          Manage Rules
         </Button>
       </CardFooter>
     </Card>

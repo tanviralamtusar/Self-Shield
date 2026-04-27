@@ -64,14 +64,14 @@ export function ScheduleEditor({ appRuleId, appName, trigger }: ScheduleEditorPr
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        {trigger || (
+      <SheetTrigger 
+        render={trigger || (
           <Button variant="outline" size="sm">
             <Clock className="w-4 h-4 mr-2" />
             Manage Schedule
           </Button>
-        )}
-      </SheetTrigger>
+        )} 
+      />
       <SheetContent className="sm:max-w-md">
         <SheetHeader>
           <SheetTitle>Schedule: {appName}</SheetTitle>
