@@ -40,45 +40,46 @@ export function StatCards() {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card>
+      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">Active Devices</CardTitle>
-          <Smartphone className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">Active Devices</CardTitle>
+          <Smartphone className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{activeDevices}</div>
         </CardContent>
       </Card>
       
-      <Card>
+      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">Protected Apps</CardTitle>
-          <Shield className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium text-muted-foreground group-hover:text-success transition-colors">Protected Apps</CardTitle>
+          <Shield className="h-4 w-4 text-muted-foreground group-hover:text-success transition-colors" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{protectedAppsCount}</div>
         </CardContent>
       </Card>
       
-      <Card>
+      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">Pending Overrides</CardTitle>
-          <Clock className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium text-muted-foreground group-hover:text-warning transition-colors">Pending Overrides</CardTitle>
+          <Clock className="h-4 w-4 text-muted-foreground group-hover:text-warning transition-colors" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{pendingOverrides}</div>
         </CardContent>
       </Card>
       
-      <Card>
+      <Card className="transition-all hover:scale-[1.02] hover:shadow-md cursor-default group">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">Total Blocks</CardTitle>
-          <ShieldAlert className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium text-muted-foreground group-hover:text-destructive transition-colors">Total Blocks</CardTitle>
+          <ShieldAlert className="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{totalBlocks.toLocaleString()}</div>
         </CardContent>
       </Card>
+
     </div>
   );
 }

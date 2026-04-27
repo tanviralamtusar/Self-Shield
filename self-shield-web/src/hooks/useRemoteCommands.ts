@@ -1,3 +1,5 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/lib/supabase/client';
 
@@ -10,6 +12,8 @@ export type RemoteCommand = {
   created_at: string;
   executed_at: string | null;
 };
+
+import { toast } from 'sonner';
 
 export function useSendCommand() {
   const supabase = createClient();
@@ -28,16 +32,35 @@ export function useSendCommand() {
         .select()
         .single();
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
+      if (error) throw new Error(error.message);
       return data;
     },
+    onMutate: async (newCommand) => {
+      await queryClient.cancelQueries({ queryKey: ['remote-commands', newCommand.deviceId] });
+      const previousCommands = queryClient.getQueryData(['remote-commands', newCommand.deviceId]);
+
+      queryClient.setQueryData(['remote-commands', newCommand.deviceId], (old: any) => [
+        {
+          id: Math.random().toString(),
+          device_id: newCommand.deviceId,
+          command_type: newCommand.commandType,
+          status: 'pending',
+          created_at: new Date().toISOString(),
+        },
+        ...(old || [])
+      ]);
+
+      toast.info(`Sending ${newCommand.commandType.replace(/_/g, ' ')}...`);
+      return { previousCommands };
+    },
+    onError: (err, newCommand, context) => {
+      queryClient.setQueryData(['remote-commands', newCommand.deviceId], context?.previousCommands);
+      toast.error('Failed to send command');
+    },
     onSuccess: (data) => {
-      // We could invalidate some queries here if needed, 
-      // but usually we just want to know it was sent.
       queryClient.invalidateQueries({ queryKey: ['remote-commands', data.device_id] });
+      toast.success('Command sent');
     },
   });
 }
+

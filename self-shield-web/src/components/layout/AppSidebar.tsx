@@ -18,6 +18,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
 import { TamperAlertListener } from './TamperAlertListener';
 import { OverrideNotificationListener } from './OverrideNotificationListener';
+import { ThemeToggle } from '../ThemeToggle';
 
 
 const menuItems = [
@@ -73,8 +74,8 @@ export function AppSidebar() {
           </SidebarGroup>
         </SidebarContent>
         <SidebarRail />
-        <div className="mt-auto p-4 border-t">
-          <SidebarMenu>
+        <div className="mt-auto p-4 border-t flex items-center justify-between gap-2">
+          <SidebarMenu className="flex-1">
             <SidebarMenuItem>
               <SidebarMenuButton onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
@@ -82,6 +83,7 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
+          <ThemeToggle />
         </div>
       </Sidebar>
     </>
