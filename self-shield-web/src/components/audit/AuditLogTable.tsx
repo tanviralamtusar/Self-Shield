@@ -2,45 +2,12 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ShieldAlert, Info, AlertTriangle, ShieldCheck } from 'lucide-react';
-import { format } from 'date-fns';
+import { ShieldAlert, Info, AlertTriangle, ShieldCheck, Loader2, Image as ImageIcon } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
+import { useAuditLogs } from '@/hooks/useAuditLogs';
 
-export function AuditLogTable() {
-  // Mock data
-  const logs = [
-    { 
-      id: '1', 
-      type: 'Tamper', 
-      device: 'Pixel 7', 
-      description: 'Accessibility Service disabled', 
-      timestamp: new Date().toISOString(),
-      severity: 'high'
-    },
-    { 
-      id: '2', 
-      type: 'Block', 
-      device: 'Pixel 7', 
-      description: 'Blocked access to instagram.com', 
-      timestamp: new Date(Date.now() - 3600000).toISOString(),
-      severity: 'info'
-    },
-    { 
-      id: '3', 
-      type: 'Security', 
-      device: 'Samsung S22', 
-      description: 'App uninstallation attempt blocked', 
-      timestamp: new Date(Date.now() - 7200000).toISOString(),
-      severity: 'medium'
-    },
-    { 
-      id: '4', 
-      type: 'System', 
-      device: 'Pixel 7', 
-      description: 'Blocklist updated successfully', 
-      timestamp: new Date(Date.now() - 86400000).toISOString(),
-      severity: 'success'
-    }
-  ];
+export function AuditLogTable({ deviceId }: { deviceId?: string }) {
+  const { data: logs, isLoading } = useAuditLogs(deviceId);
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -60,6 +27,38 @@ export function AuditLogTable() {
     }
   };
 
+  const mapEventType = (type: string) => {
+    const map: Record<string, { label: string; severity: string }> = {
+      'uninstall_attempt': { label: 'Tamper', severity: 'high' },
+      'adb_detected': { label: 'Security', severity: 'high' },
+      'safe_mode_boot': { label: 'Security', severity: 'medium' },
+      'wrong_pin': { label: 'Auth', severity: 'medium' },
+      'vpn_killed': { label: 'System', severity: 'high' },
+      'admin_settings_access': { label: 'System', severity: 'info' },
+      'factory_reset_attempt': { label: 'Tamper', severity: 'high' },
+      'app_kill_attempt': { label: 'Tamper', severity: 'medium' },
+    };
+    return map[type] || { label: type, severity: 'info' };
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+        <Loader2 className="w-8 h-8 animate-spin mb-4" />
+        <p>Loading audit logs...</p>
+      </div>
+    );
+  }
+
+  if (!logs || logs.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+        <ShieldCheck className="w-12 h-12 mb-4 opacity-20" />
+        <p>No audit events recorded yet.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -73,28 +72,47 @@ export function AuditLogTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {logs.map((log) => (
-            <TableRow key={log.id}>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  {getSeverityIcon(log.severity)}
-                  <span className="capitalize text-xs font-medium">{log.severity}</span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <Badge variant={getSeverityColor(log.severity) as any}>
-                  {log.type}
-                </Badge>
-              </TableCell>
-              <TableCell className="font-medium">{log.device}</TableCell>
-              <TableCell className="max-w-[400px] truncate">{log.description}</TableCell>
-              <TableCell className="text-right text-muted-foreground tabular-nums">
-                {format(new Date(log.timestamp), 'MMM d, HH:mm')}
-              </TableCell>
-            </TableRow>
-          ))}
+          {logs.map((log) => {
+            const { label, severity } = mapEventType(log.event_type);
+            return (
+              <TableRow key={log.id}>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    {getSeverityIcon(severity)}
+                    <span className="capitalize text-xs font-medium">{severity}</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={getSeverityColor(severity) as any}>
+                    {label}
+                  </Badge>
+                </TableCell>
+                <TableCell className="font-medium">{log.devices.device_name}</TableCell>
+                <TableCell className="max-w-[400px] truncate">
+                  <div className="flex items-center gap-2">
+                    {log.details?.message || log.event_type.replace(/_/g, ' ')}
+                    {log.screenshot_url && (
+                      <a 
+                        href={log.screenshot_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary hover:text-primary/80 inline-flex items-center gap-1"
+                        title="View Screenshot"
+                      >
+                        <ImageIcon className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell className="text-right text-muted-foreground tabular-nums">
+                  {format(parseISO(log.occurred_at), 'MMM d, HH:mm')}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
   );
 }
+

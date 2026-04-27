@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/lib/supabase/client';
 
 export type Device = {
@@ -14,6 +15,24 @@ export type Device = {
 
 export function useDevices() {
   const supabase = createClient();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('devices-live')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'devices' },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['devices'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, queryClient]);
 
   return useQuery({
     queryKey: ['devices'],
@@ -31,3 +50,4 @@ export function useDevices() {
     },
   });
 }
+

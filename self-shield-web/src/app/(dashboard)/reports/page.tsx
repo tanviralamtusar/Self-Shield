@@ -1,8 +1,27 @@
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { UsageChart } from '@/components/reports/UsageChart';
 import { Smartphone, Clock, ShieldAlert, History } from 'lucide-react';
+import { useReports, useReportStats } from '@/hooks/useReports';
+import { format, parseISO } from 'date-fns';
 
 export default function ReportsPage() {
+  const { data: reports, isLoading: reportsLoading } = useReports(7);
+  const { data: stats, isLoading: statsLoading } = useReportStats();
+
+  // Process data for the chart
+  const chartData = reports?.map(report => ({
+    name: format(parseISO(report.report_date), 'EEE'),
+    usage: Math.round(report.total_screen_sec / 60)
+  })) || [];
+
+  const formatDuration = (mins: number) => {
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div>
@@ -19,16 +38,20 @@ export default function ReportsPage() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2h 15m</div>
+            <div className="text-2xl font-bold">
+              {statsLoading ? '...' : formatDuration(stats?.avgScreenTimeMin || 0)}
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Top Device</CardTitle>
+            <CardTitle className="text-sm font-medium">Devices</CardTitle>
             <Smartphone className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">Pixel 7</div>
+            <div className="text-2xl font-bold">
+              {statsLoading ? '...' : stats?.deviceCount}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -37,7 +60,9 @@ export default function ReportsPage() {
             <ShieldAlert className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,204</div>
+            <div className="text-2xl font-bold">
+              {statsLoading ? '...' : stats?.totalBlocks.toLocaleString()}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -46,7 +71,9 @@ export default function ReportsPage() {
             <History className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12%</div>
+            <div className="text-2xl font-bold">
+              {statsLoading ? '...' : `${stats?.overrideRate}%`}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -58,10 +85,11 @@ export default function ReportsPage() {
             <CardDescription>Daily usage across all devices for the last 7 days.</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
-            <UsageChart />
+            <UsageChart data={chartData} loading={reportsLoading} />
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
+

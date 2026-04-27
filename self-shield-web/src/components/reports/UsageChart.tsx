@@ -2,16 +2,32 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-export function UsageChart() {
-  const data = [
-    { name: 'Mon', usage: 120 },
-    { name: 'Tue', usage: 190 },
-    { name: 'Wed', usage: 150 },
-    { name: 'Thu', usage: 80 },
-    { name: 'Fri', usage: 210 },
-    { name: 'Sat', usage: 300 },
-    { name: 'Sun', usage: 250 },
-  ];
+interface UsageData {
+  name: string;
+  usage: number;
+}
+
+interface UsageChartProps {
+  data: UsageData[];
+  loading?: boolean;
+}
+
+export function UsageChart({ data, loading }: UsageChartProps) {
+  if (loading) {
+    return (
+      <div className="w-full h-full min-h-[300px] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="w-full h-full min-h-[300px] flex items-center justify-center text-muted-foreground">
+        No usage data available for this period.
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full min-h-[300px]">
@@ -52,3 +68,4 @@ export function UsageChart() {
     </div>
   );
 }
+

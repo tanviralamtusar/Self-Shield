@@ -4,9 +4,127 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Smartphone, Shield, Activity, FileText, Settings, Key } from 'lucide-react';
+import { Smartphone, Shield, Activity, FileText, Settings, Key, Clock, ShieldAlert, History } from 'lucide-react';
 import { useDevices } from '@/hooks/useDevices';
 import { DeviceRulesEditor } from '@/components/devices/DeviceRulesEditor';
+import { AuditLogTable } from '@/components/audit/AuditLogTable';
+import { UsageChart } from '@/components/reports/UsageChart';
+import { useReports, useReportStats } from '@/hooks/useReports';
+import { useSendCommand } from '@/hooks/useRemoteCommands';
+import { format, parseISO } from 'date-fns';
+import { toast } from 'sonner';
+
+function DeviceUsageChart({ deviceId }: { deviceId: string }) {
+  const { data: reports, isLoading } = useReports(deviceId, 7);
+  
+  const chartData = reports?.map(report => ({
+    name: format(parseISO(report.report_date), 'EEE'),
+    usage: Math.round(report.total_screen_sec / 60)
+  })) || [];
+
+  return <UsageChart data={chartData} loading={isLoading} />;
+}
+
+function DeviceReportStats({ deviceId }: { deviceId: string }) {
+  const { data: stats, isLoading } = useReportStats(deviceId);
+
+  const formatDuration = (mins: number) => {
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  };
+
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Daily Avg</CardTitle>
+          <Clock className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            {isLoading ? '...' : formatDuration(stats?.avgScreenTimeMin || 0)}
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Blocks</CardTitle>
+          <ShieldAlert className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            {isLoading ? '...' : stats?.totalBlocks.toLocaleString()}
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Override Rate</CardTitle>
+          <History className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            {isLoading ? '...' : `${stats?.overrideRate}%`}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function QuickActions({ deviceId }: { deviceId: string }) {
+  const sendCommand = useSendCommand();
+
+  const handleCommand = async (type: string, label: string) => {
+    try {
+      await sendCommand.mutateAsync({ deviceId, commandType: type });
+      toast.success(`${label} requested`, {
+        description: 'The command has been queued for the device.'
+      });
+    } catch (error: any) {
+      toast.error(`Failed to request ${label}`, { description: error.message });
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Quick Actions</CardTitle>
+        <CardDescription>Common commands for this device</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Button 
+          className="w-full justify-start" 
+          variant="outline"
+          disabled={sendCommand.isPending}
+          onClick={() => handleCommand('push_blocklist', 'Update Blocklists')}
+        >
+          <Shield className="w-4 h-4 mr-2" />
+          {sendCommand.isPending ? 'Sending...' : 'Update Blocklists'}
+        </Button>
+        <Button 
+          className="w-full justify-start" 
+          variant="outline"
+          disabled={sendCommand.isPending}
+          onClick={() => handleCommand('sync_request', 'Request Full Sync')}
+        >
+          <Activity className="w-4 h-4 mr-2" />
+          {sendCommand.isPending ? 'Sending...' : 'Request Full Sync'}
+        </Button>
+        <Button 
+          className="w-full justify-start text-destructive hover:text-destructive" 
+          variant="outline"
+          disabled={sendCommand.isPending}
+          onClick={() => handleCommand('lock_device', 'Lock Device')}
+        >
+          <Key className="w-4 h-4 mr-2" />
+          Lock Device
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function DeviceDetailPage() {
   const params = useParams();
@@ -89,22 +207,7 @@ export default function DeviceDetailPage() {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Common commands for this device</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button className="w-full justify-start" variant="outline">
-                  <Shield className="w-4 h-4 mr-2" />
-                  Update Blocklists
-                </Button>
-                <Button className="w-full justify-start" variant="outline">
-                  <Activity className="w-4 h-4 mr-2" />
-                  Request Full Sync
-                </Button>
-              </CardContent>
-            </Card>
+            <QuickActions deviceId={device.id} />
           </div>
         )}
 
@@ -112,8 +215,34 @@ export default function DeviceDetailPage() {
           <DeviceRulesEditor deviceId={device.id} />
         )}
 
-        {/* Placeholders for other tabs */}
-        {['reports', 'audit', 'commands', 'settings'].includes(activeTab) && (
+        {activeTab === 'reports' && (
+          <div className="space-y-6">
+            <DeviceReportStats deviceId={device.id} />
+            <Card>
+              <CardHeader>
+                <CardTitle>Usage History</CardTitle>
+                <CardDescription>Daily screen time for this device.</CardDescription>
+              </CardHeader>
+              <CardContent className="h-80">
+                <DeviceUsageChart deviceId={device.id} />
+              </CardContent>
+            </Card>
+          </div>
+        )}
+        
+        {activeTab === 'audit' && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Security Events</CardTitle>
+              <CardDescription>Tamper attempts and system logs for this device.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <AuditLogTable deviceId={device.id} />
+            </CardContent>
+          </Card>
+        )}
+
+        {['commands', 'settings'].includes(activeTab) && (
           <Card>
             <CardHeader>
               <CardTitle className="capitalize">{activeTab}</CardTitle>

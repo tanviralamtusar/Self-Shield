@@ -27,6 +27,8 @@ const menuItems = [
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
+import { TamperAlertListener } from './TamperAlertListener';
+
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -39,7 +41,9 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar>
+    <>
+      <TamperAlertListener />
+      <Sidebar>
       <SidebarHeader className="border-b p-4">
         <div className="flex items-center gap-2 font-semibold text-primary">
           <Shield className="h-6 w-6" />
