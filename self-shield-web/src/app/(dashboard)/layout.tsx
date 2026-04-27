@@ -2,7 +2,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { requireAuth } from '@/lib/api-helpers';
-import { createServerClient } from '@/lib/supabase/server';
+import { createServerSupabase } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
 export default async function DashboardLayout({
@@ -10,7 +10,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createServerClient();
+  const supabase = await createServerSupabase();
   const { data } = await supabase.auth.getUser();
 
   if (!data.user) {
