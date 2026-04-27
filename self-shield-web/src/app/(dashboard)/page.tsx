@@ -13,9 +13,27 @@ export default function DashboardOverview() {
   return (
       <div className="flex flex-col gap-8">
         {/* Header Section */}
-        <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">System Monitor • v2.4.0</p>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-br from-card/80 to-card border border-primary/10 shadow-sm backdrop-blur-md">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Command Center</h2>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              System Live • v2.4.0 • Distributed Network
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+             <div className="hidden md:flex flex-col items-end px-4 border-r border-border/50">
+                <span className="text-[10px] uppercase text-muted-foreground font-bold tracking-tighter">Sync Status</span>
+                <span className="text-xs font-semibold text-success uppercase">Optimized</span>
+             </div>
+             <div className="flex flex-col items-end px-4">
+                <span className="text-[10px] uppercase text-muted-foreground font-bold tracking-tighter">Database</span>
+                <span className="text-xs font-semibold uppercase">Cloud-Sync</span>
+             </div>
+          </div>
         </div>
 
         {/* Quick Actions & Stats Row */}

@@ -48,10 +48,15 @@ export function AppSidebar() {
       <TamperAlertListener />
       <OverrideNotificationListener />
       <Sidebar>
-        <SidebarHeader className="h-14 border-b px-4 flex items-center shrink-0">
-          <div className="flex items-center gap-2 font-semibold text-primary">
-            <Shield className="h-6 w-6" />
-            <span className="text-lg">Self-Shield</span>
+        <SidebarHeader className="h-20 border-b px-6 flex flex-col justify-center shrink-0 bg-gradient-to-b from-primary/5 to-transparent">
+          <div className="flex items-center gap-3 font-bold text-primary">
+            <div className="p-2 rounded-xl bg-primary shadow-lg shadow-primary/20">
+              <Shield className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg leading-none tracking-tight">Self-Shield</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Admin Authority</span>
+            </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
