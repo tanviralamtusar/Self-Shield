@@ -1,4 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { StatCards } from '@/components/dashboard/StatCards';
+import { DeviceStatusTable } from '@/components/dashboard/DeviceStatusTable';
+import { RecentAuditFeed } from '@/components/dashboard/RecentAuditFeed';
 
 export default function DashboardOverview() {
   return (
@@ -10,39 +12,15 @@ export default function DashboardOverview() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Devices</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Protected Apps</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Overrides</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Weekly Blocks</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">0</div>
-          </CardContent>
-        </Card>
+      <StatCards />
+
+      <div className="grid gap-6 md:grid-cols-7">
+        <div className="md:col-span-4 lg:col-span-5">
+          <DeviceStatusTable />
+        </div>
+        <div className="md:col-span-3 lg:col-span-2">
+          <RecentAuditFeed />
+        </div>
       </div>
     </div>
   );
