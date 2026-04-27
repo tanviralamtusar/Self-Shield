@@ -40,7 +40,7 @@ export function ConnectExtensionModal() {
       // Initialize default settings for the new extension device
       await supabase.from('device_settings').insert({
         device_id: data.id,
-        vpn_enabled: false, // Not applicable to extension
+        vpn_enabled: true, // Set to true so extension starts active
         accessibility_enabled: true,
         keyword_blocking: true,
       });

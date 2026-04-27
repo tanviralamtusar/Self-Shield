@@ -46,7 +46,9 @@ async function syncWithAdminPanel() {
     const settings = await settingsResponse.json();
     
     if (!settings || settings.length === 0) {
-      console.log("Device settings not found.");
+      console.warn("Device settings not found for ID:", deviceId);
+      await chrome.storage.local.set({ is_enabled: false });
+      clearBlockingRules();
       return;
     }
 
