@@ -16,6 +16,7 @@ import { Shield, LayoutDashboard, ShieldBan, Lock, FileText, Settings, LogOut, A
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
+import { TamperAlertListener } from './TamperAlertListener';
 
 const menuItems = [
   { title: 'Overview', url: '/', icon: LayoutDashboard },
@@ -26,8 +27,6 @@ const menuItems = [
   { title: 'Audit Log', url: '/audit', icon: Activity },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
-
-import { TamperAlertListener } from './TamperAlertListener';
 
 export function AppSidebar() {
   const router = useRouter();
@@ -44,44 +43,44 @@ export function AppSidebar() {
     <>
       <TamperAlertListener />
       <Sidebar>
-      <SidebarHeader className="border-b p-4">
-        <div className="flex items-center gap-2 font-semibold text-primary">
-          <Shield className="h-6 w-6" />
-          <span className="text-lg">Self-Shield</span>
+        <SidebarHeader className="border-b p-4">
+          <div className="flex items-center gap-2 font-semibold text-primary">
+            <Shield className="h-6 w-6" />
+            <span className="text-lg">Self-Shield</span>
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Menu</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {menuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton 
+                      render={<Link href={item.url} />} 
+                      isActive={pathname === item.url}
+                    >
+                      <item.icon className="mr-2 h-4 w-4" />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarRail />
+        <div className="mt-auto p-4 border-t">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign Out</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </div>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton 
-                    render={<Link href={item.url} />} 
-                    isActive={pathname === item.url}
-                  >
-                    <item.icon className="mr-2 h-4 w-4" />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarRail />
-      <div className="mt-auto p-4 border-t">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Sign Out</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </div>
-    </Sidebar>
+      </Sidebar>
     </>
   );
 }
