@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { Shield, LayoutDashboard, ShieldBan, Lock, FileText, Settings, LogOut } from 'lucide-react';
+import { Shield, LayoutDashboard, ShieldBan, Lock, FileText, Settings, LogOut, Activity } from 'lucide-react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
@@ -23,6 +23,7 @@ const menuItems = [
   { title: 'Blocklists', url: '/blocklists', icon: ShieldBan },
   { title: 'Overrides', url: '/overrides', icon: Lock },
   { title: 'Reports', url: '/reports', icon: FileText },
+  { title: 'Audit Log', url: '/audit', icon: Activity },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 

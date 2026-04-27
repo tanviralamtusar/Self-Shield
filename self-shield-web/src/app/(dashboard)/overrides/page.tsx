@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { OverridesList } from '@/components/overrides/OverridesList';
 
 export default function OverridesPage() {
   return (
@@ -16,9 +17,7 @@ export default function OverridesPage() {
           <CardDescription>Requests awaiting your approval.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            No pending override requests.
-          </div>
+          <OverridesList />
         </CardContent>
       </Card>
     </div>

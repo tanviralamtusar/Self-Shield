@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AuditLogTable } from '@/components/audit/AuditLogTable';
 
 export default function AuditPage() {
   return (
@@ -16,9 +17,7 @@ export default function AuditPage() {
           <CardDescription>A chronological log of all important device events.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            No events found.
-          </div>
+          <AuditLogTable />
         </CardContent>
       </Card>
     </div>
