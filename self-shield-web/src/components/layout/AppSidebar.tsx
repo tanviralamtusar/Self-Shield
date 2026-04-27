@@ -48,7 +48,7 @@ export function AppSidebar() {
       <TamperAlertListener />
       <OverrideNotificationListener />
       <Sidebar>
-        <SidebarHeader className="h-20 border-b px-6 flex flex-col justify-center shrink-0 bg-gradient-to-b from-primary/5 to-transparent">
+        <SidebarHeader className="h-16 border-b px-6 flex flex-col justify-center shrink-0 bg-gradient-to-b from-primary/5 to-transparent">
           <div className="flex items-center gap-3 font-bold text-primary">
             <div className="p-2 rounded-xl bg-primary shadow-lg shadow-primary/20">
               <Shield className="h-5 w-5 text-white" />

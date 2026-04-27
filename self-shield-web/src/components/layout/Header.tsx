@@ -9,7 +9,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 h-14 border-b flex items-center justify-between px-4 bg-background/80 backdrop-blur-md z-20 shrink-0">
+    <header className="sticky top-0 h-16 border-b flex items-center justify-between px-6 bg-background/80 backdrop-blur-md z-20 shrink-0">
       <div className="flex items-center gap-4">
         <SidebarTrigger />
         <div className="flex items-center gap-2">
