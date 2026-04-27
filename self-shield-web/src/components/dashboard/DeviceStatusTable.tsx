@@ -36,7 +36,7 @@ export function DeviceStatusTable() {
       <div className="rounded-md border p-12 text-center text-muted-foreground">
         <Smartphone className="mx-auto h-12 w-12 opacity-20 mb-4" />
         <p>No devices paired yet.</p>
-        <Button variant="outline" className="mt-4" render={<Link href="/devices" />}>
+        <Button nativeButton={false} variant="outline" className="mt-4" render={<Link href="/devices" />}>
           Pair a Device
         </Button>
       </div>
@@ -78,7 +78,7 @@ export function DeviceStatusTable() {
                   v{device.app_version || '1.0.0'}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="sm" render={<Link href={`/devices/${device.id}`} />}>
+                  <Button nativeButton={false} variant="ghost" size="sm" render={<Link href={`/devices/${device.id}`} />}>
                     View Details
                     <ExternalLink className="ml-2 h-3 w-3" />
                   </Button>

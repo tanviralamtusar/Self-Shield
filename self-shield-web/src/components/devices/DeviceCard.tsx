@@ -54,7 +54,7 @@ export function DeviceCard({ device }: { device: Device }) {
         </div>
       </CardContent>
       <CardFooter className="pt-0">
-        <Button render={<Link href={`/devices/${device.id}`} />} variant="outline" className="w-full">
+        <Button nativeButton={false} render={<Link href={`/devices/${device.id}`} />} variant="outline" className="w-full">
           Manage Rules
         </Button>
       </CardFooter>

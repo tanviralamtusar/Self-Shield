@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Clock, Plus, Trash2, Calendar } from 'lucide-react';
 import { useAppSchedules, useUpsertAppSchedule, useDeleteAppSchedule } from '@/hooks/useAppSchedules';
+import { ScheduleGrid } from './ScheduleGrid';
 import { toast } from 'sonner';
 
 interface ScheduleEditorProps {
@@ -115,6 +116,13 @@ export function ScheduleEditor({ appRuleId, appName, trigger }: ScheduleEditorPr
               </div>
             )}
           </div>
+
+          {!isLoading && schedules && schedules.length > 0 && (
+            <>
+              <hr />
+              <ScheduleGrid schedules={schedules} />
+            </>
+          )}
 
           <hr />
 
