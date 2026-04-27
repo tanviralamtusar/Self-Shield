@@ -11,38 +11,40 @@ import { Zap } from 'lucide-react';
 
 export default function DashboardOverview() {
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">Overview</h2>
-        <p className="text-muted-foreground mt-1">
-          Monitor your devices and maintain your digital discipline.
-        </p>
-      </div>
-
-      <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Zap className="w-5 h-5 text-primary fill-primary" />
-          <h3 className="text-lg font-semibold tracking-tight">Quick Actions</h3>
+      <div className="flex flex-col gap-8">
+        {/* Header Section */}
+        <div className="flex flex-col gap-1">
+          <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
+          <p className="text-xs text-muted-foreground uppercase tracking-widest">System Monitor • v2.4.0</p>
         </div>
-        <QuickActions />
-      </section>
 
-      <StatCards />
-
-      <div className="grid gap-6 lg:grid-cols-12">
-        <div className="lg:col-span-8 space-y-6">
-          <DeviceStatusTable />
-          <div className="grid gap-6 md:grid-cols-2">
-            <CategoryDistribution />
-            <SystemHealth />
+        {/* Quick Actions & Stats Row */}
+        <div className="grid gap-4 lg:grid-cols-12 items-start">
+          <div className="lg:col-span-8">
+            <StatCards />
           </div>
-          <RecentAuditFeed />
+          <div className="lg:col-span-4">
+            <QuickActions />
+          </div>
         </div>
-        <div className="lg:col-span-4 space-y-6">
-          <ThreatAnalysis />
-          {/* We can add more side panels here later */}
+
+        {/* Main Content Area */}
+        <div className="grid gap-4 lg:grid-cols-12">
+          {/* Central Control Unit */}
+          <div className="lg:col-span-8 space-y-4">
+            <DeviceStatusTable />
+            <div className="grid gap-4 md:grid-cols-2">
+              <CategoryDistribution />
+              <SystemHealth />
+            </div>
+            <RecentAuditFeed />
+          </div>
+
+          {/* Side Intelligence Panel */}
+          <div className="lg:col-span-4">
+            <ThreatAnalysis />
+          </div>
         </div>
       </div>
-    </div>
   );
 }
