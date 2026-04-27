@@ -16,7 +16,7 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
 
-const listsDir = path.join(__dirname, '../../self-shield-blocklists/lists');
+const listsDir = path.join(process.cwd(), '../self-shield-blocklists/lists');
 
 async function seed() {
   console.log('Seeding block lists...');

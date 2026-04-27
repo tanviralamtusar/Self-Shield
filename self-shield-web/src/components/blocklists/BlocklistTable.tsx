@@ -1,25 +1,46 @@
 'use client';
 
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { createClient } from '@/lib/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MoreHorizontal, Plus, Search, Trash } from 'lucide-react';
+import { MoreHorizontal, Plus, Search, Trash, Loader2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export function BlocklistTable() {
   const [search, setSearch] = useState('');
   
-  // Mock data
-  const lists = [
-    { id: '1', name: 'Social Media', type: 'System', items: 142, enabled: true },
-    { id: '2', name: 'Adult Content', type: 'System', items: 8530, enabled: true },
-    { id: '3', name: 'My Custom Deny', type: 'Custom', items: 12, enabled: true },
-    { id: '4', name: 'Gaming', type: 'System', items: 65, enabled: false },
-  ];
+  const supabase = createClient();
 
-  const filteredLists = lists.filter(l => l.name.toLowerCase().includes(search.toLowerCase()));
+  const { data: lists, isLoading } = useQuery({
+    queryKey: ['blocklists'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('block_lists')
+        .select(`
+          id,
+          name,
+          type,
+          is_enabled:device_block_list_subscriptions(is_enabled),
+          entries:block_list_entries(count)
+        `);
+      
+      if (error) throw error;
+      
+      return data.map(list => ({
+        id: list.id,
+        name: list.name,
+        type: list.owner_id ? 'Custom' : 'System',
+        items: list.entries[0]?.count || 0,
+        enabled: list.is_enabled?.[0]?.is_enabled ?? true
+      }));
+    }
+  });
+
+  const filteredLists = (lists || []).filter(l => l.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="space-y-4">
@@ -85,7 +106,16 @@ export function BlocklistTable() {
                 </TableCell>
               </TableRow>
             ))}
-            {filteredLists.length === 0 && (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Loading blocklists...
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : filteredLists.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
                   No blocklists found.
