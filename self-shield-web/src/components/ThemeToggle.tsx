@@ -1,31 +1,49 @@
 'use client';
 
 import * as React from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Monitor } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => setMounted(true), []);
+
+  if (!mounted) return <div className="h-9 w-24 bg-muted/20 rounded-full animate-pulse" />;
+
+  const options = [
+    { value: 'light', icon: Sun, label: 'Light' },
+    { value: 'system', icon: Monitor, label: 'System' },
+    { value: 'dark', icon: Moon, label: 'Dark' },
+  ];
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      className="group relative h-9 w-9 rounded-full bg-muted/20 hover:bg-muted/40 transition-all duration-300 active:scale-90"
-    >
-      <div className="absolute inset-0 rounded-full border border-primary/20 scale-0 group-hover:scale-100 group-hover:opacity-100 opacity-0 transition-all duration-500 group-hover:rotate-180" />
-      
-      <Sun className="h-4 w-4 rotate-0 scale-100 transition-all duration-500 ease-in-out group-hover:text-primary dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all duration-500 ease-in-out group-hover:text-primary dark:rotate-0 dark:scale-100" />
-      
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+    <div className="relative flex items-center p-1 bg-muted/20 rounded-full border border-border/50 backdrop-blur-sm">
+      {/* Sliding Highlight */}
+      <div 
+        className={cn(
+          "absolute h-7 w-7 bg-background rounded-full shadow-sm transition-all duration-300 ease-out z-0",
+          theme === 'light' ? "left-1" : 
+          theme === 'system' ? "left-1/2 -translate-x-1/2" : 
+          "left-[calc(100%-1.75rem-0.25rem)]"
+        )}
+      />
+
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          onClick={() => setTheme(opt.value)}
+          className={cn(
+            "relative z-10 flex items-center justify-center h-7 w-7 rounded-full transition-colors duration-200",
+            theme === opt.value ? "text-primary" : "text-muted-foreground hover:text-foreground"
+          )}
+          title={opt.label}
+        >
+          <opt.icon className="h-3.5 w-3.5" />
+        </button>
+      ))}
+    </div>
   );
+}
