@@ -1,7 +1,6 @@
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/AppSidebar';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { requireAuth } from '@/lib/api-helpers';
+import { Header } from '@/components/layout/Header';
 import { createServerSupabase } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
@@ -20,17 +19,9 @@ export default async function DashboardLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="flex-1 flex flex-col min-h-screen overflow-hidden">
-        <header className="h-14 border-b flex items-center justify-between px-4 bg-background z-10 shrink-0">
-          <div className="flex items-center gap-4">
-            <SidebarTrigger />
-            <h1 className="font-semibold text-sm">Dashboard</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-          </div>
-        </header>
-        <div className="flex-1 overflow-auto p-6 bg-muted/20">
+      <main className="flex-1 flex flex-col min-h-screen overflow-auto bg-muted/10">
+        <Header />
+        <div className="p-6">
           {children}
         </div>
       </main>
