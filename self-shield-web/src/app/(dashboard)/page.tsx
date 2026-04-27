@@ -1,8 +1,13 @@
 import { StatCards } from '@/components/dashboard/StatCards';
 import { DeviceStatusTable } from '@/components/dashboard/DeviceStatusTable';
 import { RecentAuditFeed } from '@/components/dashboard/RecentAuditFeed';
+import { QuickActions } from '@/components/dashboard/QuickActions';
+import { useReportStats } from '@/hooks/useReports';
+import { Zap } from 'lucide-react';
 
 export default function DashboardOverview() {
+  const { data: stats, isLoading } = useReportStats();
+
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div>
@@ -11,6 +16,14 @@ export default function DashboardOverview() {
           Monitor your devices and maintain your digital discipline.
         </p>
       </div>
+
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Zap className="w-5 h-5 text-primary fill-primary" />
+          <h3 className="text-lg font-semibold tracking-tight">Quick Actions</h3>
+        </div>
+        <QuickActions />
+      </section>
 
       <StatCards />
 

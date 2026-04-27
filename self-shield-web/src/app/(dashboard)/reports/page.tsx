@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { UsageChart } from '@/components/reports/UsageChart';
 import { Smartphone, Clock, ShieldAlert, History } from 'lucide-react';
 import { useReports, useReportStats } from '@/hooks/useReports';
+import { WeeklyReportPreview } from '@/components/reports/WeeklyReportPreview';
 import { format, parseISO } from 'date-fns';
 
 export default function ReportsPage() {
@@ -88,6 +89,10 @@ export default function ReportsPage() {
             <UsageChart data={chartData} loading={reportsLoading} />
           </CardContent>
         </Card>
+
+        <div className="md:col-span-2">
+          <WeeklyReportPreview />
+        </div>
       </div>
     </div>
   );

@@ -17,6 +17,8 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
 import { TamperAlertListener } from './TamperAlertListener';
+import { OverrideNotificationListener } from './OverrideNotificationListener';
+
 
 const menuItems = [
   { title: 'Overview', url: '/', icon: LayoutDashboard },
@@ -42,6 +44,7 @@ export function AppSidebar() {
   return (
     <>
       <TamperAlertListener />
+      <OverrideNotificationListener />
       <Sidebar>
         <SidebarHeader className="border-b p-4">
           <div className="flex items-center gap-2 font-semibold text-primary">
