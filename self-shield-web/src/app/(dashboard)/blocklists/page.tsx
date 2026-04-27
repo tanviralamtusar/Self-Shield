@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { BlocklistTable } from '@/components/blocklists/BlocklistTable';
 
 export default function BlocklistsPage() {
   return (
@@ -18,28 +19,15 @@ export default function BlocklistsPage() {
         </Button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>System Categories</CardTitle>
-            <CardDescription>Curated lists maintained by Self-Shield.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* List items will go here */}
-            <p className="text-sm text-muted-foreground">Loading categories...</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Custom Lists</CardTitle>
-            <CardDescription>Your personal blocked websites and keywords.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">No custom lists found.</p>
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>All Blocklists</CardTitle>
+          <CardDescription>Manage both system categories and your custom lists here.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <BlocklistTable />
+        </CardContent>
+      </Card>
     </div>
   );
 }
