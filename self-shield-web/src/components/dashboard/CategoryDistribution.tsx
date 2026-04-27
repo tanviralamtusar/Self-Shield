@@ -38,8 +38,8 @@ export function CategoryDistribution() {
         {!mounted ? (
           <div className="h-full w-full bg-muted/5 animate-pulse rounded-full" />
         ) : (
-          <ResponsiveContainer width="100%" height="100%">
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+          <ResponsiveContainer width="100%" height="100%" style={{ outline: 'none' }}>
+            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data} style={{ outline: 'none' }} tabIndex={-1}>
               <PolarGrid strokeOpacity={0.1} />
               <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: 'currentColor', opacity: 0.5 }} />
               <Radar
@@ -49,6 +49,7 @@ export function CategoryDistribution() {
                 fill="var(--color-primary)"
                 fillOpacity={0.4}
                 animationDuration={500}
+                activeDot={false}
               />
             </RadarChart>
           </ResponsiveContainer>

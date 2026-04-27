@@ -115,7 +115,10 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground;
@@ -123,4 +126,8 @@
   html {
     @apply font-sans;
   }
-}
+
+  .recharts-wrapper, .recharts-surface {
+    outline: none !important;
+  }
+}

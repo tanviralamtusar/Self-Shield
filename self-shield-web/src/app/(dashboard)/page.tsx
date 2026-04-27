@@ -5,6 +5,8 @@ import { DeviceStatusTable } from '@/components/dashboard/DeviceStatusTable';
 import { RecentAuditFeed } from '@/components/dashboard/RecentAuditFeed';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { CategoryDistribution } from '@/components/dashboard/CategoryDistribution';
+import { SystemHealth } from '@/components/dashboard/SystemHealth';
+import { ThreatAnalysis } from '@/components/dashboard/ThreatAnalysis';
 import { Zap } from 'lucide-react';
 
 export default function DashboardOverview() {
@@ -27,18 +29,18 @@ export default function DashboardOverview() {
 
       <StatCards />
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <div className="md:col-span-1 lg:col-span-5">
+      <div className="grid gap-6 lg:grid-cols-12">
+        <div className="lg:col-span-8 space-y-6">
           <DeviceStatusTable />
-        </div>
-        <div className="md:col-span-1 lg:col-span-2">
-          <CategoryDistribution />
-        </div>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-7">
-        <div className="md:col-span-7">
+          <div className="grid gap-6 md:grid-cols-2">
+            <CategoryDistribution />
+            <SystemHealth />
+          </div>
           <RecentAuditFeed />
+        </div>
+        <div className="lg:col-span-4 space-y-6">
+          <ThreatAnalysis />
+          {/* We can add more side panels here later */}
         </div>
       </div>
     </div>
