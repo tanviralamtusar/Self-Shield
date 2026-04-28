@@ -174,9 +174,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     }
 
-    // === INSTANT DEVICE DELETION (from content script) ===
+    // === INSTANT DEVICE DELETION (from content script or popup) ===
     if (request.action === "deviceDeleted") {
-      console.log("INSTANT: Device deleted from admin panel!");
+      console.log("INSTANT: Device unpairing/deleted!");
+      
+      // Notify server to go offline immediately
+      chrome.storage.local.get("deviceId", (data) => {
+        if (data.deviceId) {
+          fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${data.deviceId}&status=offline`).catch(() => {});
+        }
+      });
+
       chrome.storage.local.set({ 
         is_enabled: false, deviceId: null, pairedAt: null, 
         everBeenActive: false, blocked_urls: [] 

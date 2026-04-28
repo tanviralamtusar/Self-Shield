@@ -14,10 +14,17 @@ export async function GET(req: NextRequest) {
 
   try {
     // 0. Update last seen timestamp
+    const status = searchParams.get('status');
+    const lastSeenValue = status === 'offline' ? null : new Date().toISOString();
+    
     await supabaseAdmin
       .from('devices')
-      .update({ last_seen_at: new Date().toISOString() })
+      .update({ last_seen_at: lastSeenValue })
       .eq('id', deviceId);
+
+    if (status === 'offline') {
+      return NextResponse.json({ success: true, message: 'Device marked offline' });
+    }
 
     // 1. Fetch device settings
     let { data: settings, error: settingsError } = await supabaseAdmin
