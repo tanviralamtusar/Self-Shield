@@ -1,32 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html class="dark" lang="en">
 <head>
-  <title>Self-Shield</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Self-Shield - Pair Device</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <img src="../icons/icon48.png" alt="Logo" class="logo">
+  <!-- TopAppBar -->
+  <header class="app-bar">
+    <div class="app-bar-logo">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shield</span>
       <h1>Self-Shield</h1>
-    </header>
-
-    <div id="status-container" class="status-box">
-      <p>Status: <span id="status-text">Checking...</span></p>
-      <p>Device ID: <span id="device-id">None</span></p>
-      <button id="unpairBtn" class="unpair-btn hidden">Unpair Device</button>
     </div>
-
-    <div id="pair-container" class="form-group hidden">
-      <label for="deviceIdInput">Enter Device ID to Pair:</label>
-      <input type="text" id="deviceIdInput" placeholder="Enter ID from Admin Panel">
-      <button id="pairBtn">Pair Device</button>
+    <div class="app-bar-profile">
+      <span class="material-symbols-outlined">person</span>
     </div>
+  </header>
 
-    <footer>
-      <p>Manage rules at <a href="https://selfshield.app" target="_blank">Admin Panel</a></p>
-    </footer>
-  </div>
+  <!-- Main Content Canvas -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      
+      <!-- Status Bento Card -->
+      <div class="status-card state-inactive" id="status-card">
+        <div class="status-aura"></div>
+        <div class="status-icon-container">
+          <span class="material-symbols-outlined status-icon" id="status-icon">phonelink_erase</span>
+        </div>
+        <div class="status-info">
+          <div class="status-title-row">
+            <span class="status-dot animate-pulse" id="status-dot"></span>
+            <h2 id="status-text">Inactive</h2>
+          </div>
+          <p id="device-id">Not Paired</p>
+        </div>
+      </div>
+
+      <!-- Pairing Interface -->
+      <div id="pair-container" class="pair-card">
+        <div class="input-group">
+          <label for="deviceIdInput">
+            <span class="material-symbols-outlined">key</span>
+            Authentication Key
+          </label>
+          <div class="input-wrapper">
+            <input id="deviceIdInput" placeholder="Enter ID from Admin Panel" type="text"/>
+            <div class="input-icon">
+              <span class="material-symbols-outlined">dialpad</span>
+            </div>
+          </div>
+        </div>
+        <button id="pairBtn" class="primary-btn">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_link</span>
+          Pair Device
+        </button>
+      </div>
+
+      <!-- Unpair Interface -->
+      <button id="unpairBtn" class="hidden outline-btn">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">link_off</span>
+          Unpair Device
+      </button>
+
+      <!-- Contextual Help -->
+      <div class="help-link">
+        <a href="https://selfshield.app" target="_blank">
+          <span class="material-symbols-outlined">settings_suggest</span>
+          Manage rules at Admin Panel
+        </a>
+      </div>
+      
+    </div>
+  </main>
   <script src="popup.js"></script>
 </body>
 </html>
