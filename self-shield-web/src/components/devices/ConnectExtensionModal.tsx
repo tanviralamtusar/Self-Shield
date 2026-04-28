@@ -30,6 +30,7 @@ export function ConnectExtensionModal() {
       const data = await response.json();
       
       if (!response.ok) {
+        console.error('Registration failed:', data);
         throw new Error(data.error || 'Failed to register device');
       }
 
