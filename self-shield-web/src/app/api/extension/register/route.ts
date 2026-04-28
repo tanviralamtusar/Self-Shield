@@ -1,24 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
-    // Get user from cookies
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll();
-          },
-        },
-      }
-    );
-
+    // Use the project's existing server auth helper
+    const supabase = await createServerSupabase();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     
     if (authError || !user) {
@@ -31,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Register] Creating device for user: ${user.id}, name: ${deviceName}`);
 
-    // 1. Create the device record using Admin client (bypass RLS)
+    // Use Admin client to bypass RLS
     const { data: device, error: deviceError } = await supabaseAdmin
       .from('devices')
       .insert({
@@ -51,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Register] Device created: ${device.id}`);
 
-    // 2. Create the settings record
+    // Create settings
     const { error: settingsError } = await supabaseAdmin
       .from('device_settings')
       .insert({
@@ -62,16 +49,14 @@ export async function POST(req: NextRequest) {
       });
 
     if (settingsError) {
-      console.error('[Register] Settings creation error:', settingsError);
-    } else {
-      console.log(`[Register] Settings created for device: ${device.id}`);
+      console.error('[Register] Settings error:', settingsError);
     }
 
     return NextResponse.json({ deviceId: device.id });
 
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    console.error('[Register] Unexpected error:', message);
-    return NextResponse.json({ error: 'Internal server error: ' + message }, { status: 500 });
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    console.error('[Register] Error:', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

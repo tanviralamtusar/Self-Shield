@@ -56,17 +56,16 @@ async function syncWithAdminPanel(retryCount = 0) {
 
     if (!response.ok) {
       if (response.status === 404) {
-        const { is_enabled } = await chrome.storage.local.get("is_enabled");
+        const { pairedAt } = await chrome.storage.local.get("pairedAt");
         
-        // If we are in "Waiting" state (just paired), don't treat 404 as deletion.
-        // Give server a few seconds to propagate.
-        if (is_enabled === null) {
-          console.log("Device not yet found on server (Waiting state). Retrying...");
+        // Grace period: if paired less than 30 seconds ago, don't wipe yet
+        if (pairedAt && (Date.now() - pairedAt) < 30000) {
+          console.log("Device not yet found on server. Grace period active, retrying...");
           return; 
         }
 
         console.log("Device not found on server. Disabling protection.");
-        await chrome.storage.local.set({ is_enabled: false, deviceId: null, blocked_urls: [] });
+        await chrome.storage.local.set({ is_enabled: false, deviceId: null, pairedAt: null, blocked_urls: [] });
         clearBlockingRules();
         return;
       }
@@ -147,7 +146,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "pairDevice") {
     chrome.storage.local.set({ 
       deviceId: request.deviceId,
-      is_enabled: null, // "Waiting" state
+      pairedAt: Date.now(),
+      is_enabled: false,
       blocked_urls: [] 
     }, () => {
       sendResponse({ success: true });

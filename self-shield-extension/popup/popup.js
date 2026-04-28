@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const pairBtn = document.getElementById('pairBtn');
 
   // Load initial status
-  chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls"], (data) => {
+  chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls", "pairedAt"], (data) => {
     updateUI(data);
   });
 
   // Listen for storage changes (Real-time updates from background)
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'local') {
-      chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls"], (data) => {
+      chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls", "pairedAt"], (data) => {
         updateUI(data);
       });
     }
@@ -34,11 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (data.is_enabled === true) {
       statusText.textContent = 'Active';
       statusText.className = 'active';
+    } else if (data.pairedAt && (Date.now() - data.pairedAt) < 30000) {
+      statusText.textContent = 'Connecting...';
+      statusText.className = 'inactive';
     } else if (data.is_enabled === false) {
       statusText.textContent = 'Inactive';
       statusText.className = 'inactive';
     } else {
-      statusText.textContent = 'Waiting for Sync...';
+      statusText.textContent = 'Inactive';
       statusText.className = 'inactive';
     }
   }
