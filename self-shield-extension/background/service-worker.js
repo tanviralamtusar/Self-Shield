@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://nkadwmptdzjsmwuujcid.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWR3bXB0ZHpqc213dXVqY2lkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMjI4OTcsImV4cCI6MjA5MjU5ODg5N30.XunlpVcJPHSL953gKIQuZ7-vrbI3SnmCbtp8OX_gdL0";
+// In development, use 127.0.0.1. In production, use your actual domain.
+const API_BASE_URL = "http://127.0.0.1:3000";
 
 // Sync interval in minutes
 const SYNC_INTERVAL = 5;
@@ -34,66 +34,25 @@ async function syncWithAdminPanel() {
       return;
     }
 
-    // 1. Fetch device settings
-    const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/device_settings?device_id=eq.${deviceId}&select=*`, {
-      headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-      }
-    });
+    // Call our new secure API route
+    const response = await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}`);
 
-    if (!settingsResponse.ok) throw new Error("Failed to fetch settings");
-    const settings = await settingsResponse.json();
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Sync failed:", errorData.error);
+      return;
+    }
+
+    const data = await response.json();
+    const { is_enabled, blocked_urls } = data;
+
+    await chrome.storage.local.set({ is_enabled, blocked_urls });
     
-    if (!settings || settings.length === 0) {
-      console.warn("Device settings not found for ID:", deviceId);
-      await chrome.storage.local.set({ is_enabled: false });
+    if (is_enabled && blocked_urls && blocked_urls.length > 0) {
+      updateBlockingRules(blocked_urls);
+    } else {
       clearBlockingRules();
-      return;
     }
-
-    const is_enabled = settings[0].vpn_enabled; // Using vpn_enabled as global protection flag
-    
-    if (!is_enabled) {
-      await chrome.storage.local.set({ is_enabled: false });
-      clearBlockingRules();
-      return;
-    }
-
-    // 2. Fetch subscribed blocklists
-    const subResponse = await fetch(`${SUPABASE_URL}/rest/v1/device_block_list_subscriptions?device_id=eq.${deviceId}&is_enabled=eq.true&select=block_list_id`, {
-      headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-      }
-    });
-
-    if (!subResponse.ok) throw new Error("Failed to fetch subscriptions");
-    const subs = await subResponse.json();
-    const listIds = subs.map(s => s.block_list_id);
-
-    if (listIds.length === 0) {
-      await chrome.storage.local.set({ is_enabled: true, blocked_urls: [] });
-      clearBlockingRules();
-      return;
-    }
-
-    // 3. Fetch entries for those blocklists
-    // Note: We use in.(id1,id2) syntax for Supabase REST API
-    const idsString = listIds.join(',');
-    const entriesResponse = await fetch(`${SUPABASE_URL}/rest/v1/block_list_entries?block_list_id=in.(${idsString})&select=value`, {
-      headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-      }
-    });
-
-    if (!entriesResponse.ok) throw new Error("Failed to fetch blocklist entries");
-    const entries = await entriesResponse.json();
-    const blocked_urls = [...new Set(entries.map(e => e.value))]; // Unique hostnames
-
-    await chrome.storage.local.set({ is_enabled: true, blocked_urls });
-    updateBlockingRules(blocked_urls);
 
   } catch (error) {
     console.error("Sync failed:", error);

@@ -21,11 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
       pairContainer.classList.remove('hidden');
     }
 
-    if (data.is_enabled) {
+    if (data.is_enabled === true) {
       statusText.textContent = 'Active';
       statusText.className = 'active';
-    } else {
+    } else if (data.is_enabled === false) {
       statusText.textContent = 'Inactive';
+      statusText.className = 'inactive';
+    } else {
+      statusText.textContent = 'Waiting for Sync...';
       statusText.className = 'inactive';
     }
   }
@@ -33,12 +36,30 @@ document.addEventListener('DOMContentLoaded', () => {
   pairBtn.addEventListener('click', () => {
     const id = deviceIdInput.value.trim();
     if (id) {
+      statusText.textContent = 'Syncing...';
+      pairBtn.disabled = true;
       chrome.runtime.sendMessage({ action: 'pairDevice', deviceId: id }, (response) => {
         if (response && response.success) {
-          // Refresh UI
-          chrome.runtime.sendMessage({ action: 'getStatus' }, (res) => {
-            updateUI(res);
-          });
+          // Poll for status update
+          let attempts = 0;
+          const poll = setInterval(() => {
+            chrome.runtime.sendMessage({ action: 'getStatus' }, (res) => {
+              if (res && res.is_enabled !== undefined) {
+                updateUI(res);
+                clearInterval(poll);
+                pairBtn.disabled = false;
+              }
+            });
+            attempts++;
+            if (attempts > 10) {
+              clearInterval(poll);
+              statusText.textContent = 'Sync Error';
+              pairBtn.disabled = false;
+            }
+          }, 1000);
+        } else {
+          statusText.textContent = 'Pairing Failed';
+          pairBtn.disabled = false;
         }
       });
     }
