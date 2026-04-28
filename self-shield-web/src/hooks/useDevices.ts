@@ -27,10 +27,13 @@ export function useDevices() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'devices' },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['devices'] });
+          console.log('[Realtime] Devices table changed, re-fetching...');
+          queryClient.refetchQueries({ queryKey: ['devices'] });
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log(`[Realtime] Subscription status: ${status}`);
+      });
 
     return () => {
       supabase.removeChannel(channel);
@@ -39,6 +42,7 @@ export function useDevices() {
 
   return useQuery({
     queryKey: ['devices'],
+    refetchInterval: 10000, // Fallback polling every 10 seconds
     queryFn: async () => {
       const { data, error } = await supabase
         .from('devices')
