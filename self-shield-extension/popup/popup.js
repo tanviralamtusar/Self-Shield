@@ -4,13 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const pairContainer = document.getElementById('pair-container');
   const deviceIdInput = document.getElementById('deviceIdInput');
   const pairBtn = document.getElementById('pairBtn');
+  const syncBtn = document.getElementById('syncBtn');
 
   // Load current status
-  chrome.runtime.sendMessage({ action: 'getStatus' }, (response) => {
-    if (response) {
-      updateUI(response);
-    }
-  });
+  function fetchStatus() {
+    chrome.runtime.sendMessage({ action: 'getStatus' }, (response) => {
+      if (response) {
+        updateUI(response);
+      }
+    });
+  }
+
+  fetchStatus();
+  // Poll every 1 second for instant UI update
+  const statusPoller = setInterval(fetchStatus, 1000);
+
+  // Cleanup on unload
+  window.addEventListener('unload', () => clearInterval(statusPoller));
 
   function updateUI(data) {
     if (data.deviceId) {
@@ -63,5 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+  });
+
+  syncBtn.addEventListener('click', () => {
+    statusText.textContent = 'Syncing...';
+    chrome.runtime.sendMessage({ action: 'triggerSync' }, () => {
+      setTimeout(() => {
+        chrome.runtime.sendMessage({ action: 'getStatus' }, (res) => {
+          updateUI(res);
+        });
+      }, 1000);
+    });
   });
 });

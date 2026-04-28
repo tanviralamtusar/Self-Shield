@@ -1,17 +1,16 @@
 // In development, use 127.0.0.1. In production, use your actual domain.
 const API_BASE_URL = "http://127.0.0.1:3000";
 
-// Sync interval in minutes
-const SYNC_INTERVAL = 5;
+// Sync interval in seconds for near-instant response
+const SYNC_INTERVAL_SECONDS = 10;
 
-// Initialize alarm for syncing
-chrome.alarms.create("syncData", { periodInMinutes: SYNC_INTERVAL });
+function startFastSync() {
+  syncWithAdminPanel();
+  setTimeout(startFastSync, SYNC_INTERVAL_SECONDS * 1000);
+}
 
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "syncData") {
-    syncWithAdminPanel();
-  }
-});
+// Start fast sync immediately
+startFastSync();
 
 // Initial sync on startup
 chrome.runtime.onInstalled.addListener(() => {
@@ -23,39 +22,60 @@ chrome.runtime.onStartup.addListener(() => {
   syncWithAdminPanel();
 });
 
-async function syncWithAdminPanel() {
+async function syncWithAdminPanel(retryCount = 0) {
   console.log("Syncing with Admin Panel...");
   
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
     
     if (!deviceId) {
-      console.log("No deviceId found. Please pair the extension via the admin panel.");
+      console.log("No deviceId found.");
       return;
     }
 
-    // Call our new secure API route
-    const response = await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}`);
+    const response = await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}`, {
+      // Add a timeout signal
+      signal: AbortSignal.timeout(5000)
+    });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Sync failed:", errorData.error);
-      return;
+      if (response.status === 404) {
+        console.log("Device not found on server. Disabling protection.");
+        await chrome.storage.local.set({ is_enabled: false, deviceId: null, blocked_urls: [] });
+        clearBlockingRules();
+        return;
+      }
+      
+      // If server is compiling or busy, retry once after 3 seconds
+      if (retryCount < 1) {
+        console.log("Server busy, retrying in 3s...");
+        setTimeout(() => syncWithAdminPanel(retryCount + 1), 3000);
+        return;
+      }
+      
+      throw new Error(`Server returned ${response.status}`);
     }
 
     const data = await response.json();
     const { is_enabled, blocked_urls } = data;
 
-    await chrome.storage.local.set({ is_enabled, blocked_urls });
+    // Explicitly set to true if enabled, false otherwise
+    const enabledState = is_enabled === true;
+    const urls = blocked_urls || [];
+
+    await chrome.storage.local.set({ is_enabled: enabledState, blocked_urls: urls });
     
-    if (is_enabled && blocked_urls && blocked_urls.length > 0) {
-      updateBlockingRules(blocked_urls);
+    if (enabledState && urls.length > 0) {
+      updateBlockingRules(urls);
     } else {
       clearBlockingRules();
     }
 
+    console.log(`Sync successful. Active: ${enabledState}, Rules: ${urls.length}`);
+
   } catch (error) {
     console.error("Sync failed:", error);
+    // If we have a deviceId but sync failed, don't wipe it, just wait for next alarm
   }
 }
 
@@ -112,6 +132,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.storage.local.get(["is_enabled", "deviceId"], (data) => {
       sendResponse(data);
     });
+    return true;
+  }
+
+  if (request.action === "triggerSync") {
+    syncWithAdminPanel().then(() => sendResponse({ success: true }));
     return true;
   }
 });
