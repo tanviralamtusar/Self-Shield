@@ -1,12 +1,7 @@
 // In development, use 127.0.0.1. In production, use your actual domain.
 const API_BASE_URL = "http://127.0.0.1:3000";
-
-// Fallback polling interval - fast enough to detect deletions quickly
-// Grace period (is_enabled === null) protects new pairings from 404
-const SYNC_INTERVAL_SECONDS = 5;
-
-// Fallback alarm to keep service worker alive
-chrome.alarms.create("syncData", { periodInMinutes: 1 });
+// Keep service worker alive with alarm (backup)
+chrome.alarms.create("syncData", { periodInMinutes: 0.5 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "syncData") {
@@ -14,19 +9,20 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-// Force sync when the popup opens
+// Always-running fast polling (every 2 seconds)
+// Each setTimeout keeps the service worker alive
+function startFastSync() {
+  syncWithAdminPanel();
+  setTimeout(startFastSync, 2000);
+}
+startFastSync();
+
+// Also sync immediately when popup opens
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name === "popup") {
     syncWithAdminPanel();
   }
 });
-
-// Fallback polling loop
-function startFastSync() {
-  syncWithAdminPanel();
-  setTimeout(startFastSync, SYNC_INTERVAL_SECONDS * 1000);
-}
-startFastSync();
 
 // Initial sync on startup
 chrome.runtime.onInstalled.addListener(() => {
@@ -39,55 +35,56 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 async function syncWithAdminPanel(retryCount = 0) {
-  console.log("Syncing with Admin Panel...");
-
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
 
     if (!deviceId) {
-      console.log("No deviceId found.");
       return;
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}`, {
-      signal: AbortSignal.timeout(5000),
-      cache: 'no-store'
+    // Cache-busting: add timestamp to URL to prevent ANY caching
+    const url = `${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&_t=${Date.now()}`;
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(3000),
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache' }
     });
 
     if (!response.ok) {
       if (response.status === 404) {
-        const { pairedAt } = await chrome.storage.local.get("pairedAt");
+        const { everBeenActive } = await chrome.storage.local.get("everBeenActive");
         
-        // Grace period: if paired less than 30 seconds ago, don't wipe yet
-        if (pairedAt && (Date.now() - pairedAt) < 30000) {
-          console.log("Device not yet found on server. Grace period active, retrying...");
+        // Grace period: only retry if device has NEVER been active
+        if (!everBeenActive) {
+          console.log("Grace period: device not yet on server...");
           return; 
         }
 
-        console.log("Device not found on server. Disabling protection.");
-        await chrome.storage.local.set({ is_enabled: false, deviceId: null, pairedAt: null, blocked_urls: [] });
+        // Device was active before → it was DELETED
+        console.log("DEVICE DELETED! Going INACTIVE now.");
+        await chrome.storage.local.set({ 
+          is_enabled: false, deviceId: null, pairedAt: null, 
+          everBeenActive: false, blocked_urls: [] 
+        });
         clearBlockingRules();
         return;
       }
 
-      // If server is compiling or busy, retry once after 3 seconds
       if (retryCount < 1) {
-        console.log("Server busy, retrying in 3s...");
         return new Promise((resolve) => {
-          setTimeout(() => syncWithAdminPanel(retryCount + 1).then(resolve), 3000);
+          setTimeout(() => syncWithAdminPanel(retryCount + 1).then(resolve), 2000);
         });
       }
-
-      throw new Error(`Server returned ${response.status}`);
+      return;
     }
 
     const data = await response.json();
-    const { is_enabled, blocked_urls } = data;
+    const enabledState = data.is_enabled === true;
+    const urls = data.blocked_urls || [];
 
-    const enabledState = is_enabled === true;
-    const urls = blocked_urls || [];
-
-    await chrome.storage.local.set({ is_enabled: enabledState, blocked_urls: urls });
+    const update = { is_enabled: enabledState, blocked_urls: urls };
+    if (enabledState) update.everBeenActive = true;
+    await chrome.storage.local.set(update);
 
     if (enabledState && urls.length > 0) {
       updateBlockingRules(urls);
@@ -95,10 +92,8 @@ async function syncWithAdminPanel(retryCount = 0) {
       clearBlockingRules();
     }
 
-    console.log(`Sync successful. Active: ${enabledState}, Rules: ${urls.length}`);
-
   } catch (error) {
-    console.error("Sync failed:", error);
+    // Silently fail — next sync will retry
   }
 }
 
@@ -125,8 +120,6 @@ async function updateBlockingRules(urls) {
     removeRuleIds: removeRuleIds,
     addRules: rules
   });
-
-  console.log(`Updated blocking rules: ${urls.length} sites blocked.`);
 }
 
 async function clearBlockingRules() {
@@ -136,8 +129,6 @@ async function clearBlockingRules() {
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: removeRuleIds
   });
-
-  console.log("Blocking rules cleared.");
 }
 
 // Listen for messages from popup AND content scripts
@@ -147,25 +138,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.storage.local.set({ 
       deviceId: request.deviceId,
       pairedAt: Date.now(),
+      everBeenActive: false,
       is_enabled: false,
       blocked_urls: [] 
     }, () => {
       sendResponse({ success: true });
       
-      // Retry sync quickly after pairing (every 2s, up to 10 times)
+      // Aggressive retry after pairing
       let attempts = 0;
       const trySync = () => {
         syncWithAdminPanel().then(() => {
           chrome.storage.local.get("is_enabled", (data) => {
-            if (data.is_enabled === null && attempts < 10) {
+            if (!data.is_enabled && attempts < 15) {
               attempts++;
-              setTimeout(trySync, 2000);
+              setTimeout(trySync, 1000);
             }
           });
         }).catch(() => {
-          if (attempts < 10) {
+          if (attempts < 15) {
             attempts++;
-            setTimeout(trySync, 2000);
+            setTimeout(trySync, 1000);
           }
         });
       };
@@ -174,10 +166,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
-  // === INSTANT DEVICE DELETION (from content script on admin panel page) ===
+  // === INSTANT DEVICE DELETION (from content script) ===
   if (request.action === "deviceDeleted") {
-    console.log("Device deleted signal received from admin panel! Going INACTIVE immediately.");
-    chrome.storage.local.set({ is_enabled: false, deviceId: null, blocked_urls: [] }, () => {
+    console.log("INSTANT: Device deleted from admin panel!");
+    chrome.storage.local.set({ 
+      is_enabled: false, deviceId: null, pairedAt: null, 
+      everBeenActive: false, blocked_urls: [] 
+    }, () => {
       clearBlockingRules();
       sendResponse({ success: true });
     });

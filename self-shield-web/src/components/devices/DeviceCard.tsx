@@ -5,14 +5,12 @@ import { Smartphone, Shield, ShieldAlert, Clock, Trash2, Loader2 } from 'lucide-
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import type { Device } from '@/hooks/useDevices';
-import { createClient } from '@/lib/supabase/client';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export function DeviceCard({ device }: { device: Device }) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const supabase = createClient();
   const queryClient = useQueryClient();
 
   const isOnline = device.last_seen_at 
@@ -27,16 +25,17 @@ export function DeviceCard({ device }: { device: Device }) {
     }
 
     setIsDeleting(true);
+    
+    // INSTANT: Tell the extension to go inactive IMMEDIATELY (before API call)
+    window.postMessage({ type: 'SELF_SHIELD_DEVICE_DELETED', deviceId: device.id }, '*');
+
     try {
-      const { error } = await supabase
-        .from('devices')
-        .delete()
-        .eq('id', device.id);
+      const response = await fetch(`/api/extension/devices/${device.id}`, {
+        method: 'DELETE',
+      });
 
-      if (error) throw error;
-
-      // INSTANT: Tell the extension's content script (running on this page) to go inactive
-      window.postMessage({ type: 'SELF_SHIELD_DEVICE_DELETED', deviceId: device.id }, '*');
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to delete');
 
       toast.success('Device removed successfully');
       queryClient.invalidateQueries({ queryKey: ['devices'] });
