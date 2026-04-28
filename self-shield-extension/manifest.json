@@ -8,7 +8,9 @@
     "declarativeNetRequestFeedback",
     "storage",
     "alarms",
-    "tabs"
+    "tabs",
+    "webNavigation",
+    "offscreen"
   ],
   "host_permissions": [
     "<all_urls>"

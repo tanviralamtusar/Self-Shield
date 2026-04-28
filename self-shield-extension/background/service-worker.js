@@ -1,29 +1,74 @@
 // In development, use localhost. In production, use your actual domain.
 const API_BASE_URL = "http://localhost:3000";
-// Keep service worker alive with alarm (backup)
-chrome.alarms.create("syncData", { periodInMinutes: 0.5 });
 
+// Supabase Config (for REST logging)
+const SUPABASE_URL = "https://nkadwmptdzjsmwuujcid.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWR3bXB0ZHpqc213dXVqY2lkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMjI4OTcsImV4cCI6MjA5MjU5ODg5N30.XunlpVcJPHSL953gKIQuZ7-vrbI3SnmCbtp8OX_gdL0";
+
+// Offscreen Management
+let isCreatingOffscreen = false;
+
+async function setupOffscreen() {
+  if (isCreatingOffscreen) return;
+
+  const existingContexts = await chrome.runtime.getContexts({
+    contextTypes: ['OFFSCREEN_DOCUMENT']
+  });
+
+  if (existingContexts.length > 0) return;
+
+  // Re-check after the async getContexts call
+  if (isCreatingOffscreen) return;
+  isCreatingOffscreen = true;
+
+  try {
+    await chrome.offscreen.createDocument({
+      url: 'offscreen/offscreen.html',
+      reasons: ['MATCH_MEDIA'],
+      justification: 'Maintaining a Realtime WebSocket connection with Supabase for instant settings sync.'
+    });
+    console.log("[Service Worker] Offscreen document created.");
+  } catch (error) {
+    if (!error.message.includes('Only a single offscreen document')) {
+      console.error("[Service Worker] Failed to create offscreen document:", error);
+    }
+  } finally {
+    isCreatingOffscreen = false;
+  }
+}
+
+// Ensure offscreen is running
+setupOffscreen();
+
+// Backup alarm to ensure service worker and offscreen stay alive
+chrome.alarms.create("keepAlive", { periodInMinutes: 0.5 });
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "syncData") {
-    syncWithAdminPanel();
+  if (alarm.name === "keepAlive") {
+    setupOffscreen();
   }
 });
 
-// Always-running fast polling (every 2 seconds) with self-healing
 let isUnpairing = false;
 
-function startFastSync() {
-  try {
-    syncWithAdminPanel().finally(() => {
-      // Always schedule the next sync, even if this one failed
-      setTimeout(startFastSync, 2000);
-    });
-  } catch (e) {
-    console.error("Critical error in fast sync loop:", e);
-    setTimeout(startFastSync, 5000); // Wait a bit longer on crash
+// Initial sync on startup
+chrome.runtime.onInstalled.addListener(() => {
+  console.log("Self-Shield Extension Installed");
+  syncWithAdminPanel();
+  setupOffscreen();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  syncWithAdminPanel();
+  setupOffscreen();
+});
+
+// Sync when offscreen notifies us of a change
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'supabase_update') {
+    console.log(`[Service Worker] Sync triggered by ${request.source}`);
+    syncWithAdminPanel();
   }
-}
-startFastSync();
+});
 
 // Also sync immediately when popup opens
 chrome.runtime.onConnect.addListener((port) => {
@@ -32,27 +77,13 @@ chrome.runtime.onConnect.addListener((port) => {
   }
 });
 
-// Initial sync on startup
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("Self-Shield Extension Installed");
-  syncWithAdminPanel();
-});
-
-chrome.runtime.onStartup.addListener(() => {
-  syncWithAdminPanel();
-});
-
 async function syncWithAdminPanel(retryCount = 0) {
   if (isUnpairing) return;
 
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
+    if (!deviceId) return;
 
-    if (!deviceId) {
-      return;
-    }
-
-    // Cache-busting: add timestamp to URL to prevent ANY caching
     const url = `${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&_t=${Date.now()}`;
     const response = await fetch(url, {
       signal: AbortSignal.timeout(3000),
@@ -63,14 +94,8 @@ async function syncWithAdminPanel(retryCount = 0) {
     if (!response.ok) {
       if (response.status === 404) {
         const { everBeenActive } = await chrome.storage.local.get("everBeenActive");
-        
-        // Grace period: only retry if device has NEVER been active
-        if (!everBeenActive) {
-          console.log("Grace period: device not yet on server...");
-          return; 
-        }
+        if (!everBeenActive) return;
 
-        // Device was active before → it was DELETED
         console.log("DEVICE DELETED! Going INACTIVE now.");
         await chrome.storage.local.set({ 
           is_enabled: false, deviceId: null, pairedAt: null, 
@@ -78,12 +103,6 @@ async function syncWithAdminPanel(retryCount = 0) {
         });
         clearBlockingRules();
         return;
-      }
-
-      if (retryCount < 1) {
-        return new Promise((resolve) => {
-          setTimeout(() => syncWithAdminPanel(retryCount + 1).then(resolve), 2000);
-        });
       }
       return;
     }
@@ -103,7 +122,7 @@ async function syncWithAdminPanel(retryCount = 0) {
     }
 
   } catch (error) {
-    // Silently fail — next sync will retry
+    console.error("Sync failed:", error);
   }
 }
 
@@ -135,127 +154,99 @@ async function updateBlockingRules(urls) {
 async function clearBlockingRules() {
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   const removeRuleIds = currentRules.map(r => r.id);
-
-  await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: removeRuleIds
-  });
+  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds });
 }
 
 // Listen for messages from popup AND content scripts
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // Safely wrap all message processing
-  try {
-    // === PAIRING ===
-    if (request.action === "pairDevice") {
-      chrome.storage.local.set({ 
-        deviceId: request.deviceId,
-        pairedAt: Date.now(),
-        everBeenActive: false,
-        is_enabled: false,
-        blocked_urls: [] 
-      }, () => {
-        try {
-          sendResponse({ success: true });
-        } catch (e) {
-          console.log("Pairing response channel closed.");
-        }
-        
-        // Aggressive retry after pairing
-        let attempts = 0;
-        const trySync = () => {
-          syncWithAdminPanel().then(() => {
-            chrome.storage.local.get("is_enabled", (data) => {
-              if (!data.is_enabled && attempts < 15) {
-                attempts++;
-                setTimeout(trySync, 1000);
-              }
-            });
-          }).catch(() => {
-            if (attempts < 15) {
-              attempts++;
-              setTimeout(trySync, 1000);
-            }
-          });
-        };
-        trySync();
-      });
-      return true;
-    }
-
-    // === INSTANT DEVICE DELETION (from content script or popup) ===
-    if (request.action === "deviceDeleted") {
-      console.log("INSTANT: Device unpairing...");
-      isUnpairing = true;
-      
-      const performUnpair = async () => {
-        try {
-          const { deviceId } = await chrome.storage.local.get("deviceId");
-          if (deviceId) {
-            // Await the signal to ensure it finishes before clearing local storage
-            await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&status=offline`).catch((err) => {
-              console.error("Offline signal failed:", err);
-            });
-          }
-        } catch (e) {}
-
-        await chrome.storage.local.set({ 
-          is_enabled: false, deviceId: null, pairedAt: null, 
-          everBeenActive: false, blocked_urls: [] 
-        });
-        
-        await clearBlockingRules().catch(() => {});
-        isUnpairing = false; // Reset for potential future pairing
-        
-        try {
-          sendResponse({ success: true });
-        } catch (e) {
-          // sendResponse might fail if the popup/page is closed
-          console.log("Response channel closed before unpair finished.");
-        }
-      };
-
-      performUnpair();
-      return true;
-    }
-
-    // === MANUAL SYNC ===
-    if (request.action === "triggerSync") {
-      syncWithAdminPanel()
-        .then(() => sendResponse({ success: true }))
-        .catch(() => sendResponse({ success: false }));
-      return true;
-    }
-
-    // === REPORT BLOCK EVENT ===
-    if (request.action === "reportBlock") {
-      reportEventToServer("block_triggered", request.target);
+  if (request.action === "pairDevice") {
+    chrome.storage.local.set({ 
+      deviceId: request.deviceId,
+      pairedAt: Date.now(),
+      everBeenActive: false,
+      is_enabled: false,
+      blocked_urls: [] 
+    }, () => {
       sendResponse({ success: true });
-      return true;
-    }
-  } catch (error) {
-    console.error("Error in message listener:", error);
-    sendResponse({ success: false, error: error.message });
+      syncWithAdminPanel();
+    });
+    return true;
   }
 
-  return false;
+  if (request.action === "deviceDeleted") {
+    console.log("INSTANT: Device unpairing...");
+    isUnpairing = true;
+    
+    const performUnpair = async () => {
+      try {
+        const { deviceId } = await chrome.storage.local.get("deviceId");
+        if (deviceId) {
+          // Send offline signal to Supabase directly
+          await reportEventToServer("status_offline", "manual_unpair");
+        }
+      } catch (e) {}
+
+      await chrome.storage.local.set({ 
+        is_enabled: false, deviceId: null, pairedAt: null, 
+        everBeenActive: false, blocked_urls: [] 
+      });
+      
+      await clearBlockingRules().catch(() => {});
+      isUnpairing = false;
+      sendResponse({ success: true });
+    };
+
+    performUnpair();
+    return true;
+  }
+
+  if (request.action === "triggerSync") {
+    syncWithAdminPanel()
+      .then(() => sendResponse({ success: true }))
+      .catch(() => sendResponse({ success: false }));
+    return true;
+  }
+
+  if (request.action === "reportBlock") {
+    reportEventToServer("block_triggered", request.target);
+    sendResponse({ success: true });
+    return true;
+  }
 });
 
+// Activity Logging via direct Supabase REST API
 async function reportEventToServer(eventType, target) {
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
     if (!deviceId) return;
 
-    await fetch(`${API_BASE_URL}/api/extension/sync`, {
+    await fetch(`${SUPABASE_URL}/rest/v1/usage_events`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      },
       body: JSON.stringify({
-        deviceId,
-        eventType,
-        target
+        device_id: deviceId,
+        event_type: eventType,
+        target: target,
+        occurred_at: new Date().toISOString()
       })
     });
   } catch (error) {
-    console.error("Failed to report event:", error);
+    console.error("Direct logging failed:", error);
   }
 }
 
+// Site Visit Tracking
+chrome.webNavigation.onCompleted.addListener((details) => {
+  if (details.frameId === 0) {
+    try {
+      const url = new URL(details.url);
+      if (url.protocol.startsWith('http')) {
+        reportEventToServer("site_visit", url.hostname);
+      }
+    } catch (e) {}
+  }
+});
