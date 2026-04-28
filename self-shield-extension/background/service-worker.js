@@ -4,8 +4,18 @@ const API_BASE_URL = "http://127.0.0.1:3000";
 // Sync interval in seconds for near-instant response
 const SYNC_INTERVAL_SECONDS = 10;
 
+// Fallback alarm to keep service worker alive (minimum 1 minute)
+chrome.alarms.create("syncData", { periodInMinutes: 1 });
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "syncData") {
+    syncWithAdminPanel();
+  }
+});
+
 function startFastSync() {
   syncWithAdminPanel();
+  // Recursive timeout will run as long as the service worker is active
   setTimeout(startFastSync, SYNC_INTERVAL_SECONDS * 1000);
 }
 
