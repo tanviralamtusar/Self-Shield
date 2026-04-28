@@ -117,3 +117,15 @@ footer a {
 .inactive {
   color: var(--danger) !important;
 }
+.unpair-btn {
+  margin-top: 12px;
+  background: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  width: 100%;
+}
+
+.unpair-btn:hover {
+  background: var(--danger);
+  color: white;
+}

@@ -9,11 +9,17 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-// Always-running fast polling (every 2 seconds)
-// Each setTimeout keeps the service worker alive
+// Always-running fast polling (every 2 seconds) with self-healing
 function startFastSync() {
-  syncWithAdminPanel();
-  setTimeout(startFastSync, 2000);
+  try {
+    syncWithAdminPanel().finally(() => {
+      // Always schedule the next sync, even if this one failed
+      setTimeout(startFastSync, 2000);
+    });
+  } catch (e) {
+    console.error("Critical error in fast sync loop:", e);
+    setTimeout(startFastSync, 5000); // Wait a bit longer on crash
+  }
 }
 startFastSync();
 
@@ -133,65 +139,71 @@ async function clearBlockingRules() {
 
 // Listen for messages from popup AND content scripts
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // === PAIRING ===
-  if (request.action === "pairDevice") {
-    chrome.storage.local.set({ 
-      deviceId: request.deviceId,
-      pairedAt: Date.now(),
-      everBeenActive: false,
-      is_enabled: false,
-      blocked_urls: [] 
-    }, () => {
-      sendResponse({ success: true });
-      
-      // Aggressive retry after pairing
-      let attempts = 0;
-      const trySync = () => {
-        syncWithAdminPanel().then(() => {
-          chrome.storage.local.get("is_enabled", (data) => {
-            if (!data.is_enabled && attempts < 15) {
+  // Safely wrap all message processing
+  try {
+    // === PAIRING ===
+    if (request.action === "pairDevice") {
+      chrome.storage.local.set({ 
+        deviceId: request.deviceId,
+        pairedAt: Date.now(),
+        everBeenActive: false,
+        is_enabled: false,
+        blocked_urls: [] 
+      }, () => {
+        sendResponse({ success: true });
+        
+        // Aggressive retry after pairing
+        let attempts = 0;
+        const trySync = () => {
+          syncWithAdminPanel().then(() => {
+            chrome.storage.local.get("is_enabled", (data) => {
+              if (!data.is_enabled && attempts < 15) {
+                attempts++;
+                setTimeout(trySync, 1000);
+              }
+            });
+          }).catch(() => {
+            if (attempts < 15) {
               attempts++;
               setTimeout(trySync, 1000);
             }
           });
-        }).catch(() => {
-          if (attempts < 15) {
-            attempts++;
-            setTimeout(trySync, 1000);
-          }
-        });
-      };
-      trySync();
-    });
-    return true;
-  }
+        };
+        trySync();
+      });
+      return true;
+    }
 
-  // === INSTANT DEVICE DELETION (from content script) ===
-  if (request.action === "deviceDeleted") {
-    console.log("INSTANT: Device deleted from admin panel!");
-    chrome.storage.local.set({ 
-      is_enabled: false, deviceId: null, pairedAt: null, 
-      everBeenActive: false, blocked_urls: [] 
-    }, () => {
-      clearBlockingRules();
+    // === INSTANT DEVICE DELETION (from content script) ===
+    if (request.action === "deviceDeleted") {
+      console.log("INSTANT: Device deleted from admin panel!");
+      chrome.storage.local.set({ 
+        is_enabled: false, deviceId: null, pairedAt: null, 
+        everBeenActive: false, blocked_urls: [] 
+      }, () => {
+        clearBlockingRules().catch(() => {});
+        sendResponse({ success: true });
+      });
+      return true;
+    }
+
+    // === MANUAL SYNC ===
+    if (request.action === "triggerSync") {
+      syncWithAdminPanel()
+        .then(() => sendResponse({ success: true }))
+        .catch(() => sendResponse({ success: false }));
+      return true;
+    }
+
+    // === REPORT BLOCK EVENT ===
+    if (request.action === "reportBlock") {
+      reportEventToServer("block_triggered", request.target);
       sendResponse({ success: true });
-    });
-    return true;
-  }
-
-  // === MANUAL SYNC ===
-  if (request.action === "triggerSync") {
-    syncWithAdminPanel()
-      .then(() => sendResponse({ success: true }))
-      .catch(() => sendResponse({ success: false }));
-    return true;
-  }
-
-  // === REPORT BLOCK EVENT ===
-  if (request.action === "reportBlock") {
-    reportEventToServer("block_triggered", request.target);
-    sendResponse({ success: true });
-    return true;
+      return true;
+    }
+  } catch (error) {
+    console.error("Error in message listener:", error);
+    sendResponse({ success: false, error: error.message });
   }
 
   return false;
