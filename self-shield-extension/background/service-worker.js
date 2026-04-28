@@ -154,7 +154,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         is_enabled: false,
         blocked_urls: [] 
       }, () => {
-        sendResponse({ success: true });
+        try {
+          sendResponse({ success: true });
+        } catch (e) {
+          console.log("Pairing response channel closed.");
+        }
         
         // Aggressive retry after pairing
         let attempts = 0;
@@ -201,7 +205,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         
         await clearBlockingRules().catch(() => {});
         isUnpairing = false; // Reset for potential future pairing
-        sendResponse({ success: true });
+        
+        try {
+          sendResponse({ success: true });
+        } catch (e) {
+          // sendResponse might fail if the popup/page is closed
+          console.log("Response channel closed before unpair finished.");
+        }
       };
 
       performUnpair();
