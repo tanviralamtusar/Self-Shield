@@ -29,6 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       deviceIdSpan.textContent = 'Not Paired';
       pairContainer.classList.remove('hidden');
+      
+      // If not paired, status must be inactive
+      statusText.textContent = 'Inactive';
+      statusText.className = 'inactive';
+      return;
     }
 
     if (data.is_enabled === true) {
@@ -37,14 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (data.pairedAt && (Date.now() - data.pairedAt) < 30000) {
       statusText.textContent = 'Connecting...';
       statusText.className = 'inactive';
-    } else if (data.is_enabled === false) {
-      statusText.textContent = 'Inactive';
-      statusText.className = 'inactive';
     } else {
       statusText.textContent = 'Inactive';
       statusText.className = 'inactive';
     }
   }
+
 
   pairBtn.addEventListener('click', () => {
     const id = deviceIdInput.value.trim();
