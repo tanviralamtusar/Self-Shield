@@ -103,6 +103,105 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+// ─── Browser Info Detection ─────────────────────────────────────────
+function getBrowserInfo() {
+  const ua = navigator.userAgent;
+  const manifest = chrome.runtime.getManifest();
+  
+  let browserName = 'Unknown';
+  let browserVersion = '';
+
+  // 1. Modern API: navigator.userAgentData.brands (Chromium 90+)
+  //    Arc, Brave, Edge, Opera, Vivaldi all register their brand here,
+  //    even when their UA string is identical to Chrome's.
+  const uaData = navigator.userAgentData;
+  if (uaData && uaData.brands) {
+    // Known browser brands to look for (order = priority)
+    const knownBrands = ['Arc', 'Brave', 'Edge', 'Opera', 'Vivaldi', 'Whale', 'Samsung Internet'];
+    
+    for (const target of knownBrands) {
+      const match = uaData.brands.find(b =>
+        b.brand.toLowerCase().includes(target.toLowerCase())
+      );
+      if (match) {
+        browserName = target;
+        browserVersion = match.version || '';
+        break;
+      }
+    }
+
+    // If no special brand found, check for Microsoft Edge (brand: "Microsoft Edge")
+    if (browserName === 'Unknown') {
+      const edgeBrand = uaData.brands.find(b => b.brand === 'Microsoft Edge');
+      if (edgeBrand) {
+        browserName = 'Edge';
+        browserVersion = edgeBrand.version || '';
+      }
+    }
+
+    // If still unknown, fall back to Chromium version from brands
+    if (browserName === 'Unknown') {
+      const chromium = uaData.brands.find(b => b.brand === 'Chromium');
+      if (chromium) {
+        browserName = 'Chrome';
+        browserVersion = chromium.version || '';
+      }
+    }
+  }
+
+  // 2. Fallback: UA string parsing (Firefox, Safari, or old browsers)
+  if (browserName === 'Unknown') {
+    if (ua.includes('Edg/')) {
+      browserName = 'Edge';
+      browserVersion = ua.match(/Edg\/([\d.]+)/)?.[1] || '';
+    } else if (ua.includes('OPR/') || ua.includes('Opera/')) {
+      browserName = 'Opera';
+      browserVersion = ua.match(/OPR\/([\d.]+)/)?.[1] || '';
+    } else if (ua.includes('Firefox/')) {
+      browserName = 'Firefox';
+      browserVersion = ua.match(/Firefox\/([\d.]+)/)?.[1] || '';
+    } else if (ua.includes('Chrome/')) {
+      browserName = 'Chrome';
+      browserVersion = ua.match(/Chrome\/([\d.]+)/)?.[1] || '';
+    } else if (ua.includes('Safari/')) {
+      browserName = 'Safari';
+      browserVersion = ua.match(/Version\/([\d.]+)/)?.[1] || '';
+    }
+  }
+
+  // Detect OS
+  let osName = 'Unknown';
+  let osVersion = '';
+
+  // Try modern API first
+  if (uaData && uaData.platform) {
+    osName = uaData.platform; // "Windows", "macOS", "Linux", "Chrome OS"
+  }
+
+  // Enrich with version from UA string
+  if (ua.includes('Windows NT')) {
+    if (osName === 'Unknown') osName = 'Windows';
+    const ntVersion = ua.match(/Windows NT ([\d.]+)/)?.[1] || '';
+    const ntMap = { '10.0': '10/11', '6.3': '8.1', '6.2': '8', '6.1': '7' };
+    osVersion = ntMap[ntVersion] || ntVersion;
+  } else if (ua.includes('Mac OS X')) {
+    if (osName === 'Unknown') osName = 'macOS';
+    osVersion = ua.match(/Mac OS X ([\d_]+)/)?.[1]?.replace(/_/g, '.') || '';
+  } else if (ua.includes('CrOS')) {
+    if (osName === 'Unknown') osName = 'ChromeOS';
+  } else if (ua.includes('Linux')) {
+    if (osName === 'Unknown') osName = 'Linux';
+  }
+
+  return {
+    browserName,
+    browserVersion,
+    osName,
+    osVersion,
+    extensionVersion: manifest.version,
+  };
+}
+
 // ─── Core Sync ──────────────────────────────────────────────────────
 async function syncWithAdminPanel() {
   if (isUnpairing) return;
@@ -114,7 +213,18 @@ async function syncWithAdminPanel() {
     // Flush any pending events while we're syncing
     await flushEventBatch(deviceId);
 
-    const url = `${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&_t=${Date.now()}`;
+    const info = getBrowserInfo();
+    const params = new URLSearchParams({
+      deviceId,
+      _t: Date.now().toString(),
+      browserName: info.browserName,
+      browserVersion: info.browserVersion,
+      osName: info.osName,
+      osVersion: info.osVersion,
+      extVersion: info.extensionVersion,
+    });
+
+    const url = `${API_BASE_URL}/api/extension/sync?${params.toString()}`;
     const response = await fetch(url, {
       signal: AbortSignal.timeout(5000),
       cache: 'no-store',

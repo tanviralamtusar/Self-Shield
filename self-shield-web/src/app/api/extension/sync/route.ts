@@ -18,17 +18,39 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // 0. Update last seen timestamp
+    // 0. Update device metadata + last seen
     const status = searchParams.get('status');
     const lastSeenValue = status === 'offline' ? '1970-01-01T00:00:00Z' : new Date().toISOString();
-    
+
     if (status === 'offline') {
       console.log(`[Extension Sync] Marking device ${deviceId} as OFFLINE`);
     }
 
+    // Browser info from extension (sent on every sync)
+    const browserName = searchParams.get('browserName');
+    const browserVersion = searchParams.get('browserVersion');
+    const osName = searchParams.get('osName');
+    const osVersion = searchParams.get('osVersion');
+    const extVersion = searchParams.get('extVersion');
+
+    const updatePayload: Record<string, unknown> = {
+      last_seen_at: lastSeenValue,
+    };
+
+    // Only update browser info if provided (extension sync sends these)
+    if (browserName) {
+      updatePayload.device_name = `${browserName} Extension`;
+      updatePayload.browser_name = browserName;
+      updatePayload.browser_version = browserVersion || null;
+      updatePayload.os_name = osName || null;
+      updatePayload.os_version = osVersion || null;
+      updatePayload.device_type = 'browser_extension';
+      if (extVersion) updatePayload.app_version = extVersion;
+    }
+
     await supabaseAdmin
       .from('devices')
-      .update({ last_seen_at: lastSeenValue })
+      .update(updatePayload)
       .eq('id', deviceId);
 
     // Cleanup: delete usage events older than 3 days (fire-and-forget)

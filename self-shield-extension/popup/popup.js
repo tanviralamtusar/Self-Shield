@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const pairContainer = document.getElementById('pair-container');
   const deviceIdInput = document.getElementById('deviceIdInput');
   const pairBtn = document.getElementById('pairBtn');
-  const unpairBtn = document.getElementById('unpairBtn');
 
   // Load initial status
   chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls", "pairedAt"], (data) => {
@@ -50,11 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (data.deviceId) {
       if(deviceIdSpan) deviceIdSpan.textContent = data.deviceId;
       if(pairContainer) pairContainer.classList.add('hidden');
-      if(unpairBtn) unpairBtn.classList.remove('hidden');
     } else {
       if(deviceIdSpan) deviceIdSpan.textContent = 'Not Paired';
       if(pairContainer) pairContainer.classList.remove('hidden');
-      if(unpairBtn) unpairBtn.classList.add('hidden');
       
       // If not paired, status must be inactive
       updateStatusUI('inactive');
@@ -95,15 +92,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if(unpairBtn) {
-    unpairBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to unpair this device?')) {
-        chrome.runtime.sendMessage({ action: 'deviceDeleted' }, (response) => {
-          if (response && response.success) {
-            // Storage listener will update UI
-          }
-        });
-      }
-    });
-  }
+
 });

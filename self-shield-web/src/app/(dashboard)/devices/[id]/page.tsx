@@ -158,7 +158,17 @@ export default function DeviceDetailPage() {
       <div>
         <h2 className="text-3xl font-bold tracking-tight">{device.device_name || 'Unnamed Device'}</h2>
         <p className="text-muted-foreground mt-1">
-          Android {device.android_version} • App v{device.app_version}
+          {device.device_type === 'browser_extension' ? (
+            <>
+              {device.browser_name && `${device.browser_name} ${device.browser_version || ''}`}
+              {device.os_name && ` • ${device.os_name} ${device.os_version || ''}`}
+              {device.app_version && ` • v${device.app_version}`}
+            </>
+          ) : (
+            <>
+              {device.os_name || 'Android'} {device.android_version || ''} • App v{device.app_version || '—'}
+            </>
+          )}
         </p>
       </div>
 

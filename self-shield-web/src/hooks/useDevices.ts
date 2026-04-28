@@ -13,6 +13,12 @@ export type Device = {
   is_admin_active: boolean;
   last_seen_at: string | null;
   created_at: string;
+  // Browser extension fields
+  browser_name: string | null;
+  browser_version: string | null;
+  os_name: string | null;
+  os_version: string | null;
+  device_type: 'android' | 'browser_extension' | 'ios' | null;
 };
 
 export function useDevices() {
