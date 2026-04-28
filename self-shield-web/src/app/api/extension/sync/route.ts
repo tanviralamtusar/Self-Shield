@@ -5,10 +5,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const deviceId = searchParams.get('deviceId');
 
-  console.log(`[Extension Sync] Request for deviceId: ${deviceId}`);
-
   if (!deviceId) {
-    console.error('[Extension Sync] Missing deviceId');
     return NextResponse.json({ error: 'Device ID required' }, { status: 400 });
   }
 
@@ -17,6 +14,10 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get('status');
     const lastSeenValue = status === 'offline' ? '1970-01-01T00:00:00Z' : new Date().toISOString();
     
+    if (status === 'offline') {
+      console.log(`[Extension Sync] Marking device ${deviceId} as OFFLINE`);
+    }
+
     await supabaseAdmin
       .from('devices')
       .update({ last_seen_at: lastSeenValue })
@@ -35,7 +36,6 @@ export async function GET(req: NextRequest) {
 
     // If settings don't exist, let's try to find the device first
     if (settingsError || !settings) {
-      console.log(`[Extension Sync] Settings not found for ${deviceId}, checking device existence...`);
       const { data: device, error: deviceError } = await supabaseAdmin
         .from('devices')
         .select('*')
@@ -69,8 +69,6 @@ export async function GET(req: NextRequest) {
       console.error(`[Extension Sync] Failed to initialize settings for ${deviceId}`);
       return NextResponse.json({ error: 'Failed to initialize settings' }, { status: 500 });
     }
-
-    console.log(`[Extension Sync] Settings for ${deviceId}: vpn_enabled=${settings.vpn_enabled}`);
 
     // 2. If vpn_enabled is false, return early (disabled)
     if (!settings.vpn_enabled) {
@@ -143,8 +141,6 @@ export async function POST(req: NextRequest) {
     if (!deviceId || !eventType || !target) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-
-    console.log(`[Extension Event] ${eventType} on ${target} for device ${deviceId}`);
 
     // Insert into usage_events
     const { error } = await supabaseAdmin

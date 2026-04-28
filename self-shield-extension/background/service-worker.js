@@ -1,5 +1,5 @@
-// In development, use 127.0.0.1. In production, use your actual domain.
-const API_BASE_URL = "http://127.0.0.1:3000";
+// In development, use localhost. In production, use your actual domain.
+const API_BASE_URL = "http://localhost:3000";
 // Keep service worker alive with alarm (backup)
 chrome.alarms.create("syncData", { periodInMinutes: 0.5 });
 
@@ -10,6 +10,8 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 });
 
 // Always-running fast polling (every 2 seconds) with self-healing
+let isUnpairing = false;
+
 function startFastSync() {
   try {
     syncWithAdminPanel().finally(() => {
@@ -41,6 +43,8 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 async function syncWithAdminPanel(retryCount = 0) {
+  if (isUnpairing) return;
+
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
 
@@ -177,13 +181,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // === INSTANT DEVICE DELETION (from content script or popup) ===
     if (request.action === "deviceDeleted") {
       console.log("INSTANT: Device unpairing...");
+      isUnpairing = true;
       
       const performUnpair = async () => {
         try {
           const { deviceId } = await chrome.storage.local.get("deviceId");
           if (deviceId) {
-            // Await the signal to ensure server gets it before we clear local ID
-            await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&status=offline`).catch(() => {});
+            // Await the signal and use keepalive to ensure it finishes
+            await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&status=offline`, {
+              keepalive: true
+            }).catch(() => {});
           }
         } catch (e) {}
 
@@ -193,6 +200,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
         
         await clearBlockingRules().catch(() => {});
+        isUnpairing = false; // Reset for potential future pairing
         sendResponse({ success: true });
       };
 
