@@ -187,10 +187,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         try {
           const { deviceId } = await chrome.storage.local.get("deviceId");
           if (deviceId) {
-            // Await the signal and use keepalive to ensure it finishes
-            await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&status=offline`, {
-              keepalive: true
-            }).catch(() => {});
+            // Await the signal to ensure it finishes before clearing local storage
+            await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&status=offline`).catch((err) => {
+              console.error("Offline signal failed:", err);
+            });
           }
         } catch (e) {}
 
