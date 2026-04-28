@@ -176,22 +176,27 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     // === INSTANT DEVICE DELETION (from content script or popup) ===
     if (request.action === "deviceDeleted") {
-      console.log("INSTANT: Device unpairing/deleted!");
+      console.log("INSTANT: Device unpairing...");
       
-      // Notify server to go offline immediately
-      chrome.storage.local.get("deviceId", (data) => {
-        if (data.deviceId) {
-          fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${data.deviceId}&status=offline`).catch(() => {});
-        }
-      });
+      const performUnpair = async () => {
+        try {
+          const { deviceId } = await chrome.storage.local.get("deviceId");
+          if (deviceId) {
+            // Await the signal to ensure server gets it before we clear local ID
+            await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&status=offline`).catch(() => {});
+          }
+        } catch (e) {}
 
-      chrome.storage.local.set({ 
-        is_enabled: false, deviceId: null, pairedAt: null, 
-        everBeenActive: false, blocked_urls: [] 
-      }, () => {
-        clearBlockingRules().catch(() => {});
+        await chrome.storage.local.set({ 
+          is_enabled: false, deviceId: null, pairedAt: null, 
+          everBeenActive: false, blocked_urls: [] 
+        });
+        
+        await clearBlockingRules().catch(() => {});
         sendResponse({ success: true });
-      });
+      };
+
+      performUnpair();
       return true;
     }
 

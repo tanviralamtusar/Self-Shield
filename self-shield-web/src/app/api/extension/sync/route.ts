@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   try {
     // 0. Update last seen timestamp
     const status = searchParams.get('status');
-    const lastSeenValue = status === 'offline' ? null : new Date().toISOString();
+    const lastSeenValue = status === 'offline' ? '1970-01-01T00:00:00Z' : new Date().toISOString();
     
     await supabaseAdmin
       .from('devices')

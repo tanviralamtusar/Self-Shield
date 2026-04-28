@@ -7,6 +7,7 @@ import { formatDistanceToNow } from 'date-fns';
 import type { Device } from '@/hooks/useDevices';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 export function DeviceCard({ device }: { device: Device }) {
@@ -64,7 +65,19 @@ export function DeviceCard({ device }: { device: Device }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant={isOnline ? 'default' : 'secondary'} className={isOnline ? 'bg-success hover:bg-success/90' : ''}>
+            <Badge 
+              variant="outline" 
+              className={cn(
+                "font-medium px-2 py-0.5 border",
+                isOnline 
+                  ? "bg-green-500/10 text-green-500 border-green-500/20 shadow-[0_0_8px_rgba(34,197,94,0.2)]" 
+                  : "bg-slate-500/10 text-slate-500 border-slate-500/20"
+              )}
+            >
+              <span className={cn(
+                "w-1.5 h-1.5 rounded-full mr-1.5",
+                isOnline ? "bg-green-500 animate-pulse" : "bg-slate-500"
+              )} />
               {isOnline ? 'Online' : 'Offline'}
             </Badge>
             <Button 
