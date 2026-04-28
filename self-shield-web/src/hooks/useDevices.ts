@@ -42,7 +42,7 @@ export function useDevices() {
 
   return useQuery({
     queryKey: ['devices'],
-    refetchInterval: 10000, // Fallback polling every 10 seconds
+    refetchInterval: 3000, // Faster polling as a fallback
     queryFn: async () => {
       const { data, error } = await supabase
         .from('devices')

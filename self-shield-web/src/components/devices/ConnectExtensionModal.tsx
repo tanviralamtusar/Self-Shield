@@ -14,7 +14,29 @@ export function ConnectExtensionModal() {
   const [copied, setCopied] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleOpenChange = (isOpen: boolean) => {
+  const handleOpenChange = async (isOpen: boolean) => {
+    // If the modal is closing and we have a deviceId that hasn't been paired yet
+    if (!isOpen && deviceId && !copied) {
+      // User closed modal without even copying the ID? Definitely cleanup.
+      await fetch('/api/extension/devices/cleanup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deviceId })
+      });
+      queryClient.invalidateQueries({ queryKey: ['devices'] });
+    } else if (!isOpen && deviceId) {
+      // User closed modal after copying or clicking Done. 
+      // Let's still try to cleanup IF they didn't actually pair it.
+      // We'll give them 5 seconds to pair, or just cleanup if they close.
+      // The cleanup API already checks if last_seen_at is null.
+      await fetch('/api/extension/devices/cleanup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deviceId })
+      });
+      queryClient.invalidateQueries({ queryKey: ['devices'] });
+    }
+
     setOpen(isOpen);
     if (isOpen) {
       // Reset state every time the dialog opens

@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         admin_id: user.id,
         device_name: deviceName,
         is_admin_active: true,
-        last_seen_at: new Date().toISOString(),
+        last_seen_at: null,
       })
       .select()
       .single();
