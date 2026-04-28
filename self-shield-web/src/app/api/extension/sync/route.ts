@@ -13,6 +13,12 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // 0. Update last seen timestamp
+    await supabaseAdmin
+      .from('devices')
+      .update({ last_seen_at: new Date().toISOString() })
+      .eq('id', deviceId);
+
     // 1. Fetch device settings
     let { data: settings, error: settingsError } = await supabaseAdmin
       .from('device_settings')
@@ -121,3 +127,38 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { deviceId, eventType, target } = body;
+
+    if (!deviceId || !eventType || !target) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    console.log(`[Extension Event] ${eventType} on ${target} for device ${deviceId}`);
+
+    // Insert into usage_events
+    const { error } = await supabaseAdmin
+      .from('usage_events')
+      .insert({
+        device_id: deviceId,
+        event_type: eventType, // 'block_triggered' or 'site_visit'
+        target: target,
+        occurred_at: new Date().toISOString()
+      });
+
+    if (error) {
+      console.error('Error logging usage event:', error);
+      return NextResponse.json({ error: 'Failed to log event' }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+
+  } catch (error: any) {
+    console.error('Extension event error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+

@@ -187,5 +187,32 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
+  // === REPORT BLOCK EVENT ===
+  if (request.action === "reportBlock") {
+    reportEventToServer("block_triggered", request.target);
+    sendResponse({ success: true });
+    return true;
+  }
+
   return false;
 });
+
+async function reportEventToServer(eventType, target) {
+  try {
+    const { deviceId } = await chrome.storage.local.get("deviceId");
+    if (!deviceId) return;
+
+    await fetch(`${API_BASE_URL}/api/extension/sync`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        deviceId,
+        eventType,
+        target
+      })
+    });
+  } catch (error) {
+    console.error("Failed to report event:", error);
+  }
+}
+

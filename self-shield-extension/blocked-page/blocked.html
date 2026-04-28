@@ -63,5 +63,16 @@
     <p>Go back to the admin panel to manage your restrictions.</p>
     <a href="https://selfshield.app" target="_blank" class="btn">Open Admin Panel</a>
   </div>
+
+  <script>
+    // Notify background script that a block event occurred
+    const urlParams = new URLSearchParams(window.location.search);
+    const blockedUrl = document.referrer || 'Unknown';
+    
+    chrome.runtime.sendMessage({ 
+      action: 'reportBlock', 
+      target: blockedUrl 
+    });
+  </script>
 </body>
 </html>
