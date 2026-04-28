@@ -5,21 +5,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const deviceIdInput = document.getElementById('deviceIdInput');
   const pairBtn = document.getElementById('pairBtn');
 
-  // Load current status
-  function fetchStatus() {
-    chrome.runtime.sendMessage({ action: 'getStatus' }, (response) => {
-      if (response) {
-        updateUI(response);
-      }
-    });
-  }
+  // Load initial status
+  chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls"], (data) => {
+    updateUI(data);
+  });
 
-  fetchStatus();
-  // Poll every 1 second for instant UI update
-  const statusPoller = setInterval(fetchStatus, 1000);
-
-  // Cleanup on unload
-  window.addEventListener('unload', () => clearInterval(statusPoller));
+  // Listen for storage changes (Real-time updates from background)
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local') {
+      chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls"], (data) => {
+        updateUI(data);
+      });
+    }
+  });
 
   function updateUI(data) {
     if (data.deviceId) {
@@ -48,24 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
       statusText.textContent = 'Syncing...';
       pairBtn.disabled = true;
       chrome.runtime.sendMessage({ action: 'pairDevice', deviceId: id }, (response) => {
+        const error = chrome.runtime.lastError; // Access to check it
+        if (error) {
+          statusText.textContent = 'Connection Error';
+          pairBtn.disabled = false;
+          return;
+        }
         if (response && response.success) {
-          // Poll for status update
-          let attempts = 0;
-          const poll = setInterval(() => {
-            chrome.runtime.sendMessage({ action: 'getStatus' }, (res) => {
-              if (res && res.is_enabled !== undefined) {
-                updateUI(res);
-                clearInterval(poll);
-                pairBtn.disabled = false;
-              }
-            });
-            attempts++;
-            if (attempts > 10) {
-              clearInterval(poll);
-              statusText.textContent = 'Sync Error';
-              pairBtn.disabled = false;
-            }
-          }, 1000);
+          // No need to poll, storage listener will catch the update
+          pairBtn.disabled = false;
         } else {
           statusText.textContent = 'Pairing Failed';
           pairBtn.disabled = false;
