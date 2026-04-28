@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
 import { supabaseAdmin } from '../src/lib/supabase/admin';
 
 async function activateDevice() {
