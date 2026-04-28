@@ -35,70 +35,49 @@ export function StatCards() {
   const activeDevices = devices?.length || 0;
   const pendingOverrides = overrides?.filter(o => o.status === 'pending').length || 0;
   const totalBlocks = stats?.totalBlocks || 0;
-  // We'll use device count for now or a hardcoded value if we don't have total apps
-  const protectedAppsCount = 12; // Mock or calculate if we have a way to get total apps
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 border border-primary/10 bg-gradient-to-br from-card to-card/50">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 transition-transform duration-500 group-hover:scale-110"></div>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
-          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Devices</CardTitle>
-          <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+    <div className="grid gap-6 md:grid-cols-3">
+      <Card className="border border-border/50 bg-card/30 backdrop-blur-sm shadow-sm">
+        <CardHeader className="flex flex-row items-center gap-4 pb-2">
+          <div className="p-2 rounded-full bg-primary/10 text-primary">
             <Smartphone className="h-4 w-4" />
           </div>
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Active Devices</CardTitle>
         </CardHeader>
-        <CardContent className="pb-4 relative z-10">
-          <div className="text-3xl font-black tracking-tight">{activeDevices}</div>
-          <div className="flex items-center gap-1 mt-1 text-[10px] text-success font-medium uppercase tracking-tighter">
-            <span className="h-1 w-1 rounded-full bg-success animate-pulse"></span>
-            Online
-          </div>
+        <CardContent>
+          <div className="text-3xl font-bold tracking-tight">{activeDevices}</div>
+          <p className="text-xs text-muted-foreground mt-1">Systems currently protected</p>
         </CardContent>
       </Card>
       
-      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-success/10 border border-success/10 bg-gradient-to-br from-card to-card/50">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-success/5 rounded-full -mr-12 -mt-12"></div>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
-          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Protection</CardTitle>
-          <div className="p-1.5 rounded-lg bg-success/10 text-success">
-            <Shield className="h-4 w-4" />
-          </div>
-        </CardHeader>
-        <CardContent className="pb-4 relative z-10">
-          <div className="text-3xl font-black tracking-tight">{protectedAppsCount}</div>
-          <p className="text-[10px] text-muted-foreground uppercase font-bold mt-1 tracking-tighter">Apps Secured</p>
-        </CardContent>
-      </Card>
-      
-      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-warning/10 border border-warning/10 bg-gradient-to-br from-card to-card/50">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-warning/5 rounded-full -mr-12 -mt-12"></div>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
-          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Requests</CardTitle>
-          <div className="p-1.5 rounded-lg bg-warning/10 text-warning">
+      <Card className="border border-border/50 bg-card/30 backdrop-blur-sm shadow-sm">
+        <CardHeader className="flex flex-row items-center gap-4 pb-2">
+          <div className="p-2 rounded-full bg-amber-500/10 text-amber-500">
             <Clock className="h-4 w-4" />
           </div>
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Action Needed</CardTitle>
         </CardHeader>
-        <CardContent className="pb-4 relative z-10">
-          <div className="text-3xl font-black tracking-tight">{pendingOverrides}</div>
-          <p className="text-[10px] text-warning uppercase font-bold mt-1 tracking-tighter">Requires Action</p>
+        <CardContent>
+          <div className="text-3xl font-bold tracking-tight">{pendingOverrides}</div>
+          <p className={`text-xs mt-1 ${pendingOverrides > 0 ? "text-amber-500 font-medium" : "text-muted-foreground"}`}>
+            {pendingOverrides > 0 ? "Manual review required" : "No pending requests"}
+          </p>
         </CardContent>
       </Card>
       
-      <Card className="relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-destructive/10 border border-destructive/10 bg-gradient-to-br from-card to-card/50">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-destructive/5 rounded-full -mr-12 -mt-12"></div>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
-          <CardTitle className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Neutralized</CardTitle>
-          <div className="p-1.5 rounded-lg bg-destructive/10 text-destructive">
+      <Card className="border border-border/50 bg-card/30 backdrop-blur-sm shadow-sm">
+        <CardHeader className="flex flex-row items-center gap-4 pb-2">
+          <div className="p-2 rounded-full bg-rose-500/10 text-rose-500">
             <ShieldAlert className="h-4 w-4" />
           </div>
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Blocked Threats</CardTitle>
         </CardHeader>
-        <CardContent className="pb-4 relative z-10">
-          <div className="text-3xl font-black tracking-tight">{totalBlocks.toLocaleString()}</div>
-          <p className="text-[10px] text-destructive uppercase font-bold mt-1 tracking-tighter">Threats Blocked</p>
+        <CardContent>
+          <div className="text-3xl font-bold tracking-tight">{totalBlocks.toLocaleString()}</div>
+          <p className="text-xs text-muted-foreground mt-1">Total items neutralized</p>
         </CardContent>
       </Card>
     </div>
   );
 }
-

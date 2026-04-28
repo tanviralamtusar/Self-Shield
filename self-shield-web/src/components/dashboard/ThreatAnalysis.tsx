@@ -12,25 +12,24 @@ const recentThreats = [
 
 export function ThreatAnalysis() {
   return (
-    <Card className="h-full">
+    <Card className="h-full border border-border/50 bg-card/30 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Lock className="w-5 h-5 text-destructive" />
-          Live Threat Analysis
+        <CardTitle className="text-base font-semibold flex items-center gap-2">
+          <Lock className="w-4 h-4 text-muted-foreground" />
+          Threat Intelligence
         </CardTitle>
-        <CardDescription>Real-time monitoring of intercepted security events.</CardDescription>
+        <CardDescription className="text-[11px]">Real-time monitoring of intercepted security events.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="relative aspect-video rounded-xl bg-muted/30 border border-dashed flex items-center justify-center overflow-hidden group">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-primary)_0%,transparent_70%)] opacity-5 group-hover:opacity-10 transition-opacity" />
-          <Globe className="w-12 h-12 text-muted-foreground/20" />
-          <div className="absolute top-4 left-4 flex flex-col gap-1">
-            <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground">
-              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              Scanning Global Blocklists...
+        <div className="relative aspect-video rounded-xl bg-muted/20 border border-border/50 flex items-center justify-center overflow-hidden">
+          <Globe className="w-10 h-10 text-muted-foreground/20" />
+          <div className="absolute top-4 left-4">
+            <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground/60 uppercase tracking-tight">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Scanning Blocklists
             </div>
           </div>
-          <p className="text-xs text-muted-foreground font-mono">ENCRYPTION ACTIVE: AES-256-GCM</p>
+          <p className="absolute bottom-4 right-4 text-[9px] text-muted-foreground/40 font-mono tracking-widest uppercase">Encryption Active</p>
         </div>
 
         <div className="space-y-4">
