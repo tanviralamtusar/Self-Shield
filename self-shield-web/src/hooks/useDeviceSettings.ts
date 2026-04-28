@@ -54,6 +54,10 @@ export function useUpdateDeviceSettings() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['device-settings', data.device_id] });
+      // Notify extension content script to trigger an instant sync
+      if (typeof window !== 'undefined') {
+        window.postMessage({ type: 'SELF_SHIELD_SETTINGS_CHANGED' }, '*');
+      }
     },
   });
 }

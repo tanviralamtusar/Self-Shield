@@ -1,92 +1,122 @@
 // In development, use localhost. In production, use your actual domain.
 const API_BASE_URL = "http://localhost:3000";
 
-// Supabase Config (for REST logging)
-const SUPABASE_URL = "https://nkadwmptdzjsmwuujcid.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWR3bXB0ZHpqc213dXVqY2lkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMjI4OTcsImV4cCI6MjA5MjU5ODg5N30.XunlpVcJPHSL953gKIQuZ7-vrbI3SnmCbtp8OX_gdL0";
+// ─── Event Batch Queue ──────────────────────────────────────────────
+const MAX_BATCH_SIZE = 20;
+let eventBatch = [];
 
-// Offscreen Management
-let isCreatingOffscreen = false;
+// ─── State ──────────────────────────────────────────────────────────
+let isUnpairing = false;
 
-async function setupOffscreen() {
-  if (isCreatingOffscreen) return;
+// ─── Alarms ─────────────────────────────────────────────────────────
+// Safety-net: catch changes made outside the dashboard (e.g. mobile app)
+chrome.alarms.create("safetyNetSync", { periodInMinutes: 5 });
+// Event flush: send batched site visits to the backend every 2 minutes
+chrome.alarms.create("flushEvents", { periodInMinutes: 2 });
 
-  const existingContexts = await chrome.runtime.getContexts({
-    contextTypes: ['OFFSCREEN_DOCUMENT']
-  });
-
-  if (existingContexts.length > 0) return;
-
-  // Re-check after the async getContexts call
-  if (isCreatingOffscreen) return;
-  isCreatingOffscreen = true;
-
-  try {
-    await chrome.offscreen.createDocument({
-      url: 'offscreen/offscreen.html',
-      reasons: ['MATCH_MEDIA'],
-      justification: 'Maintaining a Realtime WebSocket connection with Supabase for instant settings sync.'
-    });
-    console.log("[Service Worker] Offscreen document created.");
-  } catch (error) {
-    if (!error.message.includes('Only a single offscreen document')) {
-      console.error("[Service Worker] Failed to create offscreen document:", error);
-    }
-  } finally {
-    isCreatingOffscreen = false;
-  }
-}
-
-// Ensure offscreen is running
-setupOffscreen();
-
-// Backup alarm to ensure service worker and offscreen stay alive
-chrome.alarms.create("keepAlive", { periodInMinutes: 0.5 });
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "keepAlive") {
-    setupOffscreen();
+  if (alarm.name === "safetyNetSync") {
+    syncWithAdminPanel();
+  }
+  if (alarm.name === "flushEvents") {
+    chrome.storage.local.get("deviceId", ({ deviceId }) => {
+      if (deviceId) flushEventBatch(deviceId);
+    });
   }
 });
 
-let isUnpairing = false;
-
-// Initial sync on startup
+// ─── Lifecycle Triggers ─────────────────────────────────────────────
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Self-Shield Extension Installed");
   syncWithAdminPanel();
-  setupOffscreen();
 });
 
 chrome.runtime.onStartup.addListener(() => {
   syncWithAdminPanel();
-  setupOffscreen();
 });
 
-// Sync when offscreen notifies us of a change
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'supabase_update') {
-    console.log(`[Service Worker] Sync triggered by ${request.source}`);
-    syncWithAdminPanel();
-  }
-});
-
-// Also sync immediately when popup opens
+// ─── Instant Sync: Content Script Relay or Popup ────────────────────
+// When the dashboard page changes settings, the content script sends
+// 'triggerSync'. When the popup opens, it connects on this port.
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name === "popup") {
     syncWithAdminPanel();
   }
 });
 
-async function syncWithAdminPanel(retryCount = 0) {
+// ─── Message Listeners ──────────────────────────────────────────────
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "triggerSync") {
+    syncWithAdminPanel()
+      .then(() => sendResponse({ success: true }))
+      .catch(() => sendResponse({ success: false }));
+    return true;
+  }
+
+  if (request.action === "pairDevice") {
+    chrome.storage.local.set({
+      deviceId: request.deviceId,
+      pairedAt: Date.now(),
+      everBeenActive: false,
+      is_enabled: false,
+      blocked_urls: []
+    }, () => {
+      sendResponse({ success: true });
+      syncWithAdminPanel();
+    });
+    return true;
+  }
+
+  if (request.action === "deviceDeleted") {
+    console.log("INSTANT: Device unpairing...");
+    isUnpairing = true;
+
+    const performUnpair = async () => {
+      try {
+        const { deviceId } = await chrome.storage.local.get("deviceId");
+        if (deviceId) {
+          // Flush any remaining events before clearing state
+          await flushEventBatch(deviceId);
+        }
+      } catch (e) {
+        // Best-effort flush before unpair
+      }
+
+      await chrome.storage.local.set({
+        is_enabled: false, deviceId: null, pairedAt: null,
+        everBeenActive: false, blocked_urls: []
+      });
+
+      await clearBlockingRules().catch(() => {});
+      isUnpairing = false;
+      sendResponse({ success: true });
+    };
+
+    performUnpair();
+    return true;
+  }
+
+  if (request.action === "reportBlock") {
+    logEvent("block_triggered", request.target);
+    sendResponse({ success: true });
+    return true;
+  }
+});
+
+// ─── Core Sync ──────────────────────────────────────────────────────
+async function syncWithAdminPanel() {
   if (isUnpairing) return;
 
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
     if (!deviceId) return;
 
+    // Flush any pending events while we're syncing
+    await flushEventBatch(deviceId);
+
     const url = `${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}&_t=${Date.now()}`;
     const response = await fetch(url, {
-      signal: AbortSignal.timeout(3000),
+      signal: AbortSignal.timeout(5000),
       cache: 'no-store',
       headers: { 'Cache-Control': 'no-cache' }
     });
@@ -97,9 +127,9 @@ async function syncWithAdminPanel(retryCount = 0) {
         if (!everBeenActive) return;
 
         console.log("DEVICE DELETED! Going INACTIVE now.");
-        await chrome.storage.local.set({ 
-          is_enabled: false, deviceId: null, pairedAt: null, 
-          everBeenActive: false, blocked_urls: [] 
+        await chrome.storage.local.set({
+          is_enabled: false, deviceId: null, pairedAt: null,
+          everBeenActive: false, blocked_urls: []
         });
         clearBlockingRules();
         return;
@@ -126,6 +156,7 @@ async function syncWithAdminPanel(retryCount = 0) {
   }
 }
 
+// ─── Blocking Rules ─────────────────────────────────────────────────
 async function updateBlockingRules(urls) {
   if (!urls || !Array.isArray(urls)) return;
 
@@ -157,96 +188,113 @@ async function clearBlockingRules() {
   await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds });
 }
 
-// Listen for messages from popup AND content scripts
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "pairDevice") {
-    chrome.storage.local.set({ 
-      deviceId: request.deviceId,
-      pairedAt: Date.now(),
-      everBeenActive: false,
-      is_enabled: false,
-      blocked_urls: [] 
-    }, () => {
-      sendResponse({ success: true });
-      syncWithAdminPanel();
+// ─── Event Logging (Batched) ────────────────────────────────────────
+// Events are queued in memory and flushed either:
+// 1. On the next sync cycle
+// 2. When the batch reaches MAX_BATCH_SIZE
+// 3. On unpair (best-effort flush)
+function logEvent(eventType, target, durationSec = null) {
+  const event = {
+    eventType,
+    target,
+    occurredAt: new Date().toISOString()
+  };
+  if (durationSec !== null) event.durationSec = durationSec;
+  eventBatch.push(event);
+
+  // Auto-flush if batch is full
+  if (eventBatch.length >= MAX_BATCH_SIZE) {
+    chrome.storage.local.get("deviceId", ({ deviceId }) => {
+      if (deviceId) flushEventBatch(deviceId);
     });
-    return true;
-  }
-
-  if (request.action === "deviceDeleted") {
-    console.log("INSTANT: Device unpairing...");
-    isUnpairing = true;
-    
-    const performUnpair = async () => {
-      try {
-        const { deviceId } = await chrome.storage.local.get("deviceId");
-        if (deviceId) {
-          // Send offline signal to Supabase directly
-          await reportEventToServer("status_offline", "manual_unpair");
-        }
-      } catch (e) {}
-
-      await chrome.storage.local.set({ 
-        is_enabled: false, deviceId: null, pairedAt: null, 
-        everBeenActive: false, blocked_urls: [] 
-      });
-      
-      await clearBlockingRules().catch(() => {});
-      isUnpairing = false;
-      sendResponse({ success: true });
-    };
-
-    performUnpair();
-    return true;
-  }
-
-  if (request.action === "triggerSync") {
-    syncWithAdminPanel()
-      .then(() => sendResponse({ success: true }))
-      .catch(() => sendResponse({ success: false }));
-    return true;
-  }
-
-  if (request.action === "reportBlock") {
-    reportEventToServer("block_triggered", request.target);
-    sendResponse({ success: true });
-    return true;
-  }
-});
-
-// Activity Logging via direct Supabase REST API
-async function reportEventToServer(eventType, target) {
-  try {
-    const { deviceId } = await chrome.storage.local.get("deviceId");
-    if (!deviceId) return;
-
-    await fetch(`${SUPABASE_URL}/rest/v1/usage_events`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-      },
-      body: JSON.stringify({
-        device_id: deviceId,
-        event_type: eventType,
-        target: target,
-        occurred_at: new Date().toISOString()
-      })
-    });
-  } catch (error) {
-    console.error("Direct logging failed:", error);
   }
 }
 
-// Site Visit Tracking
-chrome.webNavigation.onCompleted.addListener((details) => {
-  if (details.frameId === 0) {
-    try {
-      const url = new URL(details.url);
+async function flushEventBatch(deviceId) {
+  if (eventBatch.length === 0) return;
+
+  // Grab current batch and reset immediately to avoid double-flush
+  const eventsToSend = [...eventBatch];
+  eventBatch = [];
+
+  try {
+    await fetch(`${API_BASE_URL}/api/extension/sync`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(5000),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        deviceId,
+        events: eventsToSend
+      })
+    });
+  } catch (error) {
+    // Put events back on failure so they retry next flush
+    eventBatch = [...eventsToSend, ...eventBatch];
+    console.error("Event flush failed:", error);
+  }
+}
+
+// ─── Active Tab Time Tracking ───────────────────────────────────────
+// Tracks how long the user spends on each hostname.
+// When the user switches tabs or the browser loses focus, the elapsed
+// time on the previous site is logged as a site_visit with durationSec.
+let activeSession = { hostname: null, startTime: null };
+
+function endCurrentSession() {
+  if (activeSession.hostname && activeSession.startTime) {
+    const durationSec = Math.round((Date.now() - activeSession.startTime) / 1000);
+    // Only log if the user spent at least 2 seconds (avoid tab-switch noise)
+    if (durationSec >= 2) {
+      logEvent("site_visit", activeSession.hostname, durationSec);
+    }
+  }
+  activeSession = { hostname: null, startTime: null };
+}
+
+function startSession(hostname) {
+  if (!hostname) return;
+  // Don't restart if it's the same hostname
+  if (activeSession.hostname === hostname) return;
+  endCurrentSession();
+  activeSession = { hostname, startTime: Date.now() };
+}
+
+async function trackActiveTab() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    if (tab && tab.url) {
+      const url = new URL(tab.url);
       if (url.protocol.startsWith('http')) {
-        reportEventToServer("site_visit", url.hostname);
+        startSession(url.hostname);
+        return;
       }
-    } catch (e) {}
+    }
+    // Non-http tab or no tab — end any active session
+    endCurrentSession();
+  } catch (e) {
+    // Tab query can fail during shutdown
+  }
+}
+
+// When user switches tabs
+chrome.tabs.onActivated.addListener(() => {
+  trackActiveTab();
+});
+
+// When current tab navigates to a new URL
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url && tab.active) {
+    trackActiveTab();
   }
 });
+
+// When browser window gains/loses focus
+chrome.windows.onFocusChanged.addListener((windowId) => {
+  if (windowId === chrome.windows.WINDOW_ID_NONE) {
+    // Browser lost focus — user is in another app
+    endCurrentSession();
+  } else {
+    trackActiveTab();
+  }
+});
+

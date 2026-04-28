@@ -86,6 +86,10 @@ export function useToggleSubscription() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['device-subscriptions', variables.deviceId] });
+      // Notify extension content script to trigger an instant sync
+      if (typeof window !== 'undefined') {
+        window.postMessage({ type: 'SELF_SHIELD_SETTINGS_CHANGED' }, '*');
+      }
     },
   });
 }

@@ -31,6 +31,17 @@ export async function GET(req: NextRequest) {
       .update({ last_seen_at: lastSeenValue })
       .eq('id', deviceId);
 
+    // Cleanup: delete usage events older than 3 days (fire-and-forget)
+    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
+    supabaseAdmin
+      .from('usage_events')
+      .delete()
+      .eq('device_id', deviceId)
+      .lt('occurred_at', threeDaysAgo)
+      .then(({ error }) => {
+        if (error) console.error('[Sync] Cleanup error:', error.message);
+      });
+
     if (status === 'offline') {
       return NextResponse.json({ success: true, message: 'Device marked offline' });
     }
@@ -144,31 +155,53 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { deviceId, eventType, target } = body;
+    const { deviceId } = body;
 
-    if (!deviceId || !eventType || !target) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!deviceId) {
+      return NextResponse.json({ error: 'Device ID required' }, { status: 400 });
     }
 
-    // Insert into usage_events
+    // Support batched events (new) and single event (backward compat)
+    const events: Array<{ eventType: string; target: string; occurredAt?: string; durationSec?: number }> = [];
+
+    if (Array.isArray(body.events) && body.events.length > 0) {
+      events.push(...body.events);
+    } else if (body.eventType && body.target) {
+      events.push({
+        eventType: body.eventType,
+        target: body.target,
+        occurredAt: body.occurredAt,
+      });
+    }
+
+    if (events.length === 0) {
+      return NextResponse.json({ error: 'No events provided' }, { status: 400 });
+    }
+
     const { error } = await supabaseAdmin
       .from('usage_events')
-      .insert({
-        device_id: deviceId,
-        event_type: eventType, // 'block_triggered' or 'site_visit'
-        target: target,
-        occurred_at: new Date().toISOString()
-      });
+      .insert(
+        events.map(e => ({
+          device_id: deviceId,
+          event_type: e.eventType,
+          target: e.target,
+          duration_sec: e.durationSec ?? null,
+          occurred_at: e.occurredAt || new Date().toISOString()
+        }))
+      );
 
     if (error) {
-      console.error('Error logging usage event:', error);
-      return NextResponse.json({ error: 'Failed to log event' }, { status: 500 });
+      console.error('Error logging usage events:', error);
+      return NextResponse.json({ error: 'Failed to log events' }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true, count: events.length });
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    return response;
 
-  } catch (error: any) {
-    console.error('Extension event error:', error);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Extension event error:', msg);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
