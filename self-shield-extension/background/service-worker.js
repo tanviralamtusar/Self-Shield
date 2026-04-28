@@ -1,10 +1,11 @@
 // In development, use 127.0.0.1. In production, use your actual domain.
 const API_BASE_URL = "http://127.0.0.1:3000";
 
-// Sync interval in seconds for near-instant response
-const SYNC_INTERVAL_SECONDS = 10;
+// Fallback polling interval - fast enough to detect deletions quickly
+// Grace period (is_enabled === null) protects new pairings from 404
+const SYNC_INTERVAL_SECONDS = 5;
 
-// Fallback alarm to keep service worker alive (minimum 1 minute)
+// Fallback alarm to keep service worker alive
 chrome.alarms.create("syncData", { periodInMinutes: 1 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -13,13 +14,18 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
+// Force sync when the popup opens
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name === "popup") {
+    syncWithAdminPanel();
+  }
+});
+
+// Fallback polling loop
 function startFastSync() {
   syncWithAdminPanel();
-  // Recursive timeout will run as long as the service worker is active
   setTimeout(startFastSync, SYNC_INTERVAL_SECONDS * 1000);
 }
-
-// Start fast sync immediately
 startFastSync();
 
 // Initial sync on startup
@@ -44,25 +50,32 @@ async function syncWithAdminPanel(retryCount = 0) {
     }
 
     const response = await fetch(`${API_BASE_URL}/api/extension/sync?deviceId=${deviceId}`, {
-      // Add a timeout signal
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(5000),
+      cache: 'no-store'
     });
 
     if (!response.ok) {
       if (response.status === 404) {
+        const { is_enabled } = await chrome.storage.local.get("is_enabled");
+        
+        // If we are in "Waiting" state (just paired), don't treat 404 as deletion.
+        // Give server a few seconds to propagate.
+        if (is_enabled === null) {
+          console.log("Device not yet found on server (Waiting state). Retrying...");
+          return; 
+        }
+
         console.log("Device not found on server. Disabling protection.");
-        await chrome.storage.local.set({ is_enabled: false, blocked_urls: [] });
+        await chrome.storage.local.set({ is_enabled: false, deviceId: null, blocked_urls: [] });
         clearBlockingRules();
-        throw new Error("Device not found. Please pair again.");
+        return;
       }
 
       // If server is compiling or busy, retry once after 3 seconds
       if (retryCount < 1) {
         console.log("Server busy, retrying in 3s...");
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            syncWithAdminPanel(retryCount + 1).then(resolve).catch(reject);
-          }, 3000);
+        return new Promise((resolve) => {
+          setTimeout(() => syncWithAdminPanel(retryCount + 1).then(resolve), 3000);
         });
       }
 
@@ -72,7 +85,6 @@ async function syncWithAdminPanel(retryCount = 0) {
     const data = await response.json();
     const { is_enabled, blocked_urls } = data;
 
-    // Explicitly set to true if enabled, false otherwise
     const enabledState = is_enabled === true;
     const urls = blocked_urls || [];
 
@@ -88,7 +100,6 @@ async function syncWithAdminPanel(retryCount = 0) {
 
   } catch (error) {
     console.error("Sync failed:", error);
-    // If we have a deviceId but sync failed, don't wipe it, just wait for next alarm
   }
 }
 
@@ -108,7 +119,6 @@ async function updateBlockingRules(urls) {
     }
   }));
 
-  // Get current rules to remove them first
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   const removeRuleIds = currentRules.map(r => r.id);
 
@@ -131,24 +141,56 @@ async function clearBlockingRules() {
   console.log("Blocking rules cleared.");
 }
 
-// Listen for messages from popup (e.g. pairing)
+// Listen for messages from popup AND content scripts
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // === PAIRING ===
   if (request.action === "pairDevice") {
-    chrome.storage.local.set({ deviceId: request.deviceId }, () => {
-      syncWithAdminPanel()
-        .then(() => sendResponse({ success: true }))
-        .catch((err) => sendResponse({ success: false, error: err.message }));
+    chrome.storage.local.set({ 
+      deviceId: request.deviceId,
+      is_enabled: null, // "Waiting" state
+      blocked_urls: [] 
+    }, () => {
+      sendResponse({ success: true });
+      
+      // Retry sync quickly after pairing (every 2s, up to 10 times)
+      let attempts = 0;
+      const trySync = () => {
+        syncWithAdminPanel().then(() => {
+          chrome.storage.local.get("is_enabled", (data) => {
+            if (data.is_enabled === null && attempts < 10) {
+              attempts++;
+              setTimeout(trySync, 2000);
+            }
+          });
+        }).catch(() => {
+          if (attempts < 10) {
+            attempts++;
+            setTimeout(trySync, 2000);
+          }
+        });
+      };
+      trySync();
     });
-    return true; // Keep channel open for async response
+    return true;
   }
 
+  // === INSTANT DEVICE DELETION (from content script on admin panel page) ===
+  if (request.action === "deviceDeleted") {
+    console.log("Device deleted signal received from admin panel! Going INACTIVE immediately.");
+    chrome.storage.local.set({ is_enabled: false, deviceId: null, blocked_urls: [] }, () => {
+      clearBlockingRules();
+      sendResponse({ success: true });
+    });
+    return true;
+  }
+
+  // === MANUAL SYNC ===
   if (request.action === "triggerSync") {
     syncWithAdminPanel()
       .then(() => sendResponse({ success: true }))
-      .catch((err) => sendResponse({ success: false, error: err.message }));
-    return true; // Keep channel open
+      .catch(() => sendResponse({ success: false }));
+    return true;
   }
 
-  // Always return false for unhandled messages
   return false;
 });

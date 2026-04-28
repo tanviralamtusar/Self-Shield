@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Connect to background script to trigger instant sync
+  chrome.runtime.connect({ name: 'popup' });
+
   const statusText = document.getElementById('status-text');
   const deviceIdSpan = document.getElementById('device-id');
   const pairContainer = document.getElementById('pair-container');

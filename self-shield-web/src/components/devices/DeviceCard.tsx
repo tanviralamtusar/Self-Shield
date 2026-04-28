@@ -35,6 +35,9 @@ export function DeviceCard({ device }: { device: Device }) {
 
       if (error) throw error;
 
+      // INSTANT: Tell the extension's content script (running on this page) to go inactive
+      window.postMessage({ type: 'SELF_SHIELD_DEVICE_DELETED', deviceId: device.id }, '*');
+
       toast.success('Device removed successfully');
       queryClient.invalidateQueries({ queryKey: ['devices'] });
     } catch (error: any) {
