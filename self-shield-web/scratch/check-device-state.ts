@@ -1,13 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = "https://nkadwmptdzjsmwuujcid.supabase.co";
-const SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYWR3bXB0ZHpqc213dXVqY2lkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzAyMjg5NywiZXhwIjoyMDkyNTk4ODk3fQ.TAKRuxzV7IeI7T3ku2DSPhT3VU7ad1P7IAHyvgaspn4";
+// Use environment variables — NEVER hardcode secrets
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables');
+}
 
 const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 async function checkDevice() {
-  const deviceId = '2db4744d-160b-40a8-95a3-0730c303ae76';
+  const deviceId = process.argv[2] || '';
   
+  if (!deviceId) {
+    console.error('Usage: npx tsx scratch/check-device-state.ts <deviceId>');
+    process.exit(1);
+  }
+
   console.log(`Checking device: ${deviceId}`);
   
   const { data: device, error: deviceError } = await supabaseAdmin
