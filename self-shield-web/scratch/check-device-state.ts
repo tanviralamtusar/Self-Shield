@@ -6,7 +6,7 @@ const SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 async function checkDevice() {
-  const deviceId = '3d20181d-fecd-4594-9ba4-4a37c522f31f';
+  const deviceId = '2db4744d-160b-40a8-95a3-0730c303ae76';
   
   console.log(`Checking device: ${deviceId}`);
   

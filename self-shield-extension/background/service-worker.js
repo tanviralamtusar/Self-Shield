@@ -34,10 +34,10 @@ chrome.runtime.onStartup.addListener(() => {
 
 async function syncWithAdminPanel(retryCount = 0) {
   console.log("Syncing with Admin Panel...");
-  
+
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
-    
+
     if (!deviceId) {
       console.log("No deviceId found.");
       return;
@@ -51,18 +51,21 @@ async function syncWithAdminPanel(retryCount = 0) {
     if (!response.ok) {
       if (response.status === 404) {
         console.log("Device not found on server. Disabling protection.");
-        await chrome.storage.local.set({ is_enabled: false, deviceId: null, blocked_urls: [] });
+        await chrome.storage.local.set({ is_enabled: false, blocked_urls: [] });
         clearBlockingRules();
-        return;
+        throw new Error("Device not found. Please pair again.");
       }
-      
+
       // If server is compiling or busy, retry once after 3 seconds
       if (retryCount < 1) {
         console.log("Server busy, retrying in 3s...");
-        setTimeout(() => syncWithAdminPanel(retryCount + 1), 3000);
-        return;
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            syncWithAdminPanel(retryCount + 1).then(resolve).catch(reject);
+          }, 3000);
+        });
       }
-      
+
       throw new Error(`Server returned ${response.status}`);
     }
 
@@ -74,7 +77,7 @@ async function syncWithAdminPanel(retryCount = 0) {
     const urls = blocked_urls || [];
 
     await chrome.storage.local.set({ is_enabled: enabledState, blocked_urls: urls });
-    
+
     if (enabledState && urls.length > 0) {
       updateBlockingRules(urls);
     } else {
@@ -95,7 +98,7 @@ async function updateBlockingRules(urls) {
   const rules = urls.map((url, index) => ({
     id: index + 1,
     priority: 1,
-    action: { 
+    action: {
       type: "redirect",
       redirect: { extensionPath: "/blocked-page/blocked.html" }
     },
@@ -124,7 +127,7 @@ async function clearBlockingRules() {
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: removeRuleIds
   });
-  
+
   console.log("Blocking rules cleared.");
 }
 
@@ -132,21 +135,20 @@ async function clearBlockingRules() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "pairDevice") {
     chrome.storage.local.set({ deviceId: request.deviceId }, () => {
-      syncWithAdminPanel();
-      sendResponse({ success: true });
+      syncWithAdminPanel()
+        .then(() => sendResponse({ success: true }))
+        .catch((err) => sendResponse({ success: false, error: err.message }));
     });
-    return true;
-  }
-  
-  if (request.action === "getStatus") {
-    chrome.storage.local.get(["is_enabled", "deviceId"], (data) => {
-      sendResponse(data);
-    });
-    return true;
+    return true; // Keep channel open for async response
   }
 
   if (request.action === "triggerSync") {
-    syncWithAdminPanel().then(() => sendResponse({ success: true }));
-    return true;
+    syncWithAdminPanel()
+      .then(() => sendResponse({ success: true }))
+      .catch((err) => sendResponse({ success: false, error: err.message }));
+    return true; // Keep channel open
   }
+
+  // Always return false for unhandled messages
+  return false;
 });

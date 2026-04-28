@@ -19,33 +19,21 @@ export function ConnectExtensionModal() {
   const connectExtension = async () => {
     setLoading(true);
     try {
-      const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error('Not authenticated');
-
-      // Create a new device entry for the browser extension
-      const { data, error } = await supabase
-        .from('devices')
-        .insert({
-          owner_id: userData.user.id,
-          admin_id: userData.user.id,
-          device_name: 'Browser Extension (' + navigator.userAgent.split(' ').pop() + ')',
-          is_admin_active: true,
-          last_seen_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      // Initialize default settings for the new extension device
-      await supabase.from('device_settings').insert({
-        device_id: data.id,
-        vpn_enabled: true, // Set to true so extension starts active
-        accessibility_enabled: true,
-        keyword_blocking: true,
+      const deviceName = 'Browser Extension (' + navigator.userAgent.split(' ').pop() + ')';
+      
+      const response = await fetch('/api/extension/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deviceName })
       });
 
-      setDeviceId(data.id);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to register device');
+      }
+
+      setDeviceId(data.deviceId);
       queryClient.invalidateQueries({ queryKey: ['devices'] });
       toast.success('Extension Device Created!');
     } catch (err: any) {
