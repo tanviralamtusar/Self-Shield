@@ -14,6 +14,15 @@ export function ConnectExtensionModal() {
   const [copied, setCopied] = useState(false);
   const queryClient = useQueryClient();
 
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (isOpen) {
+      // Reset state every time the dialog opens
+      setDeviceId(null);
+      setCopied(false);
+    }
+  };
+
   const connectExtension = async () => {
     setLoading(true);
     try {
@@ -52,7 +61,7 @@ export function ConnectExtensionModal() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger render={<Button variant="outline" className="border-primary/20 hover:bg-primary/5" />}>
         <Globe className="w-4 h-4 mr-2 text-primary" />
         Connect Extension
