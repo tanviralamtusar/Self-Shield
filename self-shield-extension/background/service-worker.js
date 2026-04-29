@@ -63,6 +63,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       osName: info.osName,
       osVersion: info.osVersion,
       extVersion: info.extensionVersion,
+      isPairing: 'true',
     });
 
     fetch(`${API_BASE_URL}/api/extension/sync?${params.toString()}`)

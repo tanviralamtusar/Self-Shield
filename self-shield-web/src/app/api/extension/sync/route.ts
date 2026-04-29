@@ -33,10 +33,17 @@ export async function GET(req: NextRequest) {
     const osVersion = searchParams.get('osVersion');
     const extVersion = searchParams.get('extVersion');
 
+    // Get pairing flag
+    const isPairing = searchParams.get('isPairing') === 'true';
+
     const updatePayload: Record<string, unknown> = {
       last_seen_at: lastSeenValue,
-      is_admin_active: status !== 'offline',
     };
+
+    // ONLY re-activate if this is an explicit pairing request
+    if (isPairing) {
+      updatePayload.is_admin_active = true;
+    }
 
     // Only update browser info if provided (extension sync sends these)
     if (browserName) {
@@ -80,12 +87,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Device not found' }, { status: 404 });
     }
 
-    if (!device.is_admin_active) {
-      return NextResponse.json({ 
-        is_enabled: false, 
-        blocked_urls: [],
-        message: 'Device unpaired'
-      });
+    if (!device.is_admin_active && !isPairing) {
+      return NextResponse.json({ error: 'Device unpaired' }, { status: 404 });
     }
 
     let { data: settings, error: settingsError } = await supabaseAdmin
