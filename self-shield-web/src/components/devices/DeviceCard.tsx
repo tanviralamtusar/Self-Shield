@@ -31,10 +31,13 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
 
   const protectionStatus = device.is_device_owner && device.is_admin_active ? 'Full' : 'Partial';
 
-  const unpairDevice = async () => {
-    if (!confirm(`Are you sure you want to unpair ${device.device_name || 'this node'}? This will disconnect the extension immediately.`)) {
-      return;
-    }
+  const handleAction = async (isDelete: boolean) => {
+    const actionType = isDelete ? 'delete' : 'unpair';
+    const confirmMsg = isDelete 
+      ? `Are you sure you want to DELETE this node? This will remove all history and settings permanently.`
+      : `Are you sure you want to UNPAIR this node? The extension will stop protecting immediately.`;
+
+    if (!confirm(confirmMsg)) return;
 
     setIsDeleting(true);
     
@@ -47,13 +50,13 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to unpair');
+      if (!response.ok) throw new Error(data.error || `Failed to ${actionType}`);
 
-      toast.success('Device unpaired successfully');
+      toast.success(isDelete ? 'Device deleted' : 'Device unpaired');
       queryClient.invalidateQueries({ queryKey: ['devices'] });
     } catch (error: any) {
-      console.error('Error unpairing device:', error);
-      toast.error(error.message || 'Failed to unpair device');
+      console.error(`Error ${actionType} device:`, error);
+      toast.error(error.message || `Failed to ${actionType} device`);
     } finally {
       setIsDeleting(false);
     }
@@ -109,6 +112,18 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
             </div>
           </div>
         </div>
+
+        {/* Delete button (Trash icon) */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7 shrink-0 rounded-full text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 transition-all mt-0.5"
+          onClick={() => handleAction(true)}
+          disabled={isDeleting}
+          title="Delete Card"
+        >
+          {isDeleting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
+        </Button>
       </div>
 
       {/* ── FEATURES GRID ───────────────────────────── */}
@@ -192,7 +207,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
           Manage
         </Button>
         <Button
-          onClick={unpairDevice}
+          onClick={() => handleAction(false)}
           disabled={isDeleting}
           variant="outline"
           className="flex-1 h-10 text-[10px] font-black uppercase tracking-[0.15em] border-destructive/30 bg-transparent text-destructive/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-500"
