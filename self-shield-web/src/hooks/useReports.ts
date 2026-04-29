@@ -8,8 +8,8 @@ export type DailyReport = {
   total_screen_sec: number;
   blocks_triggered: number;
   keywords_blocked: number;
-  top_apps: any;
-  top_blocked_sites: any;
+  top_apps: unknown;
+  top_blocked_sites: unknown;
   focus_sessions_count: number;
   focus_total_min: number;
   created_at: string;
@@ -72,9 +72,9 @@ export function useReportStats(deviceId?: string) {
 
       const { count: deviceCount, error: deviceError } = await devicesQuery;
 
-      const { data: recentEvents, error: eventsError } = await supabase
+      const { error: eventsError } = await supabase
         .from('usage_events')
-        .select('event_type')
+        .select('event_type', { count: 'exact', head: true })
         .eq('event_type', 'block_triggered');
 
       if (reportsError || deviceError || eventsError) {

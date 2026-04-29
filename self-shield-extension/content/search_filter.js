@@ -20,7 +20,8 @@ function scrubSearch() {
     const hostname = window.location.hostname;
 
     // 1. Force Safe Search parameters for all major engines
-    if (hostname.includes('google.') && url.pathname === '/search') {
+    const isGoogle = /^https?:\/\/(www\.)?google\.[a-z.]+\/search/.test(window.location.href);
+    if (isGoogle) {
       if (url.searchParams.get('safe') !== 'active') {
         url.searchParams.set('safe', 'active');
         window.location.replace(url.toString());

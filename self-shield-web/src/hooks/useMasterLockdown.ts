@@ -1,7 +1,6 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createClient } from '@/lib/supabase/client';
+import { useMutation } from '@tanstack/react-query';
 import { useDevices } from './useDevices';
 import { useSendCommand } from './useRemoteCommands';
 

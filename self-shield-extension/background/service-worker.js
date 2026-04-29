@@ -181,9 +181,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === "pairDevice") {
+    // Security: Only allow pairing from the extension's own popup
+    if (!sender.url || !sender.url.startsWith('chrome-extension://')) {
+      console.warn("[Security] Unauthorized pairDevice attempt from:", sender.url);
+      sendResponse({ success: false, error: "Unauthorized request" });
+      return false;
+    }
+
+    const deviceId = request.deviceId?.trim();
+    if (!deviceId || deviceId.length < 5) {
+      sendResponse({ success: false, error: "Invalid Device ID format" });
+      return false;
+    }
+
     const info = getBrowserInfo();
     const params = new URLSearchParams({
-      deviceId: request.deviceId,
+      deviceId: deviceId,
       _t: Date.now().toString(),
       browserName: info.browserName,
       browserVersion: info.browserVersion,
@@ -202,9 +215,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             pairedAt: Date.now(),
             everBeenActive: true,
             is_enabled: data.is_enabled === true,
-            blocked_urls: data.blocked_urls || []
+            blocked_urls: data.blocked_urls || [],
+            api_base_url: API_BASE_URL // Store for content scripts
           }, () => {
-            setupRealtimeListener(request.deviceId).catch(() => {});
+            setupRealtimeListener(deviceId).catch(() => {});
             sendResponse({ success: true });
           });
         } else {
@@ -486,6 +500,7 @@ async function updateSafeSearchRules(enabled) {
   }
 
   const rules = [
+    // Google: safe=active
     {
       id: 10001,
       priority: 1000,
@@ -493,7 +508,10 @@ async function updateSafeSearchRules(enabled) {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "safe", value: "active" }] } } }
       },
-      condition: { urlFilter: "||google.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
+      condition: { 
+        regexFilter: "^https?://(www\\.)?google\\.[a-z.]+/search.*", 
+        resourceTypes: ["main_frame", "sub_frame"] 
+      }
     },
     {
       id: 10002,
@@ -523,6 +541,39 @@ async function updateSafeSearchRules(enabled) {
       condition: { urlFilter: "||search.yahoo.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     }
   ];
+
+    // 2. Dynamic Domain Rules from Supabase
+    dynamicUrls.forEach((url, index) => {
+      const ruleId = 11000 + index;
+      if (ruleId > 13000) return;
+
+      rules.push({
+        id: ruleId,
+        priority: 30,
+        action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+        condition: { 
+          urlFilter: url.includes('.') ? `*${url}*` : `*${url}*`, 
+          resourceTypes: ["main_frame", "sub_frame"]
+        }
+      });
+    });
+
+    // 3. Dynamic Keyword Rules from Supabase
+    dynamicKeywords.forEach((kw, index) => {
+      const ruleId = 13001 + index;
+      if (ruleId > END_ID) return;
+
+      rules.push({
+        id: ruleId,
+        priority: 30,
+        action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+        condition: { 
+          urlFilter: kw, 
+          resourceTypes: ["main_frame", "sub_frame"],
+          excludedDomains: ["google.com", "bing.com", "yahoo.com", "duckduckgo.com", "wikipedia.org", "youtube.com"]
+        }
+      });
+    });
 
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: rulesToRemove,

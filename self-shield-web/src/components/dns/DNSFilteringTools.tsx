@@ -86,7 +86,7 @@ export function DNSFilteringTools() {
             <CardContent className="space-y-4">
               <div className="flex flex-wrap gap-1.5">
                 {tool.features.map((feature) => (
-                  <Badge key={feature} variant="ghost" className="bg-primary/5 text-[10px] uppercase tracking-wider py-0 px-2 h-5 border border-primary/10">
+                  <Badge key={feature} variant="outline" className="bg-primary/5 text-[10px] uppercase tracking-wider py-0 px-2 h-5 border border-primary/10">
                     {feature}
                   </Badge>
                 ))}

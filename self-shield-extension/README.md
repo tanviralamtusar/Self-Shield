@@ -28,11 +28,16 @@ To make this extension impossible to disable or remove without Admin access, you
 Once added, the extension will be marked as "Managed by your organization" and the "Remove" and "Disable" buttons will be hidden.
 
 ## Syncing with Supabase
-The extension is pre-configured to talk to the Self-Shield Supabase instance. It fetches settings from the `protection_settings` table.
+The extension is pre-configured to talk to the Self-Shield Supabase instance. It fetches settings from the following tables:
 
-### Schema Requirements:
-Ensure your Supabase database has a `protection_settings` table:
-- `device_id` (text, primary key)
+### 1. `devices` table:
+- `id` (uuid, primary key)
+- `is_admin_active` (boolean) - Used for instant unpairing.
+
+### 2. `device_settings` table:
+- `device_id` (uuid, foreign key to `devices.id`)
 - `is_enabled` (boolean)
+- `safe_search_enabled` (boolean)
 - `blocked_urls` (text array)
+- `blocked_keywords` (text array)
 - `last_sync` (timestamp)

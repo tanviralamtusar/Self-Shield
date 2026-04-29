@@ -24,13 +24,23 @@ export function BlocklistTable() {
           id,
           name,
           type,
+          owner_id,
           is_enabled:device_block_list_subscriptions(is_enabled),
           entries:block_list_entries(count)
         `);
       
       if (error) throw error;
       
-      return data.map(list => ({
+      interface RawBlocklist {
+        id: string;
+        name: string;
+        type: string;
+        owner_id: string | null;
+        is_enabled: { is_enabled: boolean }[];
+        entries: { count: number }[];
+      }
+      
+      return (data as unknown as RawBlocklist[]).map(list => ({
         id: list.id,
         name: list.name,
         type: list.owner_id ? 'Custom' : 'System',

@@ -8,7 +8,7 @@ import { WeeklyReportPreview } from '@/components/reports/WeeklyReportPreview';
 import { format, parseISO } from 'date-fns';
 
 export default function ReportsPage() {
-  const { data: reports, isLoading: reportsLoading } = useReports(7);
+  const { data: reports, isLoading: reportsLoading } = useReports(undefined, 7);
   const { data: stats, isLoading: statsLoading } = useReportStats();
 
   // Process data for the chart
