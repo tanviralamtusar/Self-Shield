@@ -382,10 +382,17 @@ async function syncWithAdminPanel() {
     if (enabledState) {
       const combinedUrls = [...new Set([...urls, ...localUrls, ...BUILTIN_ADULT_SITES])];
       const combinedKeywords = [...new Set([...keywords, ...BUILTIN_ADULT_KEYWORDS])];
+      
+      // Update blocking rules (IDs 1-10000)
       updateBlockingRules(combinedUrls).catch(() => {});
-      updateSafeSearchRules(safeSearchState, combinedUrls, combinedKeywords).catch(() => {});
+      
+      // Update keyword rules (IDs 20000-25000) - ALWAYS apply if enabled
+      updateKeywordRules(combinedKeywords).catch(() => {});
+      
+      // Update safe search rules (IDs 10000-11000)
+      updateSafeSearchRules(safeSearchState).catch(() => {});
     } else {
-      clearBlockingRules().catch(() => {});
+      clearAllRules().catch(() => {});
     }
 
   } catch (error) {
@@ -398,12 +405,12 @@ async function updateBlockingRules(urls) {
   if (!urls || !Array.isArray(urls)) return;
   const rules = urls.map((url, index) => ({
     id: index + 1,
-    priority: 10,
+    priority: 100,
     action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
     condition: { urlFilter: `||${url}^`, resourceTypes: ["main_frame"] }
   }));
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
-  const oldBlockingRuleIds = currentRules.filter(r => r.id < 10000).map(r => r.id);
+  const oldBlockingRuleIds = currentRules.filter(r => r.id > 0 && r.id < 10000).map(r => r.id);
   
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: oldBlockingRuleIds,
@@ -411,7 +418,28 @@ async function updateBlockingRules(urls) {
   });
 }
 
-async function clearBlockingRules() {
+async function updateKeywordRules(keywords) {
+  if (!keywords || !Array.isArray(keywords)) return;
+  const rules = keywords.map((kw, index) => ({
+    id: 20000 + index,
+    priority: 2000, // Higher than safe search redirect
+    action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+    condition: { 
+      urlFilter: kw, 
+      resourceTypes: ["main_frame", "sub_frame"],
+      excludedDomains: ["wikipedia.org", "healthline.com", "medicalnewstoday.com"]
+    }
+  }));
+  const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
+  const oldKeywordRuleIds = currentRules.filter(r => r.id >= 20000 && r.id < 30000).map(r => r.id);
+  
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: oldKeywordRuleIds,
+    addRules: rules
+  });
+}
+
+async function clearAllRules() {
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   await chrome.declarativeNetRequest.updateDynamicRules({ 
     removeRuleIds: currentRules.map(r => r.id) 
@@ -419,9 +447,9 @@ async function clearBlockingRules() {
 }
 
 // ─── Safe Search Enforcement ──────────────────────────────────────────
-async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords = []) {
+async function updateSafeSearchRules(enabled) {
   const START_ID = 10000;
-  const END_ID = 15000;
+  const END_ID = 11000;
   
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   const rulesToRemove = currentRules
@@ -432,13 +460,10 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
     await chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: rulesToRemove
     });
-    console.log("[SafeSearch] Rules disabled and removed.");
     return;
   }
 
-  // 1. Static Search Engine Rules (Force Family Mode / Safe Search)
   const rules = [
-    // Google: safe=active
     {
       id: 10001,
       priority: 1000,
@@ -448,7 +473,6 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
       },
       condition: { urlFilter: "||google.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     },
-    // Bing: adlt=strict
     {
       id: 10002,
       priority: 1000,
@@ -458,7 +482,6 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
       },
       condition: { urlFilter: "||bing.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     },
-    // DuckDuckGo: kp=1 (Family Mode)
     {
       id: 10003,
       priority: 1000,
@@ -468,7 +491,6 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
       },
       condition: { urlFilter: "||duckduckgo.com/*", resourceTypes: ["main_frame", "sub_frame"] }
     },
-    // Yahoo: vm=p (Strict Search)
     {
       id: 10004,
       priority: 1000,
@@ -480,44 +502,11 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
     }
   ];
 
-    // 2. Dynamic Domain Rules from Supabase
-    dynamicUrls.forEach((url, index) => {
-      const ruleId = 11000 + index;
-      if (ruleId > 13000) return;
-
-      rules.push({
-        id: ruleId,
-        priority: 30,
-        action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
-        condition: { 
-          urlFilter: url.includes('.') ? `*${url}*` : `*${url}*`, 
-          resourceTypes: ["main_frame", "sub_frame"]
-        }
-      });
-    });
-
-    // 3. Dynamic Keyword Rules from Supabase
-    dynamicKeywords.forEach((kw, index) => {
-      const ruleId = 13001 + index;
-      if (ruleId > END_ID) return;
-
-      rules.push({
-        id: ruleId,
-        priority: 30,
-        action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
-        condition: { 
-          urlFilter: kw, 
-          resourceTypes: ["main_frame", "sub_frame"],
-          excludedDomains: ["wikipedia.org", "healthline.com", "medicalnewstoday.com"]
-        }
-      });
-    });
-
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: rulesToRemove,
     addRules: rules
   });
-  console.log(`[SafeSearch] Dynamic rules enforced from Supabase. Total rules: ${rules.length}`);
+}
 }
 
 // ─── Event Logging ──────────────────────────────────────────────────

@@ -14,28 +14,20 @@ blackoutStyle.textContent = `
 `;
 document.documentElement.appendChild(blackoutStyle);
 
-const EXCLUDED_HOSTS = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com', 'wikipedia.org', 'youtube.com', 'healthline.com'];
+const SEARCH_ENGINES = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com'];
+const SAFE_LIST = ['wikipedia.org', 'healthline.com', 'medicalnewstoday.com', 'selfshield.app'];
 
 function showBlockUI(hostname) {
-  // Use a hard redirect to our local blocked page.
-  // This is MUCH more secure than an overlay because it completely replaces 
-  // the page content and execution context, making it impossible to bypass 
-  // via Inspect Element.
   const blockedPageUrl = chrome.runtime.getURL('blocked-page/blocked.html');
   const originalUrl = window.location.href;
-  
-  // Clear the document immediately to prevent any more script execution
   document.documentElement.innerHTML = '';
   window.stop();
-  
-  // Perform the redirect
   window.location.replace(blockedPageUrl + '?url=' + encodeURIComponent(originalUrl));
 }
 
 function checkAndBlock() {
-  chrome.storage.local.get(['safe_search_enabled', 'is_enabled', 'blocked_keywords', 'blocked_urls', 'local_blocked_urls'], (settings) => {
+  chrome.storage.local.get(['is_enabled', 'blocked_keywords', 'blocked_urls', 'local_blocked_urls'], (settings) => {
     const isEnabled = settings.is_enabled !== false;
-    
     if (!isEnabled) {
       removeBlackout();
       return;
@@ -44,38 +36,39 @@ function checkAndBlock() {
     const url = window.location.href.toLowerCase();
     const hostname = window.location.hostname.toLowerCase();
 
-    // 1. Check if domain is in EXCLUDED_HOSTS (Safe List)
-    if (EXCLUDED_HOSTS.some(host => hostname.includes(host))) {
+    // 1. Skip if domain is in SAFE_LIST
+    if (SAFE_LIST.some(host => hostname.includes(host))) {
       removeBlackout();
       return;
     }
 
-    // 2. Check for Blocked URLs (including local)
-    const allBlockedUrls = [
-      ...(settings.blocked_urls || []), 
-      ...(settings.local_blocked_urls || [])
-    ];
-    
-    if (allBlockedUrls.some(blocked => hostname.includes(blocked.toLowerCase()))) {
-      console.log('[Self-Shield] Site blocked by URL filter.');
-      showBlockUI(hostname);
-      return;
+    const isSearchEngine = SEARCH_ENGINES.some(host => hostname.includes(host));
+
+    // 2. Check for Blocked URLs (Skip for search engines to allow safe search)
+    if (!isSearchEngine) {
+      const allBlockedUrls = [
+        ...(settings.blocked_urls || []), 
+        ...(settings.local_blocked_urls || [])
+      ];
+      
+      if (allBlockedUrls.some(blocked => hostname.includes(blocked.toLowerCase()))) {
+        showBlockUI(hostname);
+        return;
+      }
     }
 
-    // 3. Check for Blocked Keywords
+    // 3. Check for Blocked Keywords (Always check, even on search engines)
     const keywords = settings.blocked_keywords && settings.blocked_keywords.length > 0 
       ? settings.blocked_keywords 
       : ['porn', 'sex', 'xvideo', 'pornhub', 'xnxx', 'xhamster', 'redtube', 'youporn', 'casino', '1xbet'];
 
     const isRestricted = keywords.some(kw => {
       const lowerKw = kw.toLowerCase();
-      // Match keyword as a whole word or in query params
       const regex = new RegExp(`[?&/=]${lowerKw}|\\b${lowerKw}\\b`, 'i');
       return regex.test(url);
     });
 
     if (isRestricted) {
-      console.log('[Self-Shield] Content blocked by keyword filter.');
       showBlockUI(hostname);
     } else {
       removeBlackout();
