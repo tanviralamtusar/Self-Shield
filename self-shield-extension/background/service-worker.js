@@ -169,9 +169,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === "pairDevice") {
+    // Security: Only allow pairing from the extension's own popup
+    if (!sender.url || !sender.url.startsWith('chrome-extension://')) {
+      console.warn("[Security] Unauthorized pairDevice attempt from:", sender.url);
+      sendResponse({ success: false, error: "Unauthorized request" });
+      return false;
+    }
+
+    const deviceId = request.deviceId?.trim();
+    if (!deviceId || deviceId.length < 5) {
+      sendResponse({ success: false, error: "Invalid Device ID format" });
+      return false;
+    }
+
     const info = getBrowserInfo();
     const params = new URLSearchParams({
-      deviceId: request.deviceId,
+      deviceId: deviceId,
       _t: Date.now().toString(),
       browserName: info.browserName,
       browserVersion: info.browserVersion,
@@ -190,9 +203,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             pairedAt: Date.now(),
             everBeenActive: true,
             is_enabled: data.is_enabled === true,
-            blocked_urls: data.blocked_urls || []
+            blocked_urls: data.blocked_urls || [],
+            api_base_url: API_BASE_URL // Store for content scripts
           }, () => {
-            setupRealtimeListener(request.deviceId).catch(() => {});
+            setupRealtimeListener(deviceId).catch(() => {});
             sendResponse({ success: true });
           });
         } else {
@@ -369,7 +383,7 @@ async function updateBlockingRules(urls) {
     id: index + 1,
     priority: 1,
     action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
-    condition: { urlFilter: url, resourceTypes: ["main_frame"] }
+    condition: { urlFilter: `||${url}`, resourceTypes: ["main_frame"] }
   }));
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   const oldBlockingRuleIds = currentRules.filter(r => r.id < 10000).map(r => r.id);
@@ -407,7 +421,7 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
 
   // 1. Static Search Engine Rules (Force Family Mode / Safe Search)
   const rules = [
-    // Google: safe=active
+    // Google: safe=active (Regex for international domains)
     {
       id: 10001,
       priority: 1000,
@@ -415,7 +429,10 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "safe", value: "active" }] } } }
       },
-      condition: { urlFilter: "||google.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
+      condition: { 
+        regexFilter: "^https?://(www\\.)?google\\.[a-z.]+/search.*", 
+        resourceTypes: ["main_frame", "sub_frame"] 
+      }
     },
     // Bing: adlt=strict
     {
@@ -459,7 +476,7 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
         priority: 30,
         action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
         condition: { 
-          urlFilter: url.includes('.') ? `*${url}*` : `*${url}*`, 
+          urlFilter: url.includes('.') ? `||${url}` : `*${url}*`, 
           resourceTypes: ["main_frame", "sub_frame"]
         }
       });

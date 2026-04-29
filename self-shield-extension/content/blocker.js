@@ -81,39 +81,46 @@ new MutationObserver(() => {
   }
 }).observe(document, { subtree: true, childList: true });
 
-// Listen for pair/unpair messages
+// Listen for pair/unpair messages from the trusted Admin Panel
 window.addEventListener('message', (event) => {
-  // Device deleted — instant unpair
-  if (event.data && event.data.type === 'SELF_SHIELD_DEVICE_DELETED') {
-    console.log('[Self-Shield] Device deleted from admin panel. Notifying extension...');
+  chrome.storage.local.get(['api_base_url'], (data) => {
+    const allowedOrigin = data.api_base_url || 'http://localhost:3000';
+    
+    // Security: Verify that the message is coming from our trusted Admin Panel
+    if (event.origin !== allowedOrigin) return;
 
-    try {
-      if (chrome.runtime && chrome.runtime.id) {
-        chrome.runtime.sendMessage({ action: 'deviceDeleted' }, (response) => {
-          if (chrome.runtime.lastError) {
-            console.warn('[Self-Shield] Could not notify background script:', chrome.runtime.lastError.message);
-          }
-        });
+    // Device deleted — instant unpair
+    if (event.data && event.data.type === 'SELF_SHIELD_DEVICE_DELETED') {
+      console.log('[Self-Shield] Device deleted from admin panel. Notifying extension...');
+
+      try {
+        if (chrome.runtime && chrome.runtime.id) {
+          chrome.runtime.sendMessage({ action: 'deviceDeleted' }, (response) => {
+            if (chrome.runtime.lastError) {
+              console.warn('[Self-Shield] Could not notify background script:', chrome.runtime.lastError.message);
+            }
+          });
+        }
+      } catch (e) {
+        console.log('[Self-Shield] Extension context invalidated. Please refresh the page.');
       }
-    } catch (e) {
-      console.log('[Self-Shield] Extension context invalidated. Please refresh the page.');
     }
-  }
 
-  // Settings changed — instant sync
-  if (event.data && event.data.type === 'SELF_SHIELD_SETTINGS_CHANGED') {
-    console.log('[Self-Shield] Settings changed from admin panel. Triggering sync...');
+    // Settings changed — instant sync
+    if (event.data && event.data.type === 'SELF_SHIELD_SETTINGS_CHANGED') {
+      console.log('[Self-Shield] Settings changed from admin panel. Triggering sync...');
 
-    try {
-      if (chrome.runtime && chrome.runtime.id) {
-        chrome.runtime.sendMessage({ action: 'triggerSync' }, (response) => {
-          if (chrome.runtime.lastError) {
-            console.warn('[Self-Shield] Could not trigger sync:', chrome.runtime.lastError.message);
-          }
-        });
+      try {
+        if (chrome.runtime && chrome.runtime.id) {
+          chrome.runtime.sendMessage({ action: 'triggerSync' }, (response) => {
+            if (chrome.runtime.lastError) {
+              console.warn('[Self-Shield] Could not trigger sync:', chrome.runtime.lastError.message);
+            }
+          });
+        }
+      } catch (e) {
+        console.log('[Self-Shield] Extension context invalidated. Please refresh the page.');
       }
-    } catch (e) {
-      console.log('[Self-Shield] Extension context invalidated. Please refresh the page.');
     }
-  }
+  });
 });
