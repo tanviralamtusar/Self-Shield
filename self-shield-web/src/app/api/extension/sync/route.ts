@@ -14,57 +14,31 @@ export async function GET(req: NextRequest) {
   const deviceId = searchParams.get('deviceId');
 
   if (!deviceId) {
-    return NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+    const res = NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    return res;
   }
 
   try {
-    // 0. Update device metadata + last seen
+    const isPairing = searchParams.get('isPairing') === 'true';
     const status = searchParams.get('status');
     const lastSeenValue = status === 'offline' ? '1970-01-01T00:00:00Z' : new Date().toISOString();
 
-    if (status === 'offline') {
-      console.log(`[Extension Sync] Marking device ${deviceId} as OFFLINE`);
-    }
-
-    // Browser info from extension (sent on every sync)
+    // Browser info from extension
     const browserName = searchParams.get('browserName');
     const browserVersion = searchParams.get('browserVersion');
     const osName = searchParams.get('osName');
     const osVersion = searchParams.get('osVersion');
     const extVersion = searchParams.get('extVersion');
 
-    // Get pairing flag
-    const isPairing = searchParams.get('isPairing') === 'true';
-
-    // 1. Fetch device first to check existence and current status
-    const { data: device, error: deviceError } = await supabaseAdmin
-      .from('devices')
-      .select('is_admin_active')
-      .eq('id', deviceId)
-      .single();
-
-    if (deviceError || !device) {
-      console.log(`[Sync] Device ${deviceId} not found or error:`, deviceError?.message);
-      return NextResponse.json({ error: 'Device not found' }, { status: 404 });
-    }
-
-    // Check if device is unpaired and we're not trying to re-pair it
-    if (!device.is_admin_active && !isPairing) {
-      console.log(`[Sync] Device ${deviceId} is unpaired. Returning 404.`);
-      return NextResponse.json({ error: 'Device unpaired' }, { status: 404 });
-    }
-
-    // 2. Prepare and perform update
     const updatePayload: Record<string, unknown> = {
       last_seen_at: lastSeenValue,
     };
 
-    // Re-activate if this is an explicit pairing request
     if (isPairing) {
       updatePayload.is_admin_active = true;
     }
 
-    // Only update browser info if provided
     if (browserName) {
       updatePayload.device_name = `${browserName} Extension`;
       updatePayload.browser_name = browserName;
@@ -75,33 +49,42 @@ export async function GET(req: NextRequest) {
       if (extVersion) updatePayload.app_version = extVersion;
     }
 
-    await supabaseAdmin
+    // 1. Update and fetch current status in one go
+    const { data: device, error: updateError } = await supabaseAdmin
       .from('devices')
       .update(updatePayload)
-      .eq('id', deviceId);
+      .eq('id', deviceId)
+      .select('is_admin_active')
+      .single();
 
-    // 3. Cleanup & Offline handling
-    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
-    supabaseAdmin
-      .from('usage_events')
-      .delete()
-      .eq('device_id', deviceId)
-      .lt('occurred_at', threeDaysAgo)
-      .then(({ error }) => {
-        if (error) console.error('[Sync] Cleanup error:', error.message);
-      });
-
-    if (status === 'offline') {
-      return NextResponse.json({ success: true, message: 'Device marked offline' });
+    if (updateError || !device) {
+      console.log(`[Sync] Device ${deviceId} update failed:`, updateError?.message);
+      const res = NextResponse.json({ error: 'Device not found' }, { status: 404 });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
     }
 
+    // Check if device is unpaired and we're not trying to re-pair it
+    if (!device.is_admin_active && !isPairing) {
+      console.log(`[Sync] Device ${deviceId} is inactive. Returning 404 for heartbeat.`);
+      const res = NextResponse.json({ error: 'Device unpaired' }, { status: 404 });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
+    }
+
+    if (status === 'offline') {
+      const res = NextResponse.json({ success: true, message: 'Device marked offline' });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
+    }
+
+    // 2. Fetch device settings
     let { data: settings, error: settingsError } = await supabaseAdmin
       .from('device_settings')
       .select('*')
       .eq('device_id', deviceId)
       .single();
 
-    // If settings don't exist, create them
     if (settingsError || !settings) {
       const { data: newSettings, error: createError } = await supabaseAdmin
         .from('device_settings')
@@ -116,22 +99,11 @@ export async function GET(req: NextRequest) {
       
       if (createError) {
         console.error('Error creating default settings:', createError);
-        return NextResponse.json({ error: 'Failed to initialize settings' }, { status: 500 });
+        const res = NextResponse.json({ error: 'Failed to initialize settings' }, { status: 500 });
+        res.headers.set('Access-Control-Allow-Origin', '*');
+        return res;
       }
       settings = newSettings;
-    }
-
-    if (!settings) {
-      console.error(`[Extension Sync] Failed to initialize settings for ${deviceId}`);
-      return NextResponse.json({ error: 'Failed to initialize settings' }, { status: 500 });
-    }
-
-    // 2. If vpn_enabled is false, return early (disabled)
-    if (!settings.vpn_enabled) {
-      return NextResponse.json({ 
-        is_enabled: false, 
-        blocked_urls: [] 
-      });
     }
 
     // 3. Fetch subscribed blocklists
@@ -141,35 +113,21 @@ export async function GET(req: NextRequest) {
       .eq('device_id', deviceId)
       .eq('is_enabled', true);
 
-    if (subsError) {
-      console.error('Subscriptions fetch error:', subsError);
-      return NextResponse.json({ error: 'Failed to fetch subscriptions' }, { status: 500 });
+    let blocked_urls: string[] = [];
+    if (!subsError && subs && subs.length > 0) {
+      const listIds = subs.map(s => s.block_list_id);
+      const { data: entries, error: entriesError } = await supabaseAdmin
+        .from('block_list_entries')
+        .select('value')
+        .in('block_list_id', listIds);
+
+      if (!entriesError && entries) {
+        blocked_urls = [...new Set(entries.map(e => e.value))];
+      }
     }
-
-    const listIds = subs.map(s => s.block_list_id);
-
-    if (listIds.length === 0) {
-      return NextResponse.json({ 
-        is_enabled: true, 
-        blocked_urls: [] 
-      });
-    }
-
-    // 4. Fetch entries for those blocklists
-    const { data: entries, error: entriesError } = await supabaseAdmin
-      .from('block_list_entries')
-      .select('value')
-      .in('block_list_id', listIds);
-
-    if (entriesError) {
-      console.error('Entries fetch error:', entriesError);
-      return NextResponse.json({ error: 'Failed to fetch blocklist entries' }, { status: 500 });
-    }
-
-    const blocked_urls = [...new Set(entries.map(e => e.value))];
 
     const response = NextResponse.json({
-      is_enabled: true,
+      is_enabled: settings.vpn_enabled,
       blocked_urls
     });
 
@@ -185,7 +143,9 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error('Extension sync error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res = NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    return res;
   }
 }
 
@@ -195,13 +155,13 @@ export async function POST(req: NextRequest) {
     const { deviceId } = body;
 
     if (!deviceId) {
-      return NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+      const res = NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
     }
 
-    // Support batched events (new) and single event (backward compat)
     const events: Array<{ eventType: string; target: string; occurredAt?: string; durationSec?: number }> = [];
-
-    if (Array.isArray(body.events) && body.events.length > 0) {
+    if (Array.isArray(body.events)) {
       events.push(...body.events);
     } else if (body.eventType && body.target) {
       events.push({
@@ -211,35 +171,32 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (events.length === 0) {
-      return NextResponse.json({ error: 'No events provided' }, { status: 400 });
+    if (events.length > 0) {
+      const { error } = await supabaseAdmin
+        .from('usage_events')
+        .insert(
+          events.map(e => ({
+            device_id: deviceId,
+            event_type: e.eventType,
+            target: e.target,
+            duration_sec: e.durationSec ?? null,
+            occurred_at: e.occurredAt || new Date().toISOString()
+          }))
+        );
+
+      if (error) {
+        console.error('Error logging usage events:', error);
+      }
     }
 
-    const { error } = await supabaseAdmin
-      .from('usage_events')
-      .insert(
-        events.map(e => ({
-          device_id: deviceId,
-          event_type: e.eventType,
-          target: e.target,
-          duration_sec: e.durationSec ?? null,
-          occurred_at: e.occurredAt || new Date().toISOString()
-        }))
-      );
-
-    if (error) {
-      console.error('Error logging usage events:', error);
-      return NextResponse.json({ error: 'Failed to log events' }, { status: 500 });
-    }
-
-    const response = NextResponse.json({ success: true, count: events.length });
+    const response = NextResponse.json({ success: true });
     response.headers.set('Access-Control-Allow-Origin', '*');
     return response;
 
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Extension event error:', msg);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Extension event error:', error);
+    const response = NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    return response;
   }
 }
-
