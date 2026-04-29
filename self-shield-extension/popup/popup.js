@@ -84,7 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // No need to poll, storage listener will catch the update
             pairBtn.disabled = false;
           } else {
-            if(statusText) statusText.textContent = 'Pairing Failed';
+            const errorMsg = (response && response.error) ? response.error : 'Pairing Failed';
+            if(statusText) {
+              statusText.textContent = errorMsg;
+              statusText.style.color = '#ff4d4d'; // Soft red for error
+              setTimeout(() => {
+                statusText.style.color = '';
+                if (!deviceIdSpan || deviceIdSpan.textContent === 'Not Paired') {
+                  statusText.textContent = 'Inactive';
+                }
+              }, 4000);
+            }
             pairBtn.disabled = false;
           }
         });

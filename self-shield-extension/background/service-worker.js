@@ -54,16 +54,42 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === "pairDevice") {
-    chrome.storage.local.set({
+    const info = getBrowserInfo();
+    const params = new URLSearchParams({
       deviceId: request.deviceId,
-      pairedAt: Date.now(),
-      everBeenActive: false,
-      is_enabled: false,
-      blocked_urls: []
-    }, () => {
-      sendResponse({ success: true });
-      syncWithAdminPanel();
+      _t: Date.now().toString(),
+      browserName: info.browserName,
+      browserVersion: info.browserVersion,
+      osName: info.osName,
+      osVersion: info.osVersion,
+      extVersion: info.extensionVersion,
     });
+
+    fetch(`${API_BASE_URL}/api/extension/sync?${params.toString()}`)
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          chrome.storage.local.set({
+            deviceId: request.deviceId,
+            pairedAt: Date.now(),
+            everBeenActive: true,
+            is_enabled: data.is_enabled === true,
+            blocked_urls: data.blocked_urls || []
+          }, () => {
+            sendResponse({ success: true });
+          });
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          sendResponse({ 
+            success: false, 
+            error: errorData.error || "Invalid ID. Please check and try again." 
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Pairing verification failed:", err);
+        sendResponse({ success: false, error: "Connection error. Is the dashboard online?" });
+      });
     return true;
   }
 
