@@ -65,11 +65,11 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
   const DeviceIcon = getDeviceIcon(device.device_name || '');
 
   return (
-    <Card className="group relative border border-border/80 bg-card/30 backdrop-blur-md transition-all duration-500 hover:border-primary/50 hover:bg-card/40 shadow-lg hover:shadow-primary/5 overflow-hidden">
+    <Card className="group relative border border-border/80 bg-card/30 backdrop-blur-md transition-[border-color,background-color,shadow] duration-300 hover:border-primary/50 hover:bg-card/40 shadow-lg hover:shadow-primary/5 overflow-hidden">
       
       {/* Node Number - Sharp Minimalist Tag */}
       {index && (
-        <div className="absolute top-3 right-4 z-20 select-none pointer-events-none opacity-90 transition-opacity duration-500">
+        <div className="absolute top-3 right-4 z-20 select-none pointer-events-none opacity-90 transition-opacity duration-300">
           <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded border border-primary/30 bg-primary/10 font-mono">
             <div className="w-1 h-1 rounded-full bg-primary/60" />
             <span className="text-[10px] font-black text-primary/80 tracking-tight">
@@ -80,14 +80,14 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
       )}
 
       {/* Hover top glow */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       {/* ── INNER HEADER PANEL ───────────────────── */}
       <div className="m-5 mb-0 rounded-xl border border-border/30 bg-muted/10 p-5 flex items-start justify-between gap-3">
         <div className="flex items-center gap-4 min-w-0">
           {/* Icon container */}
-          <div className="p-3 rounded-xl bg-card/60 border border-border/40 shrink-0 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-500">
-            <DeviceIcon className="w-6 h-6 text-muted-foreground/80 group-hover:text-primary transition-colors duration-500" />
+          <div className="p-3 rounded-xl bg-card/60 border border-border/40 shrink-0 group-hover:border-primary/30 group-hover:bg-primary/5 transition-[border-color,background-color] duration-300">
+            <DeviceIcon className="w-6 h-6 text-muted-foreground/80 group-hover:text-primary transition-colors duration-300" />
           </div>
 
           {/* Name + status */}
@@ -117,7 +117,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
         <Button
           variant="ghost"
           size="icon"
-          className="h-7 w-7 shrink-0 rounded-full text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 transition-all mt-0.5"
+          className="h-7 w-7 shrink-0 rounded-full text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 transition-colors mt-0.5"
           onClick={() => handleAction(true)}
           disabled={isDeleting}
           title="Delete Card"
@@ -202,7 +202,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
           nativeButton={false}
           render={<Link href={`/devices/${device.id}`} />}
           variant="outline"
-          className="flex-1 h-10 text-[12px] font-black uppercase tracking-wider border-border/40 bg-transparent text-foreground/70 hover:bg-primary hover:text-white hover:border-primary transition-all duration-500"
+          className="flex-1 h-10 text-[12px] font-black uppercase tracking-wider border-border/40 bg-transparent text-foreground/70 hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200"
         >
           Manage
         </Button>
@@ -210,7 +210,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
           onClick={() => handleAction(false)}
           disabled={isDeleting || !device.last_seen_at}
           variant="outline"
-          className="flex-1 h-10 text-[12px] font-black uppercase tracking-wider border-destructive/30 bg-transparent text-destructive/60 hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-destructive/50 disabled:hover:border-destructive/30"
+          className="flex-1 h-10 text-[12px] font-black uppercase tracking-wider border-destructive/30 bg-transparent text-destructive/60 hover:bg-destructive hover:text-white hover:border-destructive transition-colors duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-destructive/50 disabled:hover:border-destructive/30"
         >
           {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Unpair'}
         </Button>
