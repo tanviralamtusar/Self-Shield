@@ -208,9 +208,9 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
         </Button>
         <Button
           onClick={() => handleAction(false)}
-          disabled={isDeleting}
+          disabled={isDeleting || !device.last_seen_at}
           variant="outline"
-          className="flex-1 h-10 text-[10px] font-black uppercase tracking-[0.15em] border-destructive/30 bg-transparent text-destructive/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-500"
+          className="flex-1 h-10 text-[10px] font-black uppercase tracking-[0.15em] border-destructive/30 bg-transparent text-destructive/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-destructive/50 disabled:hover:border-destructive/30"
         >
           {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Unpair'}
         </Button>
