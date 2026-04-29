@@ -33,10 +33,10 @@ function showBlockUI(hostname) {
 }
 
 function checkAndBlock() {
-  chrome.storage.local.get(['safe_search_enabled', 'is_enabled', 'blocked_keywords'], (settings) => {
-    const isSafeSearchEnabled = settings.safe_search_enabled && settings.is_enabled !== false;
+  chrome.storage.local.get(['safe_search_enabled', 'is_enabled', 'blocked_keywords', 'blocked_urls', 'local_blocked_urls'], (settings) => {
+    const isEnabled = settings.is_enabled !== false;
     
-    if (!isSafeSearchEnabled) {
+    if (!isEnabled) {
       removeBlackout();
       return;
     }
@@ -44,16 +44,35 @@ function checkAndBlock() {
     const url = window.location.href.toLowerCase();
     const hostname = window.location.hostname.toLowerCase();
 
+    // 1. Check if domain is in EXCLUDED_HOSTS (Safe List)
     if (EXCLUDED_HOSTS.some(host => hostname.includes(host))) {
       removeBlackout();
       return;
     }
 
+    // 2. Check for Blocked URLs (including local)
+    const allBlockedUrls = [
+      ...(settings.blocked_urls || []), 
+      ...(settings.local_blocked_urls || [])
+    ];
+    
+    if (allBlockedUrls.some(blocked => hostname.includes(blocked.toLowerCase()))) {
+      console.log('[Self-Shield] Site blocked by URL filter.');
+      showBlockUI(hostname);
+      return;
+    }
+
+    // 3. Check for Blocked Keywords
     const keywords = settings.blocked_keywords && settings.blocked_keywords.length > 0 
       ? settings.blocked_keywords 
       : ['porn', 'sex', 'xvideo', 'pornhub', 'xnxx', 'xhamster', 'redtube', 'youporn', 'casino', '1xbet'];
 
-    const isRestricted = keywords.some(kw => url.includes(kw.toLowerCase()));
+    const isRestricted = keywords.some(kw => {
+      const lowerKw = kw.toLowerCase();
+      // Match keyword as a whole word or in query params
+      const regex = new RegExp(`[?&/=]${lowerKw}|\\b${lowerKw}\\b`, 'i');
+      return regex.test(url);
+    });
 
     if (isRestricted) {
       console.log('[Self-Shield] Content blocked by keyword filter.');

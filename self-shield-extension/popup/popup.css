@@ -252,6 +252,18 @@ body {
   padding: 16px;
 }
 
+.site-display {
+  background-color: var(--surface-dim);
+  border: 1px solid var(--outline-variant);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: var(--font-headline);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--primary);
+  text-align: center;
+}
+
 .input-group {
   display: flex;
   flex-direction: column;

@@ -17,6 +17,16 @@ let isUnpairing = false;
 let eventBatch = [];
 const MAX_BATCH_SIZE = 20;
 let activeSession = { hostname: null, startTime: null };
+let localBlockedUrls = [];
+
+// ─── Built-in Protection Lists ──────────────────────────────────────
+const BUILTIN_ADULT_SITES = [
+  "pornhub.com", "xvideos.com", "xnxx.com", "xhamster.com", "redtube.com", "youporn.com", "tube8.com", "spankbang.com", "beeg.com", "tnaflix.com", "xtube.com", "slutload.com", "drtuber.com", "nuvid.com", "fuq.com", "4tube.com", "fux.com", "txxx.com", "hclips.com", "hdzog.com", "vjav.com", "porntrex.com", "upornia.com", "sunporno.com", "iceporn.com", "anysex.com", "analdin.com", "bravotube.net", "porndig.com", "alphaporno.com", "tubeon.com", "videosection.com", "viptube.com", "eporner.com", "gotporn.com", "perfectgirls.net", "fullporner.com", "proporn.com", "jizzbunker.com", "fapality.com", "pornone.com", "cliphunter.com", "keezmovies.com", "empflix.com", "cinecaliente.com", "porntube.com", "porn.com", "sex.com", "adult.com", "xxx.com", "bangbros.com", "brazzers.com", "realitykings.com", "naughtyamerica.com", "mofos.com", "digitalplayground.com", "vivid.com", "penthouse.com", "playboy.com", "hustler.com", "wicked.com", "girlfriendsfilms.com", "adulttime.com", "kink.com", "sexart.com", "met-art.com", "hegre.com", "chaturbate.com", "myfreecams.com", "livejasmin.com", "cam4.com", "bongacams.com", "stripchat.com", "streamate.com", "flirt4free.com", "imlive.com", "camsoda.com", "jerkmate.com", "adultfriendfinder.com", "ashleymadison.com", "onlyfans.com", "fansly.com", "motherless.com", "imagefap.com"
+];
+
+const BUILTIN_ADULT_KEYWORDS = [
+  "porn", "sex", "xxx", "nude", "naked", "erotic", "hentai", "milf", "ebony", "lesbian", "gay", "trans", "anal", "blowjob", "facial", "cum", "orgasm", "swinger", "escort", "stripper", "hardcore", "pussy", "dick", "cock", "boobs", "tits", "clitoris", "vagina", "penis", "masturbation", "bDSM"
+];
 
 // Initialize Supabase Client
 function initSupabase() {
@@ -222,6 +232,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse({ success: true });
     return true;
   }
+
+  if (request.action === "addBlockedUrl") {
+    const newUrl = request.url;
+    chrome.storage.local.get("local_blocked_urls", (data) => {
+      const current = data.local_blocked_urls || [];
+      if (!current.includes(newUrl)) {
+        const updated = [...current, newUrl];
+        chrome.storage.local.set({ local_blocked_urls: updated }, () => {
+          syncWithAdminPanel().catch(() => {});
+          sendResponse({ success: true });
+        });
+      } else {
+        sendResponse({ success: true });
+      }
+    });
+    return true;
+  }
   
   // Return false if message is not handled
   return false;
@@ -341,6 +368,8 @@ async function syncWithAdminPanel() {
     const safeSearchState = data.safe_search_enabled === true;
     const urls = data.blocked_urls || [];
     const keywords = data.blocked_keywords || [];
+    const { local_blocked_urls } = await chrome.storage.local.get("local_blocked_urls");
+    const localUrls = local_blocked_urls || [];
 
     await chrome.storage.local.set({ 
       is_enabled: enabledState, 
@@ -351,8 +380,10 @@ async function syncWithAdminPanel() {
     });
 
     if (enabledState) {
-      updateBlockingRules(urls).catch(() => {});
-      updateSafeSearchRules(safeSearchState, urls, keywords).catch(() => {});
+      const combinedUrls = [...new Set([...urls, ...localUrls, ...BUILTIN_ADULT_SITES])];
+      const combinedKeywords = [...new Set([...keywords, ...BUILTIN_ADULT_KEYWORDS])];
+      updateBlockingRules(combinedUrls).catch(() => {});
+      updateSafeSearchRules(safeSearchState, combinedUrls, combinedKeywords).catch(() => {});
     } else {
       clearBlockingRules().catch(() => {});
     }
@@ -367,9 +398,9 @@ async function updateBlockingRules(urls) {
   if (!urls || !Array.isArray(urls)) return;
   const rules = urls.map((url, index) => ({
     id: index + 1,
-    priority: 1,
+    priority: 10,
     action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
-    condition: { urlFilter: url, resourceTypes: ["main_frame"] }
+    condition: { urlFilter: `||${url}^`, resourceTypes: ["main_frame"] }
   }));
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   const oldBlockingRuleIds = currentRules.filter(r => r.id < 10000).map(r => r.id);
@@ -477,7 +508,7 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
         condition: { 
           urlFilter: kw, 
           resourceTypes: ["main_frame", "sub_frame"],
-          excludedDomains: ["google.com", "bing.com", "yahoo.com", "duckduckgo.com", "wikipedia.org", "youtube.com"]
+          excludedDomains: ["wikipedia.org", "healthline.com", "medicalnewstoday.com"]
         }
       });
     });
