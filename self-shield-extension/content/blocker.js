@@ -1,42 +1,54 @@
 // Self-Shield Content Blocker
 // Highly resilient blocking with INSTANT BLACKOUT to prevent content flashing
 
-// 1. IMMEDIATELY HIDE EVERYTHING (before any other logic)
-// Set background on html immediately so it's not white
-document.documentElement.style.background = '#0b1120';
+// 1. IMMEDIATELY CREATE BLACKOUT OVERLAY
+// We use a DIV instead of a STYLE tag to be more CSP-friendly
+const blackoutOverlay = document.createElement('div');
+blackoutOverlay.id = 'self-shield-blackout-overlay';
+Object.assign(blackoutOverlay.style, {
+  position: 'fixed',
+  top: '0',
+  left: '0',
+  width: '100vw',
+  height: '100vh',
+  backgroundColor: '#0b1120',
+  zIndex: '2147483647',
+  display: 'block',
+  pointerEvents: 'none' // Allow interaction if something goes wrong
+});
 
-const blackoutStyle = document.createElement('style');
-blackoutStyle.id = 'self-shield-blackout';
-// Hide everything except our block UI root
-blackoutStyle.textContent = `
-  html > :not(#self-shield-block-root) { display: none !important; }
-  body { display: none !important; }
-`;
-document.documentElement.appendChild(blackoutStyle);
+// Use a trick to ensure it's the first thing in the DOM
+if (document.documentElement) {
+  document.documentElement.appendChild(blackoutOverlay);
+  document.documentElement.style.backgroundColor = '#0b1120';
+}
 
-const EXCLUDED_HOSTS = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com', 'wikipedia.org', 'youtube.com', 'healthline.com'];
+// 2. Safety Timeout: Remove blackout after 1.5 seconds NO MATTER WHAT
+setTimeout(removeBlackout, 1500);
+
+function removeBlackout() {
+  const overlay = document.getElementById('self-shield-blackout-overlay');
+  if (overlay) overlay.remove();
+  document.documentElement.style.backgroundColor = '';
+}
+
+const SEARCH_ENGINES = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com', 'ecosia.org'];
+const SAFE_LIST = ['wikipedia.org', 'healthline.com', 'medicalnewstoday.com', 'selfshield.app'];
 
 function showBlockUI(hostname) {
-  // Use a hard redirect to our local blocked page.
-  // This is MUCH more secure than an overlay because it completely replaces 
-  // the page content and execution context, making it impossible to bypass 
-  // via Inspect Element.
   const blockedPageUrl = chrome.runtime.getURL('blocked-page/blocked.html');
   const originalUrl = window.location.href;
-  
-  // Clear the document immediately to prevent any more script execution
   document.documentElement.innerHTML = '';
   window.stop();
-  
-  // Perform the redirect
   window.location.replace(blockedPageUrl + '?url=' + encodeURIComponent(originalUrl));
 }
 
 function checkAndBlock() {
-  chrome.storage.local.get(['safe_search_enabled', 'is_enabled', 'blocked_keywords'], (settings) => {
-    const isSafeSearchEnabled = settings.safe_search_enabled && settings.is_enabled !== false;
-    
-    if (!isSafeSearchEnabled) {
+    chrome.storage.local.get(['is_enabled', 'blocked_keywords', 'blocked_urls', 'local_blocked_urls', 'keyword_blocking'], (settings) => {
+    const isEnabled = settings.is_enabled !== false;
+    const keywordBlockingEnabled = settings.keyword_blocking !== false;
+
+    if (!isEnabled) {
       removeBlackout();
       return;
     }
@@ -44,8 +56,35 @@ function checkAndBlock() {
     const url = window.location.href.toLowerCase();
     const hostname = window.location.hostname.toLowerCase();
 
-    if (EXCLUDED_HOSTS.some(host => hostname.includes(host))) {
+    // 1. Skip if domain is in SAFE_LIST
+    if (SAFE_LIST.some(host => hostname.includes(host))) {
       removeBlackout();
+      return;
+    }
+
+    const isSearchEngine = SEARCH_ENGINES.some(host => hostname.includes(host));
+
+    // 2. Check for Blocked URLs (Skip for search engines to allow safe search)
+    if (!isSearchEngine) {
+      const allBlockedUrls = [
+        ...(settings.blocked_urls || []), 
+        ...(settings.local_blocked_urls || [])
+      ];
+      
+      if (allBlockedUrls.some(blocked => hostname.includes(blocked.toLowerCase()))) {
+        showBlockUI(hostname);
+        return;
+      }
+    }
+
+    // 3. Check for Blocked Keywords (Always check, even on search engines, if enabled)
+    if (!keywordBlockingEnabled) {
+      // If keyword blocking is off, move to server-side check or finish
+      if (!isSearchEngine) {
+        performServerCheck(hostname);
+      } else {
+        removeBlackout();
+      }
       return;
     }
 
@@ -53,20 +92,56 @@ function checkAndBlock() {
       ? settings.blocked_keywords 
       : ['porn', 'sex', 'xvideo', 'pornhub', 'xnxx', 'xhamster', 'redtube', 'youporn', 'casino', '1xbet'];
 
-    const isRestricted = keywords.some(kw => url.includes(kw.toLowerCase()));
+    const isRestricted = keywords.some(kw => {
+      const lowerKw = kw.toLowerCase();
+      // Improved regex: Match keyword as a whole word OR as a substring in query parameters
+      // This catches "porn" in "pornography" if we remove the word boundaries, 
+      // but to avoid false positives (like "button" in "butt"), we use a more balanced approach.
+      // We check if the keyword exists at all in the URL.
+      if (url.includes(lowerKw)) {
+        // Special case: if it's a known search engine, we want to be more specific 
+        // to avoid blocking "butt" when user types "button"
+        if (isSearchEngine) {
+          const searchRegex = new RegExp(`[?&q=]${lowerKw}|[+ ]${lowerKw}|\\b${lowerKw}`, 'i');
+          return searchRegex.test(url);
+        }
+        return true;
+      }
+      return false;
+    });
 
     if (isRestricted) {
-      console.log('[Self-Shield] Content blocked by keyword filter.');
       showBlockUI(hostname);
+    } else if (!isSearchEngine) {
+      performServerCheck(hostname);
     } else {
+      // It's a search engine and no keywords matched
       removeBlackout();
     }
   });
 }
 
-function removeBlackout() {
-  const style = document.getElementById('self-shield-blackout');
-  if (style) style.remove();
+function performServerCheck(hostname) {
+  // 4. Final Fallback: Server-Based Checking (Only for non-search engines)
+  try {
+    chrome.runtime.sendMessage({ action: 'checkUrl', url: window.location.href }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.warn('[Self-Shield] Background script unavailable:', chrome.runtime.lastError.message);
+        removeBlackout();
+        return;
+      }
+      
+      if (response && response.blocked) {
+        console.log('[Self-Shield] Site blocked by server-side verification.');
+        showBlockUI(hostname);
+      } else {
+        removeBlackout();
+      }
+    });
+  } catch (e) {
+    console.error('[Self-Shield] Failed to communicate with background:', e);
+    removeBlackout();
+  }
 }
 
 // Run immediately

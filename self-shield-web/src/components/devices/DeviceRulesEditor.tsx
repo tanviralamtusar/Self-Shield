@@ -12,6 +12,7 @@ import { useDeviceSettings, useUpdateDeviceSettings } from '@/hooks/useDeviceSet
 import { useAppRules, useUpdateAppRule } from '@/hooks/useAppRules';
 import { useBlockLists, useDeviceSubscriptions, useToggleSubscription } from '@/hooks/useBlockLists';
 import { ScheduleEditor } from './ScheduleEditor';
+import { KeywordManager } from './KeywordManager';
 
 
 export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
@@ -110,6 +111,8 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
         </CardContent>
       </Card>
 
+      <KeywordManager deviceId={deviceId} />
+
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
@@ -125,7 +128,9 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            {allBlockLists?.map((list) => {
+            {allBlockLists
+              ?.filter(list => list.name !== 'My Custom Keywords' || list.is_default)
+              .map((list) => {
               const sub = subscriptions?.find(s => s.block_list_id === list.id);
               return (
                 <div key={list.id} className="flex items-center justify-between p-3 border rounded-lg bg-muted/30">

@@ -17,6 +17,18 @@ let isUnpairing = false;
 let eventBatch = [];
 const MAX_BATCH_SIZE = 20;
 let activeSession = { hostname: null, startTime: null };
+let localBlockedUrls = [];
+const SERVER_CHECK_CACHE = new Map();
+const CACHE_EXPIRY = 1000 * 60 * 60; // 1 hour
+
+// ─── Built-in Protection Lists ──────────────────────────────────────
+const BUILTIN_ADULT_SITES = [
+  "pornhub.com", "xvideos.com", "xnxx.com", "xhamster.com", "redtube.com", "youporn.com", "tube8.com", "spankbang.com", "beeg.com", "tnaflix.com", "xtube.com", "slutload.com", "drtuber.com", "nuvid.com", "fuq.com", "4tube.com", "fux.com", "txxx.com", "hclips.com", "hdzog.com", "vjav.com", "porntrex.com", "upornia.com", "sunporno.com", "iceporn.com", "anysex.com", "analdin.com", "bravotube.net", "porndig.com", "alphaporno.com", "tubeon.com", "videosection.com", "viptube.com", "eporner.com", "gotporn.com", "perfectgirls.net", "fullporner.com", "proporn.com", "jizzbunker.com", "fapality.com", "pornone.com", "cliphunter.com", "keezmovies.com", "empflix.com", "cinecaliente.com", "porntube.com", "porn.com", "sex.com", "adult.com", "xxx.com", "bangbros.com", "brazzers.com", "realitykings.com", "naughtyamerica.com", "mofos.com", "digitalplayground.com", "vivid.com", "penthouse.com", "playboy.com", "hustler.com", "wicked.com", "girlfriendsfilms.com", "adulttime.com", "kink.com", "sexart.com", "met-art.com", "hegre.com", "chaturbate.com", "myfreecams.com", "livejasmin.com", "cam4.com", "bongacams.com", "stripchat.com", "streamate.com", "flirt4free.com", "imlive.com", "camsoda.com", "jerkmate.com", "adultfriendfinder.com", "ashleymadison.com", "onlyfans.com", "fansly.com", "motherless.com", "imagefap.com"
+];
+
+const BUILTIN_ADULT_KEYWORDS = [
+  "porn", "sex", "xxx", "nude", "naked", "erotic", "hentai", "milf", "ebony", "lesbian", "gay", "trans", "anal", "blowjob", "facial", "cum", "orgasm", "swinger", "escort", "stripper", "hardcore", "pussy", "dick", "cock", "boobs", "tits", "clitoris", "vagina", "penis", "masturbation", "bDSM"
+];
 
 // Initialize Supabase Client
 function initSupabase() {
@@ -236,6 +248,31 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse({ success: true });
     return true;
   }
+
+  if (request.action === "addBlockedUrl") {
+    const newUrl = request.url;
+    chrome.storage.local.get("local_blocked_urls", (data) => {
+      const current = data.local_blocked_urls || [];
+      if (!current.includes(newUrl)) {
+        const updated = [...current, newUrl];
+        chrome.storage.local.set({ local_blocked_urls: updated }, () => {
+          syncWithAdminPanel().catch(() => {});
+          sendResponse({ success: true });
+        });
+      } else {
+        sendResponse({ success: true });
+      }
+    });
+    return true;
+  }
+
+  if (request.action === "checkUrl") {
+    const { url } = request;
+    checkUrlWithServer(url)
+      .then(result => sendResponse(result))
+      .catch(err => sendResponse({ blocked: false, error: err.message }));
+    return true;
+  }
   
   // Return false if message is not handled
   return false;
@@ -353,22 +390,45 @@ async function syncWithAdminPanel() {
     const data = await response.json();
     const enabledState = data.is_enabled === true;
     const safeSearchState = data.safe_search_enabled === true;
+    const keywordBlockingState = data.keyword_blocking === true;
+    const serverSideCheckState = data.server_side_check_enabled === true;
+    
     const urls = data.blocked_urls || [];
     const keywords = data.blocked_keywords || [];
+    const { local_blocked_urls } = await chrome.storage.local.get("local_blocked_urls");
+    const localUrls = local_blocked_urls || [];
 
     await chrome.storage.local.set({ 
       is_enabled: enabledState, 
       safe_search_enabled: safeSearchState,
+      keyword_blocking: keywordBlockingState,
+      server_side_check_enabled: serverSideCheckState,
       blocked_urls: urls,
       blocked_keywords: keywords,
       everBeenActive: enabledState ? true : undefined
     });
 
     if (enabledState) {
-      updateBlockingRules(urls).catch(() => {});
-      updateSafeSearchRules(safeSearchState, urls, keywords).catch(() => {});
+      const combinedUrls = [...new Set([...urls, ...localUrls, ...BUILTIN_ADULT_SITES])];
+      const combinedKeywords = [...new Set([...keywords, ...BUILTIN_ADULT_KEYWORDS])];
+      
+      // Update blocking rules (IDs 1-10000)
+      updateBlockingRules(combinedUrls).catch(() => {});
+      
+      // Update keyword rules (IDs 20000-25000) - respect setting
+      if (keywordBlockingState) {
+        updateKeywordRules(combinedKeywords).catch(() => {});
+      } else {
+        chrome.declarativeNetRequest.getDynamicRules().then(rules => {
+          const ids = rules.filter(r => r.id >= 20000 && r.id < 30000).map(r => r.id);
+          chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: ids });
+        });
+      }
+      
+      // Update safe search rules (IDs 10000-11000)
+      updateSafeSearchRules(safeSearchState).catch(() => {});
     } else {
-      clearBlockingRules().catch(() => {});
+      clearAllRules().catch(() => {});
     }
 
   } catch (error) {
@@ -386,7 +446,7 @@ async function updateBlockingRules(urls) {
     condition: { urlFilter: `||${url}^`, resourceTypes: ["main_frame"] }
   }));
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
-  const oldBlockingRuleIds = currentRules.filter(r => r.id < 10000).map(r => r.id);
+  const oldBlockingRuleIds = currentRules.filter(r => r.id > 0 && r.id < 10000).map(r => r.id);
   
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: oldBlockingRuleIds,
@@ -394,7 +454,28 @@ async function updateBlockingRules(urls) {
   });
 }
 
-async function clearBlockingRules() {
+async function updateKeywordRules(keywords) {
+  if (!keywords || !Array.isArray(keywords)) return;
+  const rules = keywords.map((kw, index) => ({
+    id: 20000 + index,
+    priority: 2000, // Higher than safe search redirect
+    action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+    condition: { 
+      urlFilter: kw, 
+      resourceTypes: ["main_frame", "sub_frame"],
+      excludedDomains: ["wikipedia.org", "healthline.com", "medicalnewstoday.com"]
+    }
+  }));
+  const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
+  const oldKeywordRuleIds = currentRules.filter(r => r.id >= 20000 && r.id < 30000).map(r => r.id);
+  
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: oldKeywordRuleIds,
+    addRules: rules
+  });
+}
+
+async function clearAllRules() {
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   await chrome.declarativeNetRequest.updateDynamicRules({ 
     removeRuleIds: currentRules.map(r => r.id) 
@@ -402,9 +483,9 @@ async function clearBlockingRules() {
 }
 
 // ─── Safe Search Enforcement ──────────────────────────────────────────
-async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords = []) {
+async function updateSafeSearchRules(enabled) {
   const START_ID = 10000;
-  const END_ID = 15000;
+  const END_ID = 11000;
   
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   const rulesToRemove = currentRules
@@ -415,13 +496,11 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
     await chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: rulesToRemove
     });
-    console.log("[SafeSearch] Rules disabled and removed.");
     return;
   }
 
-  // 1. Static Search Engine Rules (Force Family Mode / Safe Search)
   const rules = [
-    // Google: safe=active (Regex for international domains)
+    // Google: safe=active
     {
       id: 10001,
       priority: 1000,
@@ -434,7 +513,6 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
         resourceTypes: ["main_frame", "sub_frame"] 
       }
     },
-    // Bing: adlt=strict
     {
       id: 10002,
       priority: 1000,
@@ -444,7 +522,6 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
       },
       condition: { urlFilter: "||bing.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     },
-    // DuckDuckGo: kp=1 (Family Mode)
     {
       id: 10003,
       priority: 1000,
@@ -454,7 +531,6 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
       },
       condition: { urlFilter: "||duckduckgo.com/*", resourceTypes: ["main_frame", "sub_frame"] }
     },
-    // Yahoo: vm=p (Strict Search)
     {
       id: 10004,
       priority: 1000,
@@ -476,7 +552,7 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
         priority: 30,
         action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
         condition: { 
-          urlFilter: url.includes('.') ? `||${url}` : `*${url}*`, 
+          urlFilter: url.includes('.') ? `*${url}*` : `*${url}*`, 
           resourceTypes: ["main_frame", "sub_frame"]
         }
       });
@@ -503,7 +579,6 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
     removeRuleIds: rulesToRemove,
     addRules: rules
   });
-  console.log(`[SafeSearch] Dynamic rules enforced from Supabase. Total rules: ${rules.length}`);
 }
 
 // ─── Event Logging ──────────────────────────────────────────────────
@@ -570,3 +645,58 @@ chrome.tabs.onUpdated.addListener((id, change, tab) => { if (change.url && tab.a
 chrome.windows.onFocusChanged.addListener((id) => { 
   if (id === chrome.windows.WINDOW_ID_NONE) endCurrentSession(); else trackActiveTab(); 
 });
+
+async function checkUrlWithServer(url) {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+    
+    // 1. Check in-memory cache
+    if (SERVER_CHECK_CACHE.has(hostname)) {
+      const cached = SERVER_CHECK_CACHE.get(hostname);
+      if (Date.now() - cached.timestamp < CACHE_EXPIRY) {
+        return { blocked: cached.blocked };
+      }
+    }
+
+    // 2. Check local storage cache (for persistence)
+    const { url_cache } = await chrome.storage.local.get("url_cache");
+    const storageCache = url_cache || {};
+    if (storageCache[hostname]) {
+      const cached = storageCache[hostname];
+      if (Date.now() - cached.timestamp < CACHE_EXPIRY) {
+        SERVER_CHECK_CACHE.set(hostname, cached);
+        return { blocked: cached.blocked };
+      }
+    }
+
+    // 3. Fetch from server
+    const { deviceId, server_side_check_enabled } = await chrome.storage.local.get(["deviceId", "server_side_check_enabled"]);
+    if (!deviceId || server_side_check_enabled === false) return { blocked: false };
+
+    const params = new URLSearchParams({ deviceId, url: hostname });
+    const response = await fetch(`${API_BASE_URL}/api/extension/check?${params.toString()}`);
+    
+    if (!response.ok) return { blocked: false };
+    
+    const data = await response.json();
+    const result = { blocked: data.blocked === true, timestamp: Date.now() };
+
+    // 4. Update caches
+    SERVER_CHECK_CACHE.set(hostname, result);
+    storageCache[hostname] = result;
+    
+    // Periodically prune old cache entries to save space
+    const now = Date.now();
+    const prunedCache = Object.fromEntries(
+      Object.entries(storageCache).filter(([_, v]) => now - v.timestamp < (CACHE_EXPIRY * 24))
+    );
+    
+    await chrome.storage.local.set({ url_cache: prunedCache });
+
+    return { blocked: result.blocked };
+
+  } catch (e) {
+    console.error("[ServerCheck] Failed:", e);
+    return { blocked: false };
+  }
+}

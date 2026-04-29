@@ -29,7 +29,7 @@ function scrubSearch() {
       }
     }
     
-    if (hostname.includes('bing.com') && url.pathname === '/search') {
+    if ((hostname === 'bing.com' || hostname.endsWith('.bing.com')) && url.pathname === '/search') {
       if (url.searchParams.get('adlt') !== 'strict') {
         url.searchParams.set('adlt', 'strict');
         window.location.replace(url.toString());
@@ -37,7 +37,7 @@ function scrubSearch() {
       }
     }
 
-    if (hostname.includes('duckduckgo.com')) {
+    if (hostname === 'duckduckgo.com' || hostname.endsWith('.duckduckgo.com')) {
       if (url.searchParams.get('kp') !== '1') {
         url.searchParams.set('kp', '1');
         window.location.replace(url.toString());

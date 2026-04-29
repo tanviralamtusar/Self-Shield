@@ -9,6 +9,7 @@ import { useDevices } from '@/hooks/useDevices';
 import { DeviceRulesEditor } from '@/components/devices/DeviceRulesEditor';
 import { AuditLogTable } from '@/components/audit/AuditLogTable';
 import { ActivityLog } from '@/components/devices/ActivityLog';
+import { DeviceSettings } from '@/components/devices/DeviceSettings';
 import { UsageChart } from '@/components/reports/UsageChart';
 import { useReports, useReportStats } from '@/hooks/useReports';
 import { useSendCommand } from '@/hooks/useRemoteCommands';
@@ -296,17 +297,21 @@ export default function DeviceDetailPage() {
           </Card>
         )}
 
-        {['commands', 'settings'].includes(activeTab) && (
+        {activeTab === 'commands' && (
           <Card>
             <CardHeader>
-              <CardTitle className="capitalize">{activeTab}</CardTitle>
+              <CardTitle>Remote Commands</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground text-center py-8">
-                Content for the {activeTab} tab is under construction.
+                Content for the commands tab is under construction.
               </p>
             </CardContent>
           </Card>
+        )}
+
+        {activeTab === 'settings' && (
+          <DeviceSettings device={device} />
         )}
       </div>
     </div>

@@ -46,7 +46,7 @@ export function StrictProtection() {
   return (
     <div className="max-w-6xl mx-auto space-y-10 pb-20">
       {/* Header section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-transparent to-primary/5 border border-primary/20 backdrop-blur-xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-3xl bg-linear-to-br from-primary/10 via-transparent to-primary/5 border border-primary/20 backdrop-blur-xl relative overflow-hidden">
         <div className="relative z-10 space-y-2">
           <Badge variant="outline" className="border-primary/50 text-primary bg-primary/5">Strict Enforcement Mode</Badge>
           <h2 className="text-4xl font-black tracking-tight text-foreground">Advanced Protection</h2>
@@ -202,10 +202,10 @@ export function StrictProtection() {
 
                  <div className="space-y-2">
                     <h4 className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Protected Apps</h4>
-                    <div className="grid gap-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="grid gap-2 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
                        {protectedApps.map(app => (
                          <div key={app} className="flex items-center justify-between p-2.5 rounded-xl bg-background/40 border border-white/5 group hover:border-primary/20 transition-all">
-                            <span className="text-[10px] font-medium font-mono truncate max-w-[150px]">{app}</span>
+                            <span className="text-[10px] font-medium font-mono truncate max-w-37.5">{app}</span>
                             <button 
                               onClick={() => removeApp(app)}
                               className="text-muted-foreground hover:text-destructive transition-colors p-1"

@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
       .single();
 
     if (updateError || !device) {
-      console.log(`[Sync] Device ${deviceId} update failed:`, updateError?.message);
+      console.log('[Sync] Device %s update failed: %s', deviceId, updateError?.message);
       const res = NextResponse.json({ error: 'Device not found' }, { status: 404 });
       res.headers.set('Access-Control-Allow-Origin', '*');
       return res;
@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
 
     // Check if device is unpaired and we're not trying to re-pair it
     if (!device.is_admin_active && !isPairing) {
-      console.log(`[Sync] Device ${deviceId} is inactive. Returning 404 for heartbeat.`);
+      console.log('[Sync] Device %s is inactive. Returning 404 for heartbeat.', deviceId);
       const res = NextResponse.json({ error: 'Device unpaired' }, { status: 404 });
       res.headers.set('Access-Control-Allow-Origin', '*');
       return res;
@@ -159,6 +159,8 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.json({
       is_enabled: settings.vpn_enabled,
       safe_search_enabled: settings.safe_search_enabled === true,
+      keyword_blocking: settings.keyword_blocking === true,
+      server_side_check_enabled: settings.server_side_check_enabled === true,
       blocked_urls: Array.from(new Set(blocked_urls)),
       blocked_keywords: Array.from(new Set(blocked_keywords))
     });

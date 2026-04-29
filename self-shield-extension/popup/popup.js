@@ -10,20 +10,63 @@ document.addEventListener('DOMContentLoaded', () => {
   const pairContainer = document.getElementById('pair-container');
   const deviceIdInput = document.getElementById('deviceIdInput');
   const pairBtn = document.getElementById('pairBtn');
+  const activeSiteContainer = document.getElementById('active-site-container');
+  const currentHostnameSpan = document.getElementById('current-hostname');
+  const quickBlockBtn = document.getElementById('quickBlockBtn');
+
+  let currentTabHostname = null;
 
   // Load initial status
   chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls", "pairedAt"], (data) => {
     updateUI(data);
   });
 
-  // Listen for storage changes (Real-time updates from background)
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'local') {
-      chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls", "pairedAt"], (data) => {
+      chrome.storage.local.get(["is_enabled", "deviceId", "blocked_urls", "pairedAt", "local_blocked_urls"], (data) => {
         updateUI(data);
       });
     }
   });
+
+  // Get current tab info
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0] && tabs[0].url) {
+      try {
+        const url = new URL(tabs[0].url);
+        if (url.protocol.startsWith('http')) {
+          currentTabHostname = url.hostname;
+          if (currentHostnameSpan) currentHostnameSpan.textContent = currentTabHostname;
+        } else {
+          currentTabHostname = null;
+        }
+      } catch (e) {
+        currentTabHostname = null;
+      }
+    }
+    updateUIForCurrentTab();
+  });
+
+  function updateUIForCurrentTab() {
+    if (currentTabHostname && activeSiteContainer) {
+      // Don't show block button for our own admin panel or safe sites
+      const safeSites = ['google.com', 'bing.com', 'wikipedia.org', 'selfshield.app', 'localhost'];
+      const isSafe = safeSites.some(s => currentTabHostname.includes(s));
+      
+      chrome.storage.local.get(["deviceId", "blocked_urls", "local_blocked_urls"], (data) => {
+        const allBlocked = [...(data.blocked_urls || []), ...(data.local_blocked_urls || [])];
+        const isAlreadyBlocked = allBlocked.includes(currentTabHostname);
+        
+        if (data.deviceId && !isSafe && !isAlreadyBlocked) {
+          activeSiteContainer.classList.remove('hidden');
+        } else {
+          activeSiteContainer.classList.add('hidden');
+        }
+      });
+    } else if (activeSiteContainer) {
+      activeSiteContainer.classList.add('hidden');
+    }
+  }
 
   function updateStatusUI(state) {
     if(statusCard) statusCard.className = 'status-card group state-' + state;
@@ -114,5 +157,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (quickBlockBtn) {
+    quickBlockBtn.addEventListener('click', () => {
+      if (currentTabHostname) {
+        quickBlockBtn.disabled = true;
+        quickBlockBtn.textContent = 'Blocking...';
+        chrome.runtime.sendMessage({ action: 'addBlockedUrl', url: currentTabHostname }, (response) => {
+          if (response && response.success) {
+            quickBlockBtn.textContent = 'Blocked';
+            setTimeout(() => {
+              updateUIForCurrentTab();
+            }, 1000);
+          } else {
+            quickBlockBtn.disabled = false;
+            quickBlockBtn.textContent = 'Block This Site';
+          }
+        });
+      }
+    });
+  }
 
 });

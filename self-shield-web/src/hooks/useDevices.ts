@@ -22,6 +22,8 @@ export type Device = {
   settings?: {
     safe_search_enabled: boolean;
     vpn_enabled: boolean;
+    keyword_blocking: boolean;
+    server_side_check_enabled: boolean;
   };
 };
 
@@ -57,7 +59,7 @@ export function useDevices() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('devices')
-        .select('*, settings:device_settings(safe_search_enabled, vpn_enabled)')
+        .select('*, settings:device_settings(safe_search_enabled, vpn_enabled, keyword_blocking, server_side_check_enabled)')
         .not('last_seen_at', 'is', null)
         .order('created_at', { ascending: false });
 
