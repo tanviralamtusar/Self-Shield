@@ -405,43 +405,47 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
     return;
   }
 
-  // 1. Static Search Engine Rules
+  // 1. Static Search Engine Rules (Force Safe Search via Parameters)
   const rules = [
+    // Google: safe=active
     {
       id: 10001,
-      priority: 10,
+      priority: 1000,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "safe", value: "active" }] } } }
       },
-      condition: { urlFilter: "*://www.google.com/search*", resourceTypes: ["main_frame"] }
+      condition: { urlFilter: "||google.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     },
+    // Bing: adlt=strict
     {
       id: 10002,
-      priority: 10,
+      priority: 1000,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "adlt", value: "strict" }] } } }
       },
-      condition: { urlFilter: "*://www.bing.com/search*", resourceTypes: ["main_frame"] }
+      condition: { urlFilter: "||bing.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     },
+    // DuckDuckGo: kp=1
     {
       id: 10003,
-      priority: 10,
+      priority: 1000,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "kp", value: "1" }] } } }
       },
-      condition: { urlFilter: "*://duckduckgo.com/*", resourceTypes: ["main_frame"] }
+      condition: { urlFilter: "||duckduckgo.com/*", resourceTypes: ["main_frame", "sub_frame"] }
     },
+    // Yahoo: vm=p
     {
       id: 10004,
-      priority: 10,
+      priority: 1000,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "vm", value: "p" }] } } }
       },
-      condition: { urlFilter: "*://search.yahoo.com/search*", resourceTypes: ["main_frame"] }
+      condition: { urlFilter: "||search.yahoo.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     }
   ];
 
