@@ -28,7 +28,7 @@ function scrubSearch() {
       }
     }
     
-    if (hostname.includes('bing.com') && url.pathname === '/search') {
+    if ((hostname === 'bing.com' || hostname.endsWith('.bing.com')) && url.pathname === '/search') {
       if (url.searchParams.get('adlt') !== 'strict') {
         url.searchParams.set('adlt', 'strict');
         window.location.replace(url.toString());
