@@ -92,7 +92,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
 
           {/* Name + status */}
           <div className="min-w-0">
-            <p className="text-[17px] font-bold text-foreground/90 truncate leading-tight tracking-tight pr-10">
+            <p className="text-lg font-bold text-foreground truncate leading-tight tracking-tight pr-10">
               {device.device_name || 'Unnamed Node'}
             </p>
             <div className="flex items-center gap-2.5 mt-2">
@@ -135,8 +135,8 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
             : <ShieldAlert className="w-3.5 h-3.5 text-amber-500/80 shrink-0" />
           }
           <div className="min-w-0">
-            <p className="text-[7px] uppercase font-bold text-muted-foreground/40 tracking-widest leading-none mb-1">Security</p>
-            <p className="text-[11px] font-bold text-foreground/80 leading-none">{protectionStatus}</p>
+            <p className="text-[10px] uppercase font-bold text-muted-foreground/70 tracking-wider leading-none mb-1">Security</p>
+            <p className="text-[13px] font-bold text-foreground leading-none">{protectionStatus}</p>
           </div>
         </div>
 
@@ -146,8 +146,8 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
             <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
           </div>
           <div className="min-w-0">
-            <p className="text-[7px] uppercase font-bold text-muted-foreground/40 tracking-widest leading-none mb-1">Version</p>
-            <p className="text-[11px] font-mono font-bold text-foreground/80 leading-none">v{device.app_version || '1.0.0'}</p>
+            <p className="text-[10px] uppercase font-bold text-muted-foreground/70 tracking-wider leading-none mb-1">Version</p>
+            <p className="text-[13px] font-mono font-bold text-foreground leading-none">v{device.app_version || '1.0.0'}</p>
           </div>
         </div>
 
@@ -155,11 +155,11 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/10 border border-border/20">
           <Smartphone className={cn(
             "w-3.5 h-3.5 shrink-0",
-            device.is_admin_active ? "text-primary/70" : "text-muted-foreground/30"
+            device.is_admin_active ? "text-primary/70" : "text-muted-foreground/50"
           )} />
           <div className="min-w-0">
-            <p className="text-[7px] uppercase font-bold text-muted-foreground/40 tracking-widest leading-none mb-1">Admin Mode</p>
-            <p className="text-[11px] font-bold text-foreground/80 leading-none">
+            <p className="text-[10px] uppercase font-bold text-muted-foreground/70 tracking-wider leading-none mb-1">Admin Mode</p>
+            <p className="text-[13px] font-bold text-foreground leading-none">
               {device.is_admin_active ? 'Active' : 'Inactive'}
             </p>
           </div>
@@ -172,8 +172,8 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
             device.is_device_owner ? "text-emerald-500/60" : "text-primary/50"
           )} />
           <div className="min-w-0">
-            <p className="text-[7px] uppercase font-bold text-muted-foreground/40 tracking-widest leading-none mb-1">Node Role</p>
-            <p className="text-[11px] font-bold text-foreground/80 leading-none">
+            <p className="text-[10px] uppercase font-bold text-muted-foreground/70 tracking-wider leading-none mb-1">Node Role</p>
+            <p className="text-[13px] font-bold text-foreground leading-none">
               {device.is_device_owner ? 'Primary' : 'Shield Node'}
             </p>
           </div>
@@ -183,16 +183,16 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
       {/* ── IDENTITY ─────────────────────────────── */}
       <div className="flex items-center gap-2 mx-4 mb-3 px-3 py-2 rounded-lg bg-muted/10 border border-border/20">
         <div className="min-w-0 flex-1">
-          <p className="text-[8px] uppercase font-bold text-muted-foreground/40 tracking-[0.2em] mb-0.5">Identity Token</p>
-          <code className="text-[10px] font-mono text-muted-foreground/70 truncate block transition-colors">
+          <p className="text-[10px] uppercase font-bold text-muted-foreground/70 tracking-wider mb-1">Identity Token</p>
+          <code className="text-[11px] font-mono text-foreground/80 truncate block transition-colors">
             {device.id}
           </code>
         </div>
         <button
-          className="shrink-0 p-1.5 rounded-md text-muted-foreground/40 hover:text-primary hover:bg-primary/5 transition-all"
+          className="shrink-0 p-1.5 rounded-md text-muted-foreground/60 hover:text-primary hover:bg-primary/5 transition-all"
           onClick={(e) => { e.preventDefault(); navigator.clipboard.writeText(device.id); toast.success('Copied!'); }}
         >
-          <Copy className="w-3" />
+          <Copy className="w-4" />
         </button>
       </div>
 
@@ -202,7 +202,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
           nativeButton={false}
           render={<Link href={`/devices/${device.id}`} />}
           variant="outline"
-          className="flex-1 h-10 text-[10px] font-black uppercase tracking-[0.15em] border-border/40 bg-transparent text-foreground/60 hover:bg-primary hover:text-white hover:border-primary transition-all duration-500"
+          className="flex-1 h-10 text-[12px] font-black uppercase tracking-wider border-border/40 bg-transparent text-foreground/70 hover:bg-primary hover:text-white hover:border-primary transition-all duration-500"
         >
           Manage
         </Button>
@@ -210,7 +210,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
           onClick={() => handleAction(false)}
           disabled={isDeleting || !device.last_seen_at}
           variant="outline"
-          className="flex-1 h-10 text-[10px] font-black uppercase tracking-[0.15em] border-destructive/30 bg-transparent text-destructive/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-destructive/50 disabled:hover:border-destructive/30"
+          className="flex-1 h-10 text-[12px] font-black uppercase tracking-wider border-destructive/30 bg-transparent text-destructive/60 hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-destructive/50 disabled:hover:border-destructive/30"
         >
           {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Unpair'}
         </Button>
