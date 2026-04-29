@@ -31,8 +31,8 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
 
   const protectionStatus = device.is_device_owner && device.is_admin_active ? 'Full' : 'Partial';
 
-  const removeDevice = async () => {
-    if (!confirm(`Are you sure you want to remove ${device.device_name || 'this device'}?`)) {
+  const unpairDevice = async () => {
+    if (!confirm(`Are you sure you want to unpair ${device.device_name || 'this node'}? This will disconnect the extension immediately.`)) {
       return;
     }
 
@@ -47,13 +47,13 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to delete');
+      if (!response.ok) throw new Error(data.error || 'Failed to unpair');
 
-      toast.success('Device removed successfully');
+      toast.success('Device unpaired successfully');
       queryClient.invalidateQueries({ queryKey: ['devices'] });
     } catch (error: any) {
-      console.error('Error removing device:', error);
-      toast.error(error.message || 'Failed to remove device');
+      console.error('Error unpairing device:', error);
+      toast.error(error.message || 'Failed to unpair device');
     } finally {
       setIsDeleting(false);
     }
@@ -97,7 +97,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
               <span className={cn(
                 "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
                 isOnline
-                  ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                   ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                   : "bg-muted/20 text-muted-foreground/60 border-border/20"
               )}>
                 <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", isOnline ? "bg-emerald-500" : "bg-muted-foreground/50")} />
@@ -109,18 +109,6 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
             </div>
           </div>
         </div>
-
-        {/* Delete button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-7 w-7 shrink-0 rounded-full text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 transition-all mt-0.5"
-          onClick={removeDevice}
-          disabled={isDeleting}
-          title="Remove Device"
-        >
-          {isDeleting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
-        </Button>
       </div>
 
       {/* ── FEATURES GRID ───────────────────────────── */}
@@ -193,16 +181,23 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
         </button>
       </div>
 
-      {/* ── FOOTER: action only ─────────── */}
-      <div className="px-4 pb-4">
-        {/* Manage button */}
+      {/* ── FOOTER: action buttons ─────────── */}
+      <div className="px-4 pb-4 flex gap-2">
         <Button
           nativeButton={false}
           render={<Link href={`/devices/${device.id}`} />}
           variant="outline"
-          className="w-full h-10 text-[11px] font-black uppercase tracking-[0.2em] border-border/40 bg-transparent text-foreground/60 hover:bg-primary hover:text-white hover:border-primary transition-all duration-500"
+          className="flex-1 h-10 text-[10px] font-black uppercase tracking-[0.15em] border-border/40 bg-transparent text-foreground/60 hover:bg-primary hover:text-white hover:border-primary transition-all duration-500"
         >
-          Manage Node
+          Manage
+        </Button>
+        <Button
+          onClick={unpairDevice}
+          disabled={isDeleting}
+          variant="outline"
+          className="flex-1 h-10 text-[10px] font-black uppercase tracking-[0.15em] border-destructive/30 bg-transparent text-destructive/50 hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-500"
+        >
+          {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Unpair'}
         </Button>
       </div>
 
