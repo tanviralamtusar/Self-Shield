@@ -70,39 +70,31 @@ export function AppSidebar() {
                     <SidebarMenuButton 
                       render={<Link href={item.url} />} 
                       isActive={pathname === item.url}
-                      className="group transition-all duration-300 relative overflow-hidden"
+                      className={cn(
+                        "group relative h-10 hover:bg-transparent hover:text-sidebar-foreground",
+                        pathname === item.url && "bg-primary/10"
+                      )}
                     >
-                      <div className="relative z-10 flex items-center w-full">
-                        <div className="relative mr-3 flex items-center justify-center">
+                      <div className="relative z-10 flex items-center w-full px-2">
+                        <div className="mr-3 flex items-center justify-center">
                           <item.icon className={cn(
-                            "h-4 w-4 transition-all duration-700 ease-in-out transform-gpu",
-                            // Grayscale/Muted by default
-                            "text-muted-foreground/50 group-hover:text-foreground group-hover:[transform:rotateY(360deg)]",
-                            pathname === item.url && "text-primary scale-110"
+                            "h-4 w-4",
+                            pathname === item.url ? "text-primary" : "text-muted-foreground/60"
                           )} />
-                          
-                          {/* Active Glow behind icon */}
-                          {pathname === item.url && (
-                            <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full animate-pulse" />
-                          )}
                         </div>
                         
                         <span className={cn(
-                          "transition-all duration-300 text-sm font-medium",
-                          "text-muted-foreground/70 group-hover:text-foreground",
-                          pathname === item.url && "text-foreground font-bold"
+                          "text-sm font-medium",
+                          pathname === item.url ? "text-foreground font-semibold" : "text-muted-foreground/70"
                         )}>
                           {item.title}
                         </span>
 
                         {/* Active Indicator Bar */}
                         {pathname === item.url && (
-                          <div className="absolute -left-3 h-6 w-1 rounded-r-full bg-primary shadow-[4px_0_12px_rgba(59,130,246,0.5)]" />
+                          <div className="absolute -left-2 h-5 w-1 rounded-r-full bg-primary" />
                         )}
                       </div>
-
-                      {/* Subtle background highlight on hover */}
-                      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -116,10 +108,10 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={handleLogout} 
-                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-primary/5 text-primary transition-all duration-300 hover:bg-primary hover:text-white hover:shadow-[0_0_15px_rgba(45,127,249,0.4)] active:scale-95"
+                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-primary/5 text-primary"
               >
                 <div className="flex items-center justify-center w-full gap-2 font-semibold">
-                  <LogOut className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  <LogOut className="h-4 w-4" />
                   <span>Sign Out</span>
                 </div>
               </SidebarMenuButton>

@@ -1,26 +1,156 @@
-// In development, use localhost. In production, use your actual domain.
+// Import Supabase library first
+try {
+  importScripts('../supabase.js');
+} catch (e) {
+  console.error("CRITICAL: Failed to load Supabase library from root. Realtime features will be disabled.", e);
+}
+
+// ─── Constants & State ──────────────────────────────────────────────
 const API_BASE_URL = "http://localhost:3000";
+const SUPABASE_URL = "https://nkadwmptdzjsmwuujcid.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_U3jPnKL1B65hjpz8aVJFAA_4jMogGtD";
 
-// ─── Event Batch Queue ──────────────────────────────────────────────
-const MAX_BATCH_SIZE = 20;
-let eventBatch = [];
-
-// ─── State ──────────────────────────────────────────────────────────
+let supabaseClient = null;
+let realtimeChannel = null;
+let currentSubscribedDeviceId = null;
 let isUnpairing = false;
+let eventBatch = [];
+const MAX_BATCH_SIZE = 20;
+let activeSession = { hostname: null, startTime: null };
+let localBlockedUrls = [];
+const SERVER_CHECK_CACHE = new Map();
+const CACHE_EXPIRY = 1000 * 60 * 60; // 1 hour
+
+// ─── Built-in Protection Lists ──────────────────────────────────────
+const BUILTIN_ADULT_SITES = [
+  "pornhub.com", "xvideos.com", "xnxx.com", "xhamster.com", "redtube.com", "youporn.com", "tube8.com", "spankbang.com", "beeg.com", "tnaflix.com", "xtube.com", "slutload.com", "drtuber.com", "nuvid.com", "fuq.com", "4tube.com", "fux.com", "txxx.com", "hclips.com", "hdzog.com", "vjav.com", "porntrex.com", "upornia.com", "sunporno.com", "iceporn.com", "anysex.com", "analdin.com", "bravotube.net", "porndig.com", "alphaporno.com", "tubeon.com", "videosection.com", "viptube.com", "eporner.com", "gotporn.com", "perfectgirls.net", "fullporner.com", "proporn.com", "jizzbunker.com", "fapality.com", "pornone.com", "cliphunter.com", "keezmovies.com", "empflix.com", "cinecaliente.com", "porntube.com", "porn.com", "sex.com", "adult.com", "xxx.com", "bangbros.com", "brazzers.com", "realitykings.com", "naughtyamerica.com", "mofos.com", "digitalplayground.com", "vivid.com", "penthouse.com", "playboy.com", "hustler.com", "wicked.com", "girlfriendsfilms.com", "adulttime.com", "kink.com", "sexart.com", "met-art.com", "hegre.com", "chaturbate.com", "myfreecams.com", "livejasmin.com", "cam4.com", "bongacams.com", "stripchat.com", "streamate.com", "flirt4free.com", "imlive.com", "camsoda.com", "jerkmate.com", "adultfriendfinder.com", "ashleymadison.com", "onlyfans.com", "fansly.com", "motherless.com", "imagefap.com"
+];
+
+const BUILTIN_ADULT_KEYWORDS = [
+  "porn", "sex", "xxx", "nude", "naked", "erotic", "hentai", "milf", "ebony", "lesbian", "gay", "trans", "anal", "blowjob", "facial", "cum", "orgasm", "swinger", "escort", "stripper", "hardcore", "pussy", "dick", "cock", "boobs", "tits", "clitoris", "vagina", "penis", "masturbation", "bDSM"
+];
+
+// Initialize Supabase Client
+function initSupabase() {
+  if (typeof supabaseClient === 'undefined' || !supabaseClient) {
+    if (typeof globalThis.supabase !== 'undefined') {
+      const { createClient } = globalThis.supabase;
+      supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false }
+      });
+    } else {
+      console.error("Supabase library loaded but 'supabase' object not found in global scope.");
+    }
+  }
+}
+
+initSupabase();
+
+// ─── Realtime: Instant Unpair Listener ───────────────────────────────
+async function setupRealtimeListener(deviceId) {
+  if (!deviceId || !supabaseClient) return;
+  
+  if (currentSubscribedDeviceId === deviceId && realtimeChannel) return;
+
+  if (realtimeChannel) {
+    try {
+      await realtimeChannel.unsubscribe();
+    } catch (e) {
+      console.warn("Error unsubscribing from old channel:", e);
+    }
+  }
+
+  console.log(`[Realtime] Subscribing to device: ${deviceId}`);
+  currentSubscribedDeviceId = deviceId;
+  
+  realtimeChannel = supabaseClient
+    .channel(`device-changes-${deviceId}`)
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'devices',
+        filter: `id=eq.${deviceId}`
+      },
+      (payload) => {
+        if (payload.new && payload.new.is_admin_active === false) {
+          console.log('[Realtime] Instant unpair signal received!');
+          performUnpair();
+        }
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'device_settings',
+        filter: `device_id=eq.${deviceId}`
+      },
+      (payload) => {
+        if (payload.new) {
+          console.log('[Realtime] Settings updated:', payload.new);
+          // Trigger a full sync to get latest blocked URLs/Keywords if safe search changed
+          syncWithAdminPanel().catch(() => {});
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log(`[Realtime] Subscription status: ${status}`);
+    });
+}
+
+async function performUnpair() {
+  if (isUnpairing) return;
+  isUnpairing = true;
+  
+  console.log("Unpairing device...");
+
+  try {
+    const { deviceId } = await chrome.storage.local.get("deviceId");
+    if (deviceId) {
+      await flushEventBatch(deviceId).catch(() => {});
+    }
+
+    // 1. Clear storage
+    await chrome.storage.local.set({
+      is_enabled: false,
+      deviceId: null,
+      pairedAt: null,
+      everBeenActive: false,
+      blocked_urls: []
+    });
+
+    // 2. Clear blocking rules
+    await clearBlockingRules().catch(() => {});
+
+    // 3. Clear Realtime
+    if (realtimeChannel) {
+      await realtimeChannel.unsubscribe().catch(() => {});
+      realtimeChannel = null;
+      currentSubscribedDeviceId = null;
+    }
+    
+    console.log("Unpairing complete.");
+  } catch (err) {
+    console.error("Error during unpair process:", err);
+  } finally {
+    isUnpairing = false;
+  }
+}
 
 // ─── Alarms ─────────────────────────────────────────────────────────
-// Safety-net: catch changes made outside the dashboard (e.g. mobile app)
 chrome.alarms.create("safetyNetSync", { periodInMinutes: 5 });
-// Event flush: send batched site visits to the backend every 2 minutes
 chrome.alarms.create("flushEvents", { periodInMinutes: 2 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "safetyNetSync") {
-    syncWithAdminPanel();
+    syncWithAdminPanel().catch(() => {});
   }
   if (alarm.name === "flushEvents") {
     chrome.storage.local.get("deviceId", ({ deviceId }) => {
-      if (deviceId) flushEventBatch(deviceId);
+      if (deviceId) flushEventBatch(deviceId).catch(() => {});
     });
   }
 });
@@ -28,19 +158,16 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 // ─── Lifecycle Triggers ─────────────────────────────────────────────
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Self-Shield Extension Installed");
-  syncWithAdminPanel();
+  syncWithAdminPanel().catch(() => {});
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  syncWithAdminPanel();
+  syncWithAdminPanel().catch(() => {});
 });
 
-// ─── Instant Sync: Content Script Relay or Popup ────────────────────
-// When the dashboard page changes settings, the content script sends
-// 'triggerSync'. When the popup opens, it connects on this port.
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name === "popup") {
-    syncWithAdminPanel();
+    syncWithAdminPanel().catch(() => {});
   }
 });
 
@@ -49,50 +176,56 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "triggerSync") {
     syncWithAdminPanel()
       .then(() => sendResponse({ success: true }))
-      .catch(() => sendResponse({ success: false }));
+      .catch((err) => sendResponse({ success: false, error: err.message }));
     return true;
   }
 
   if (request.action === "pairDevice") {
-    chrome.storage.local.set({
+    const info = getBrowserInfo();
+    const params = new URLSearchParams({
       deviceId: request.deviceId,
-      pairedAt: Date.now(),
-      everBeenActive: false,
-      is_enabled: false,
-      blocked_urls: []
-    }, () => {
-      sendResponse({ success: true });
-      syncWithAdminPanel();
+      _t: Date.now().toString(),
+      browserName: info.browserName,
+      browserVersion: info.browserVersion,
+      osName: info.osName,
+      osVersion: info.osVersion,
+      extVersion: info.extensionVersion,
+      isPairing: 'true',
     });
+
+    fetch(`${API_BASE_URL}/api/extension/sync?${params.toString()}`)
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          chrome.storage.local.set({
+            deviceId: request.deviceId,
+            pairedAt: Date.now(),
+            everBeenActive: true,
+            is_enabled: data.is_enabled === true,
+            blocked_urls: data.blocked_urls || []
+          }, () => {
+            setupRealtimeListener(request.deviceId).catch(() => {});
+            sendResponse({ success: true });
+          });
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          sendResponse({ 
+            success: false, 
+            error: errorData.error || "Invalid ID. Please check and try again." 
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Pairing verification failed:", err);
+        sendResponse({ success: false, error: "Connection error. Is the dashboard online?" });
+      });
     return true;
   }
 
   if (request.action === "deviceDeleted") {
-    console.log("INSTANT: Device unpairing...");
-    isUnpairing = true;
-
-    const performUnpair = async () => {
-      try {
-        const { deviceId } = await chrome.storage.local.get("deviceId");
-        if (deviceId) {
-          // Flush any remaining events before clearing state
-          await flushEventBatch(deviceId);
-        }
-      } catch (e) {
-        // Best-effort flush before unpair
-      }
-
-      await chrome.storage.local.set({
-        is_enabled: false, deviceId: null, pairedAt: null,
-        everBeenActive: false, blocked_urls: []
-      });
-
-      await clearBlockingRules().catch(() => {});
-      isUnpairing = false;
-      sendResponse({ success: true });
-    };
-
-    performUnpair();
+    performUnpair()
+      .then(() => sendResponse({ success: true }))
+      .catch((err) => sendResponse({ success: false, error: err.message }));
     return true;
   }
 
@@ -101,6 +234,34 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse({ success: true });
     return true;
   }
+
+  if (request.action === "addBlockedUrl") {
+    const newUrl = request.url;
+    chrome.storage.local.get("local_blocked_urls", (data) => {
+      const current = data.local_blocked_urls || [];
+      if (!current.includes(newUrl)) {
+        const updated = [...current, newUrl];
+        chrome.storage.local.set({ local_blocked_urls: updated }, () => {
+          syncWithAdminPanel().catch(() => {});
+          sendResponse({ success: true });
+        });
+      } else {
+        sendResponse({ success: true });
+      }
+    });
+    return true;
+  }
+
+  if (request.action === "checkUrl") {
+    const { url } = request;
+    checkUrlWithServer(url)
+      .then(result => sendResponse(result))
+      .catch(err => sendResponse({ blocked: false, error: err.message }));
+    return true;
+  }
+  
+  // Return false if message is not handled
+  return false;
 });
 
 // ─── Browser Info Detection ─────────────────────────────────────────
@@ -111,26 +272,17 @@ function getBrowserInfo() {
   let browserName = 'Unknown';
   let browserVersion = '';
 
-  // 1. Modern API: navigator.userAgentData.brands (Chromium 90+)
-  //    Arc, Brave, Edge, Opera, Vivaldi all register their brand here,
-  //    even when their UA string is identical to Chrome's.
   const uaData = navigator.userAgentData;
   if (uaData && uaData.brands) {
-    // Known browser brands to look for (order = priority)
     const knownBrands = ['Arc', 'Brave', 'Edge', 'Opera', 'Vivaldi', 'Whale', 'Samsung Internet'];
-    
     for (const target of knownBrands) {
-      const match = uaData.brands.find(b =>
-        b.brand.toLowerCase().includes(target.toLowerCase())
-      );
+      const match = uaData.brands.find(b => b.brand.toLowerCase().includes(target.toLowerCase()));
       if (match) {
         browserName = target;
         browserVersion = match.version || '';
         break;
       }
     }
-
-    // If no special brand found, check for Microsoft Edge (brand: "Microsoft Edge")
     if (browserName === 'Unknown') {
       const edgeBrand = uaData.brands.find(b => b.brand === 'Microsoft Edge');
       if (edgeBrand) {
@@ -138,8 +290,6 @@ function getBrowserInfo() {
         browserVersion = edgeBrand.version || '';
       }
     }
-
-    // If still unknown, fall back to Chromium version from brands
     if (browserName === 'Unknown') {
       const chromium = uaData.brands.find(b => b.brand === 'Chromium');
       if (chromium) {
@@ -149,7 +299,6 @@ function getBrowserInfo() {
     }
   }
 
-  // 2. Fallback: UA string parsing (Firefox, Safari, or old browsers)
   if (browserName === 'Unknown') {
     if (ua.includes('Edg/')) {
       browserName = 'Edge';
@@ -169,16 +318,10 @@ function getBrowserInfo() {
     }
   }
 
-  // Detect OS
   let osName = 'Unknown';
   let osVersion = '';
+  if (uaData && uaData.platform) osName = uaData.platform;
 
-  // Try modern API first
-  if (uaData && uaData.platform) {
-    osName = uaData.platform; // "Windows", "macOS", "Linux", "Chrome OS"
-  }
-
-  // Enrich with version from UA string
   if (ua.includes('Windows NT')) {
     if (osName === 'Unknown') osName = 'Windows';
     const ntVersion = ua.match(/Windows NT ([\d.]+)/)?.[1] || '';
@@ -187,19 +330,9 @@ function getBrowserInfo() {
   } else if (ua.includes('Mac OS X')) {
     if (osName === 'Unknown') osName = 'macOS';
     osVersion = ua.match(/Mac OS X ([\d_]+)/)?.[1]?.replace(/_/g, '.') || '';
-  } else if (ua.includes('CrOS')) {
-    if (osName === 'Unknown') osName = 'ChromeOS';
-  } else if (ua.includes('Linux')) {
-    if (osName === 'Unknown') osName = 'Linux';
   }
 
-  return {
-    browserName,
-    browserVersion,
-    osName,
-    osVersion,
-    extensionVersion: manifest.version,
-  };
+  return { browserName, browserVersion, osName, osVersion, extensionVersion: manifest.version };
 }
 
 // ─── Core Sync ──────────────────────────────────────────────────────
@@ -210,8 +343,8 @@ async function syncWithAdminPanel() {
     const { deviceId } = await chrome.storage.local.get("deviceId");
     if (!deviceId) return;
 
-    // Flush any pending events while we're syncing
-    await flushEventBatch(deviceId);
+    setupRealtimeListener(deviceId).catch(() => {});
+    await flushEventBatch(deviceId).catch(() => {});
 
     const info = getBrowserInfo();
     const params = new URLSearchParams({
@@ -224,41 +357,64 @@ async function syncWithAdminPanel() {
       extVersion: info.extensionVersion,
     });
 
-    const url = `${API_BASE_URL}/api/extension/sync?${params.toString()}`;
-    const response = await fetch(url, {
+    const response = await fetch(`${API_BASE_URL}/api/extension/sync?${params.toString()}`, {
       signal: AbortSignal.timeout(5000),
-      cache: 'no-store',
-      headers: { 'Cache-Control': 'no-cache' }
+      cache: 'no-store'
     });
 
     if (!response.ok) {
       if (response.status === 404) {
         const { everBeenActive } = await chrome.storage.local.get("everBeenActive");
-        if (!everBeenActive) return;
-
-        console.log("DEVICE DELETED! Going INACTIVE now.");
-        await chrome.storage.local.set({
-          is_enabled: false, deviceId: null, pairedAt: null,
-          everBeenActive: false, blocked_urls: []
-        });
-        clearBlockingRules();
-        return;
+        if (everBeenActive) {
+          console.log("DEVICE DELETED! Going INACTIVE now.");
+          await performUnpair();
+        }
       }
       return;
     }
 
     const data = await response.json();
     const enabledState = data.is_enabled === true;
+    const safeSearchState = data.safe_search_enabled === true;
+    const keywordBlockingState = data.keyword_blocking === true;
+    const serverSideCheckState = data.server_side_check_enabled === true;
+    
     const urls = data.blocked_urls || [];
+    const keywords = data.blocked_keywords || [];
+    const { local_blocked_urls } = await chrome.storage.local.get("local_blocked_urls");
+    const localUrls = local_blocked_urls || [];
 
-    const update = { is_enabled: enabledState, blocked_urls: urls };
-    if (enabledState) update.everBeenActive = true;
-    await chrome.storage.local.set(update);
+    await chrome.storage.local.set({ 
+      is_enabled: enabledState, 
+      safe_search_enabled: safeSearchState,
+      keyword_blocking: keywordBlockingState,
+      server_side_check_enabled: serverSideCheckState,
+      blocked_urls: urls,
+      blocked_keywords: keywords,
+      everBeenActive: enabledState ? true : undefined
+    });
 
-    if (enabledState && urls.length > 0) {
-      updateBlockingRules(urls);
+    if (enabledState) {
+      const combinedUrls = [...new Set([...urls, ...localUrls, ...BUILTIN_ADULT_SITES])];
+      const combinedKeywords = [...new Set([...keywords, ...BUILTIN_ADULT_KEYWORDS])];
+      
+      // Update blocking rules (IDs 1-10000)
+      updateBlockingRules(combinedUrls).catch(() => {});
+      
+      // Update keyword rules (IDs 20000-25000) - respect setting
+      if (keywordBlockingState) {
+        updateKeywordRules(combinedKeywords).catch(() => {});
+      } else {
+        chrome.declarativeNetRequest.getDynamicRules().then(rules => {
+          const ids = rules.filter(r => r.id >= 20000 && r.id < 30000).map(r => r.id);
+          chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: ids });
+        });
+      }
+      
+      // Update safe search rules (IDs 10000-11000)
+      updateSafeSearchRules(safeSearchState).catch(() => {});
     } else {
-      clearBlockingRules();
+      clearAllRules().catch(() => {});
     }
 
   } catch (error) {
@@ -269,102 +425,152 @@ async function syncWithAdminPanel() {
 // ─── Blocking Rules ─────────────────────────────────────────────────
 async function updateBlockingRules(urls) {
   if (!urls || !Array.isArray(urls)) return;
-
   const rules = urls.map((url, index) => ({
     id: index + 1,
-    priority: 1,
-    action: {
-      type: "redirect",
-      redirect: { extensionPath: "/blocked-page/blocked.html" }
-    },
-    condition: {
-      urlFilter: url,
-      resourceTypes: ["main_frame"]
-    }
+    priority: 100,
+    action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+    condition: { urlFilter: `||${url}^`, resourceTypes: ["main_frame"] }
   }));
-
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
-  const removeRuleIds = currentRules.map(r => r.id);
-
+  const oldBlockingRuleIds = currentRules.filter(r => r.id > 0 && r.id < 10000).map(r => r.id);
+  
   await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: removeRuleIds,
+    removeRuleIds: oldBlockingRuleIds,
     addRules: rules
   });
 }
 
-async function clearBlockingRules() {
+async function updateKeywordRules(keywords) {
+  if (!keywords || !Array.isArray(keywords)) return;
+  const rules = keywords.map((kw, index) => ({
+    id: 20000 + index,
+    priority: 2000, // Higher than safe search redirect
+    action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+    condition: { 
+      urlFilter: kw, 
+      resourceTypes: ["main_frame", "sub_frame"],
+      excludedDomains: ["wikipedia.org", "healthline.com", "medicalnewstoday.com"]
+    }
+  }));
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
-  const removeRuleIds = currentRules.map(r => r.id);
-  await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds });
+  const oldKeywordRuleIds = currentRules.filter(r => r.id >= 20000 && r.id < 30000).map(r => r.id);
+  
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: oldKeywordRuleIds,
+    addRules: rules
+  });
 }
 
-// ─── Event Logging (Batched) ────────────────────────────────────────
-// Events are queued in memory and flushed either:
-// 1. On the next sync cycle
-// 2. When the batch reaches MAX_BATCH_SIZE
-// 3. On unpair (best-effort flush)
+async function clearAllRules() {
+  const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
+  await chrome.declarativeNetRequest.updateDynamicRules({ 
+    removeRuleIds: currentRules.map(r => r.id) 
+  });
+}
+
+// ─── Safe Search Enforcement ──────────────────────────────────────────
+async function updateSafeSearchRules(enabled) {
+  const START_ID = 10000;
+  const END_ID = 11000;
+  
+  const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
+  const rulesToRemove = currentRules
+    .filter(r => r.id >= START_ID && r.id <= END_ID)
+    .map(r => r.id);
+    
+  if (!enabled) {
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: rulesToRemove
+    });
+    return;
+  }
+
+  const rules = [
+    {
+      id: 10001,
+      priority: 1000,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "safe", value: "active" }] } } }
+      },
+      condition: { urlFilter: "||google.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
+    },
+    {
+      id: 10002,
+      priority: 1000,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "adlt", value: "strict" }] } } }
+      },
+      condition: { urlFilter: "||bing.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
+    },
+    {
+      id: 10003,
+      priority: 1000,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "kp", value: "1" }] } } }
+      },
+      condition: { urlFilter: "||duckduckgo.com/*", resourceTypes: ["main_frame", "sub_frame"] }
+    },
+    {
+      id: 10004,
+      priority: 1000,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "vm", value: "p" }] } } }
+      },
+      condition: { urlFilter: "||search.yahoo.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
+    }
+  ];
+
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: rulesToRemove,
+    addRules: rules
+  });
+}
+
+// ─── Event Logging ──────────────────────────────────────────────────
 function logEvent(eventType, target, durationSec = null) {
-  const event = {
-    eventType,
-    target,
-    occurredAt: new Date().toISOString()
-  };
+  const event = { eventType, target, occurredAt: new Date().toISOString() };
   if (durationSec !== null) event.durationSec = durationSec;
   eventBatch.push(event);
 
-  // Auto-flush if batch is full
   if (eventBatch.length >= MAX_BATCH_SIZE) {
     chrome.storage.local.get("deviceId", ({ deviceId }) => {
-      if (deviceId) flushEventBatch(deviceId);
+      if (deviceId) flushEventBatch(deviceId).catch(() => {});
     });
   }
 }
 
 async function flushEventBatch(deviceId) {
   if (eventBatch.length === 0) return;
-
-  // Grab current batch and reset immediately to avoid double-flush
   const eventsToSend = [...eventBatch];
   eventBatch = [];
-
   try {
     await fetch(`${API_BASE_URL}/api/extension/sync`, {
       method: 'POST',
       signal: AbortSignal.timeout(5000),
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        deviceId,
-        events: eventsToSend
-      })
+      body: JSON.stringify({ deviceId, events: eventsToSend })
     });
   } catch (error) {
-    // Put events back on failure so they retry next flush
     eventBatch = [...eventsToSend, ...eventBatch];
     console.error("Event flush failed:", error);
   }
 }
 
-// ─── Active Tab Time Tracking ───────────────────────────────────────
-// Tracks how long the user spends on each hostname.
-// When the user switches tabs or the browser loses focus, the elapsed
-// time on the previous site is logged as a site_visit with durationSec.
-let activeSession = { hostname: null, startTime: null };
-
+// ─── Tab Tracking ───────────────────────────────────────────────────
 function endCurrentSession() {
   if (activeSession.hostname && activeSession.startTime) {
     const durationSec = Math.round((Date.now() - activeSession.startTime) / 1000);
-    // Only log if the user spent at least 2 seconds (avoid tab-switch noise)
-    if (durationSec >= 2) {
-      logEvent("site_visit", activeSession.hostname, durationSec);
-    }
+    if (durationSec >= 2) logEvent("site_visit", activeSession.hostname, durationSec);
   }
   activeSession = { hostname: null, startTime: null };
 }
 
 function startSession(hostname) {
-  if (!hostname) return;
-  // Don't restart if it's the same hostname
-  if (activeSession.hostname === hostname) return;
+  if (!hostname || activeSession.hostname === hostname) return;
   endCurrentSession();
   activeSession = { hostname, startTime: Date.now() };
 }
@@ -372,39 +578,74 @@ function startSession(hostname) {
 async function trackActiveTab() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    if (tab && tab.url) {
+    if (tab?.url) {
       const url = new URL(tab.url);
       if (url.protocol.startsWith('http')) {
         startSession(url.hostname);
         return;
       }
     }
-    // Non-http tab or no tab — end any active session
     endCurrentSession();
-  } catch (e) {
-    // Tab query can fail during shutdown
-  }
+  } catch (e) {}
 }
 
-// When user switches tabs
-chrome.tabs.onActivated.addListener(() => {
-  trackActiveTab();
+chrome.tabs.onActivated.addListener(trackActiveTab);
+chrome.tabs.onUpdated.addListener((id, change, tab) => { if (change.url && tab.active) trackActiveTab(); });
+chrome.windows.onFocusChanged.addListener((id) => { 
+  if (id === chrome.windows.WINDOW_ID_NONE) endCurrentSession(); else trackActiveTab(); 
 });
 
-// When current tab navigates to a new URL
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.url && tab.active) {
-    trackActiveTab();
+async function checkUrlWithServer(url) {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+    
+    // 1. Check in-memory cache
+    if (SERVER_CHECK_CACHE.has(hostname)) {
+      const cached = SERVER_CHECK_CACHE.get(hostname);
+      if (Date.now() - cached.timestamp < CACHE_EXPIRY) {
+        return { blocked: cached.blocked };
+      }
+    }
+
+    // 2. Check local storage cache (for persistence)
+    const { url_cache } = await chrome.storage.local.get("url_cache");
+    const storageCache = url_cache || {};
+    if (storageCache[hostname]) {
+      const cached = storageCache[hostname];
+      if (Date.now() - cached.timestamp < CACHE_EXPIRY) {
+        SERVER_CHECK_CACHE.set(hostname, cached);
+        return { blocked: cached.blocked };
+      }
+    }
+
+    // 3. Fetch from server
+    const { deviceId, server_side_check_enabled } = await chrome.storage.local.get(["deviceId", "server_side_check_enabled"]);
+    if (!deviceId || server_side_check_enabled === false) return { blocked: false };
+
+    const params = new URLSearchParams({ deviceId, url: hostname });
+    const response = await fetch(`${API_BASE_URL}/api/extension/check?${params.toString()}`);
+    
+    if (!response.ok) return { blocked: false };
+    
+    const data = await response.json();
+    const result = { blocked: data.blocked === true, timestamp: Date.now() };
+
+    // 4. Update caches
+    SERVER_CHECK_CACHE.set(hostname, result);
+    storageCache[hostname] = result;
+    
+    // Periodically prune old cache entries to save space
+    const now = Date.now();
+    const prunedCache = Object.fromEntries(
+      Object.entries(storageCache).filter(([_, v]) => now - v.timestamp < (CACHE_EXPIRY * 24))
+    );
+    
+    await chrome.storage.local.set({ url_cache: prunedCache });
+
+    return { blocked: result.blocked };
+
+  } catch (e) {
+    console.error("[ServerCheck] Failed:", e);
+    return { blocked: false };
   }
-});
-
-// When browser window gains/loses focus
-chrome.windows.onFocusChanged.addListener((windowId) => {
-  if (windowId === chrome.windows.WINDOW_ID_NONE) {
-    // Browser lost focus — user is in another app
-    endCurrentSession();
-  } else {
-    trackActiveTab();
-  }
-});
-
+}

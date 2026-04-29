@@ -20,6 +20,7 @@ export function useReports(deviceId?: string, days = 7) {
 
   return useQuery({
     queryKey: ['reports', deviceId, days],
+    staleTime: 60000, // Reports don't change often, keep for 1 min
     queryFn: async () => {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
@@ -49,6 +50,7 @@ export function useReportStats(deviceId?: string) {
 
   return useQuery({
     queryKey: ['report-stats', deviceId],
+    staleTime: 30000, // Stats can be cached for 30s
     queryFn: async () => {
       let reportsQuery = supabase
         .from('daily_reports')

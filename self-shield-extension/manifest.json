@@ -30,20 +30,18 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "dynamic_rules",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
-  },
+
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content/blocker.js"],
+      "js": ["content/blocker.js", "content/search_filter.js"],
       "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked-page/blocked.html"],
+      "matches": ["<all_urls>"]
     }
   ]
 }
