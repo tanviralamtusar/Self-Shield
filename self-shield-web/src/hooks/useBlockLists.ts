@@ -93,3 +93,69 @@ export function useToggleSubscription() {
     },
   });
 }
+
+export function useBlockListEntries(blockListId: string | undefined) {
+  const supabase = createClient();
+
+  return useQuery({
+    queryKey: ['block-list-entries', blockListId],
+    enabled: !!blockListId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('block_list_entries')
+        .select('*')
+        .eq('block_list_id', blockListId!)
+        .order('created_at', { ascending: false });
+
+      if (error) throw new Error(error.message);
+      return data;
+    },
+  });
+}
+
+export function useAddEntry() {
+  const supabase = createClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ blockListId, value }: { blockListId: string, value: string }) => {
+      const { data, error } = await supabase
+        .from('block_list_entries')
+        .insert({ block_list_id: blockListId, value })
+        .select()
+        .single();
+
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['block-list-entries', variables.blockListId] });
+      // Also notify extension if needed
+      if (typeof window !== 'undefined') {
+        window.postMessage({ type: 'SELF_SHIELD_SETTINGS_CHANGED' }, '*');
+      }
+    },
+  });
+}
+
+export function useDeleteEntry() {
+  const supabase = createClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, blockListId }: { id: string, blockListId: string }) => {
+      const { error } = await supabase
+        .from('block_list_entries')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw new Error(error.message);
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['block-list-entries', variables.blockListId] });
+      if (typeof window !== 'undefined') {
+        window.postMessage({ type: 'SELF_SHIELD_SETTINGS_CHANGED' }, '*');
+      }
+    },
+  });
+}
