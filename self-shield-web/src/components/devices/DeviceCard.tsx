@@ -61,7 +61,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
       setIsDeleting(false);
     }
   };
-
+  
   const DeviceIcon = getDeviceIcon(device.device_name || '');
 
   return (
@@ -184,6 +184,8 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
           </div>
         </div>
       </div>
+
+
 
       {/* ── IDENTITY ─────────────────────────────── */}
       <div className="flex items-center gap-2 mx-4 mb-3 px-3 py-2 rounded-lg bg-muted/10 border border-border/20">

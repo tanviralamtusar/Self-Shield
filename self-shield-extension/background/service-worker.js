@@ -68,6 +68,25 @@ async function setupRealtimeListener(deviceId) {
         }
       }
     )
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'device_settings',
+        filter: `device_id=eq.${deviceId}`
+      },
+      (payload) => {
+        if (payload.new) {
+          console.log('[Realtime] Settings updated:', payload.new);
+          chrome.storage.local.set({
+            is_enabled: payload.new.vpn_enabled,
+            safe_search_enabled: payload.new.safe_search_enabled === true
+          });
+          updateSafeSearchRules(payload.new.safe_search_enabled === true);
+        }
+      }
+    )
     .subscribe((status) => {
       console.log(`[Realtime] Subscription status: ${status}`);
     });
@@ -322,16 +341,19 @@ async function syncWithAdminPanel() {
 
     const data = await response.json();
     const enabledState = data.is_enabled === true;
+    const safeSearchState = data.safe_search_enabled === true;
     const urls = data.blocked_urls || [];
 
     await chrome.storage.local.set({ 
       is_enabled: enabledState, 
+      safe_search_enabled: safeSearchState,
       blocked_urls: urls,
       everBeenActive: enabledState ? true : undefined
     });
 
-    if (enabledState && urls.length > 0) {
-      updateBlockingRules(urls).catch(() => {});
+    if (enabledState) {
+      if (urls.length > 0) updateBlockingRules(urls).catch(() => {});
+      updateSafeSearchRules(safeSearchState).catch(() => {});
     } else {
       clearBlockingRules().catch(() => {});
     }
@@ -361,6 +383,61 @@ async function clearBlockingRules() {
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   await chrome.declarativeNetRequest.updateDynamicRules({ 
     removeRuleIds: currentRules.map(r => r.id) 
+  });
+}
+
+// ─── Safe Search Enforcement ──────────────────────────────────────────
+async function updateSafeSearchRules(enabled) {
+  const SAFE_SEARCH_RULE_IDS = [10001, 10002, 10003, 10004];
+  
+  // Always remove existing safe search rules first to avoid conflicts
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: SAFE_SEARCH_RULE_IDS
+  });
+
+  if (!enabled) return;
+
+  const rules = [
+    {
+      id: 10001,
+      priority: 1,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "safe", value: "active" }] } } }
+      },
+      condition: { urlFilter: "*://www.google.com/search*", resourceTypes: ["main_frame"] }
+    },
+    {
+      id: 10002,
+      priority: 1,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "adlt", value: "strict" }] } } }
+      },
+      condition: { urlFilter: "*://www.bing.com/search*", resourceTypes: ["main_frame"] }
+    },
+    {
+      id: 10003,
+      priority: 1,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "kp", value: "1" }] } } }
+      },
+      condition: { urlFilter: "*://duckduckgo.com/*", resourceTypes: ["main_frame"] }
+    },
+    {
+      id: 10004,
+      priority: 1,
+      action: {
+        type: "redirect",
+        redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "vm", value: "p" }] } } }
+      },
+      condition: { urlFilter: "*://search.yahoo.com/search*", resourceTypes: ["main_frame"] }
+    }
+  ];
+
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    addRules: rules
   });
 }
 

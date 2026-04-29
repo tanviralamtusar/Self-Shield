@@ -19,6 +19,10 @@ export type Device = {
   os_name: string | null;
   os_version: string | null;
   device_type: 'android' | 'browser_extension' | 'ios' | null;
+  settings?: {
+    safe_search_enabled: boolean;
+    vpn_enabled: boolean;
+  };
 };
 
 export function useDevices() {
@@ -52,7 +56,7 @@ export function useDevices() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('devices')
-        .select('*')
+        .select('*, settings:device_settings(safe_search_enabled, vpn_enabled)')
         .not('last_seen_at', 'is', null)
         .order('created_at', { ascending: false });
 
