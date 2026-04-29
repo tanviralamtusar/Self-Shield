@@ -35,6 +35,7 @@ export async function GET(req: NextRequest) {
 
     const updatePayload: Record<string, unknown> = {
       last_seen_at: lastSeenValue,
+      is_admin_active: status !== 'offline',
     };
 
     // Only update browser info if provided (extension sync sends these)
