@@ -69,42 +69,49 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: true, message: 'Device marked offline' });
     }
 
-    // 1. Fetch device settings
+    // 1. Fetch device and settings
+    const { data: device, error: deviceError } = await supabaseAdmin
+      .from('devices')
+      .select('is_admin_active')
+      .eq('id', deviceId)
+      .single();
+
+    if (deviceError || !device) {
+      return NextResponse.json({ error: 'Device not found' }, { status: 404 });
+    }
+
+    if (!device.is_admin_active) {
+      return NextResponse.json({ 
+        is_enabled: false, 
+        blocked_urls: [],
+        message: 'Device unpaired'
+      });
+    }
+
     let { data: settings, error: settingsError } = await supabaseAdmin
       .from('device_settings')
       .select('*')
       .eq('device_id', deviceId)
       .single();
 
-    // If settings don't exist, let's try to find the device first
+    // If settings don't exist, create them
     if (settingsError || !settings) {
-      const { data: device, error: deviceError } = await supabaseAdmin
-        .from('devices')
-        .select('*')
-        .eq('id', deviceId)
+      const { data: newSettings, error: createError } = await supabaseAdmin
+        .from('device_settings')
+        .insert({
+          device_id: deviceId,
+          vpn_enabled: true,
+          accessibility_enabled: true,
+          keyword_blocking: true
+        })
+        .select()
         .single();
-
-      if (device) {
-        // Device exists but settings don't. Create settings.
-        const { data: newSettings, error: createError } = await supabaseAdmin
-          .from('device_settings')
-          .insert({
-            device_id: deviceId,
-            vpn_enabled: true,
-            accessibility_enabled: true,
-            keyword_blocking: true
-          })
-          .select()
-          .single();
-        
-        if (createError) {
-          console.error('Error creating default settings:', createError);
-        } else {
-          settings = newSettings;
-        }
-      } else {
-        return NextResponse.json({ error: 'Device not found. Please pair again.' }, { status: 404 });
+      
+      if (createError) {
+        console.error('Error creating default settings:', createError);
+        return NextResponse.json({ error: 'Failed to initialize settings' }, { status: 500 });
       }
+      settings = newSettings;
     }
 
     if (!settings) {
