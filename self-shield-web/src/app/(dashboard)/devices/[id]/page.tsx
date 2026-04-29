@@ -4,10 +4,11 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Smartphone, Shield, Activity, FileText, Settings, Key, Clock, ShieldAlert, History } from 'lucide-react';
+import { Smartphone, Shield, Activity, FileText, Settings, Key, Clock, ShieldAlert, History, Globe } from 'lucide-react';
 import { useDevices } from '@/hooks/useDevices';
 import { DeviceRulesEditor } from '@/components/devices/DeviceRulesEditor';
 import { AuditLogTable } from '@/components/audit/AuditLogTable';
+import { ActivityLog } from '@/components/devices/ActivityLog';
 import { UsageChart } from '@/components/reports/UsageChart';
 import { useReports, useReportStats } from '@/hooks/useReports';
 import { useSendCommand } from '@/hooks/useRemoteCommands';
@@ -146,6 +147,7 @@ export default function DeviceDetailPage() {
     { id: 'summary', label: 'Summary', icon: Smartphone },
     { id: 'rules', label: 'Rules', icon: Shield },
     { id: 'reports', label: 'Reports', icon: Activity },
+    { id: 'activity', label: 'Activity Log', icon: Globe },
     { id: 'audit', label: 'Audit Log', icon: FileText },
     { id: 'commands', label: 'Commands', icon: Key },
     { id: 'settings', label: 'Settings', icon: Settings },
@@ -156,7 +158,17 @@ export default function DeviceDetailPage() {
       <div>
         <h2 className="text-3xl font-bold tracking-tight">{device.device_name || 'Unnamed Device'}</h2>
         <p className="text-muted-foreground mt-1">
-          Android {device.android_version} • App v{device.app_version}
+          {device.device_type === 'browser_extension' ? (
+            <>
+              {device.browser_name && `${device.browser_name} ${device.browser_version || ''}`}
+              {device.os_name && ` • ${device.os_name} ${device.os_version || ''}`}
+              {device.app_version && ` • v${device.app_version}`}
+            </>
+          ) : (
+            <>
+              {device.os_name || 'Android'} {device.android_version || ''} • App v{device.app_version || '—'}
+            </>
+          )}
         </p>
       </div>
 
@@ -229,7 +241,11 @@ export default function DeviceDetailPage() {
             </Card>
           </div>
         )}
-        
+
+        {activeTab === 'activity' && (
+          <ActivityLog deviceId={device.id} />
+        )}
+
         {activeTab === 'audit' && (
           <Card>
             <CardHeader>

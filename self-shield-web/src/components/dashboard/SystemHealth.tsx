@@ -26,10 +26,10 @@ export function SystemHealth() {
   }, []);
 
   return (
-    <Card>
+    <Card className="border border-border/50 bg-card/30 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle>Global Node Health</CardTitle>
-        <CardDescription>Real-time performance of the protection engine.</CardDescription>
+        <CardTitle className="text-base font-semibold">Global Node Health</CardTitle>
+        <CardDescription className="text-[11px]">Real-time performance of the protection engine.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">

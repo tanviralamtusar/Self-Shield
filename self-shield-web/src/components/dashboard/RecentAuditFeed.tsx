@@ -13,13 +13,13 @@ export function RecentAuditFeed() {
   ) || [];
 
   return (
-    <Card>
+    <Card className="border border-border/50 bg-card/30 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ShieldAlert className="w-5 h-5 text-primary" />
+        <CardTitle className="text-base font-semibold flex items-center gap-2">
+          <ShieldAlert className="w-4 h-4 text-muted-foreground" />
           Security Feed
         </CardTitle>
-        <CardDescription>Recent tamper events and system alerts</CardDescription>
+        <CardDescription className="text-[11px]">Recent tamper events and system alerts</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (

@@ -13,6 +13,12 @@ export type Device = {
   is_admin_active: boolean;
   last_seen_at: string | null;
   created_at: string;
+  // Browser extension fields
+  browser_name: string | null;
+  browser_version: string | null;
+  os_name: string | null;
+  os_version: string | null;
+  device_type: 'android' | 'browser_extension' | 'ios' | null;
 };
 
 export function useDevices() {
@@ -27,10 +33,13 @@ export function useDevices() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'devices' },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['devices'] });
+          console.log('[Realtime] Devices table changed, re-fetching...');
+          queryClient.refetchQueries({ queryKey: ['devices'] });
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log(`[Realtime] Subscription status: ${status}`);
+      });
 
     return () => {
       supabase.removeChannel(channel);
@@ -39,10 +48,12 @@ export function useDevices() {
 
   return useQuery({
     queryKey: ['devices'],
+    refetchInterval: 3000, // Faster polling as a fallback
     queryFn: async () => {
       const { data, error } = await supabase
         .from('devices')
         .select('*')
+        .not('last_seen_at', 'is', null)
         .order('created_at', { ascending: false });
 
       if (error) {

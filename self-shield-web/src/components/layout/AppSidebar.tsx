@@ -19,6 +19,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { TamperAlertListener } from './TamperAlertListener';
 import { OverrideNotificationListener } from './OverrideNotificationListener';
 import { ThemeToggle } from '../ThemeToggle';
+import { cn } from '@/lib/utils';
 
 
 const menuItems = [
@@ -69,9 +70,39 @@ export function AppSidebar() {
                     <SidebarMenuButton 
                       render={<Link href={item.url} />} 
                       isActive={pathname === item.url}
+                      className="group transition-all duration-300 relative overflow-hidden"
                     >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      <span>{item.title}</span>
+                      <div className="relative z-10 flex items-center w-full">
+                        <div className="relative mr-3 flex items-center justify-center">
+                          <item.icon className={cn(
+                            "h-4 w-4 transition-all duration-700 ease-in-out transform-gpu",
+                            // Grayscale/Muted by default
+                            "text-muted-foreground/50 group-hover:text-foreground group-hover:[transform:rotateY(360deg)]",
+                            pathname === item.url && "text-primary scale-110"
+                          )} />
+                          
+                          {/* Active Glow behind icon */}
+                          {pathname === item.url && (
+                            <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full animate-pulse" />
+                          )}
+                        </div>
+                        
+                        <span className={cn(
+                          "transition-all duration-300 text-sm font-medium",
+                          "text-muted-foreground/70 group-hover:text-foreground",
+                          pathname === item.url && "text-foreground font-bold"
+                        )}>
+                          {item.title}
+                        </span>
+
+                        {/* Active Indicator Bar */}
+                        {pathname === item.url && (
+                          <div className="absolute -left-3 h-6 w-1 rounded-r-full bg-primary shadow-[4px_0_12px_rgba(59,130,246,0.5)]" />
+                        )}
+                      </div>
+
+                      {/* Subtle background highlight on hover */}
+                      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

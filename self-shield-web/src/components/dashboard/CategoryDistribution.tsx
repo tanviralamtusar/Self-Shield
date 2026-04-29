@@ -29,10 +29,10 @@ export function CategoryDistribution() {
   }, []);
 
   return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle>Protection Focus</CardTitle>
-        <CardDescription>Intensity of blocking across different content categories.</CardDescription>
+    <Card className="h-full border border-border/50 bg-card/30 backdrop-blur-sm">
+      <CardHeader className="pb-0">
+        <CardTitle className="text-base font-semibold">Protection Focus</CardTitle>
+        <CardDescription className="text-[11px]">Intensity of blocking across content categories.</CardDescription>
       </CardHeader>
       <CardContent className="h-[300px] w-full">
         {!mounted ? (

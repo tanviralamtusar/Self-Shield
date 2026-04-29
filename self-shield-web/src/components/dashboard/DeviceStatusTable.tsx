@@ -1,12 +1,24 @@
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useDevices } from '@/hooks/useDevices';
-import { Smartphone, ExternalLink } from 'lucide-react';
+import { Smartphone, ExternalLink, Globe, Monitor } from 'lucide-react';
 import Link from 'next/link';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { Button } from '@/components/ui/button';
+
+const getDeviceIcon = (name: string) => {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes('extension') || lowerName.includes('browser') || lowerName.includes('chrome') || lowerName.includes('firefox')) {
+    return Globe;
+  }
+  if (lowerName.includes('windows') || lowerName.includes('pc') || lowerName.includes('laptop') || lowerName.includes('desktop') || lowerName.includes('mac')) {
+    return Monitor;
+  }
+  return Smartphone;
+};
 
 export function DeviceStatusTable() {
   const { data: devices, isLoading } = useDevices();
@@ -44,58 +56,53 @@ export function DeviceStatusTable() {
   }
 
   return (
-    <div className="rounded-md border">
+    <Card className="border border-border/50 bg-card/30 backdrop-blur-sm overflow-hidden">
       <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Device</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Last Seen</TableHead>
-            <TableHead>Version</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+        <TableHeader className="bg-muted/30">
+          <TableRow className="hover:bg-transparent border-border/50">
+            <TableHead className="text-[11px] uppercase font-bold tracking-wider">Device</TableHead>
+            <TableHead className="text-[11px] uppercase font-bold tracking-wider">Status</TableHead>
+            <TableHead className="text-[11px] uppercase font-bold tracking-wider">Last Seen</TableHead>
+            <TableHead className="text-[11px] uppercase font-bold tracking-wider">Version</TableHead>
+            <TableHead className="text-right text-[11px] uppercase font-bold tracking-wider">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {devices.map((device) => {
             const status = getStatus(device.last_seen_at);
+            const DeviceIcon = getDeviceIcon(device.device_name);
             return (
-              <TableRow key={device.id}>
+              <TableRow key={device.id} className="border-border/40 hover:bg-muted/20 transition-colors">
                 <TableCell className="font-medium">
-                  <div className="flex items-center gap-2">
-                    <Smartphone className="h-4 w-4 text-muted-foreground" />
-                    {device.device_name}
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-1.5 rounded-md bg-muted/50 border border-border/50">
+                      <DeviceIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                    </div>
+                    <span className="text-sm">{device.device_name}</span>
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    {status.label === 'Online' ? (
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-                      </span>
-                    ) : (
-                      <span className="h-2 w-2 rounded-full bg-muted-foreground/30"></span>
-                    )}
-                    <Badge 
-                      variant={status.color} 
-                      className={status.label === 'Online' ? 'bg-success/10 text-success border-success/20 hover:bg-success/20' : 'bg-muted/50'}
-                    >
+                    <div className="flex h-1.5 w-1.5">
+                      <span className={status.label === 'Online' ? 'relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500' : 'relative inline-flex rounded-full h-1.5 w-1.5 bg-muted-foreground/30'}></span>
+                    </div>
+                    <span className={`text-[11px] font-semibold uppercase tracking-tight ${status.label === 'Online' ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}`}>
                       {status.label}
-                    </Badge>
+                    </span>
                   </div>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="text-xs text-muted-foreground">
                   {device.last_seen_at 
                     ? `${formatDistanceToNow(parseISO(device.last_seen_at))} ago` 
                     : 'Never'}
                 </TableCell>
-                <TableCell className="text-muted-foreground">
-                  v{device.app_version || '1.0.0'}
+                <TableCell className="text-xs text-muted-foreground">
+                  <code className="bg-muted/50 px-1.5 py-0.5 rounded text-[10px] border border-border/50">v{device.app_version || '1.0.0'}</code>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button nativeButton={false} variant="ghost" size="sm" render={<Link href={`/devices/${device.id}`} />}>
-                    View Details
-                    <ExternalLink className="ml-2 h-3 w-3" />
+                  <Button nativeButton={false} variant="ghost" size="sm" className="h-8 text-xs font-medium hover:bg-muted/50" render={<Link href={`/devices/${device.id}`} />}>
+                    Details
+                    <ExternalLink className="ml-1.5 h-3 w-3 opacity-50" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -103,6 +110,6 @@ export function DeviceStatusTable() {
           })}
         </TableBody>
       </Table>
-    </div>
+    </Card>
   );
 }
