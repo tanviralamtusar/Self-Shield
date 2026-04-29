@@ -36,16 +36,35 @@ export async function GET(req: NextRequest) {
     // Get pairing flag
     const isPairing = searchParams.get('isPairing') === 'true';
 
+    // 1. Fetch device first to check existence and current status
+    const { data: device, error: deviceError } = await supabaseAdmin
+      .from('devices')
+      .select('is_admin_active')
+      .eq('id', deviceId)
+      .single();
+
+    if (deviceError || !device) {
+      console.log(`[Sync] Device ${deviceId} not found or error:`, deviceError?.message);
+      return NextResponse.json({ error: 'Device not found' }, { status: 404 });
+    }
+
+    // Check if device is unpaired and we're not trying to re-pair it
+    if (!device.is_admin_active && !isPairing) {
+      console.log(`[Sync] Device ${deviceId} is unpaired. Returning 404.`);
+      return NextResponse.json({ error: 'Device unpaired' }, { status: 404 });
+    }
+
+    // 2. Prepare and perform update
     const updatePayload: Record<string, unknown> = {
       last_seen_at: lastSeenValue,
     };
 
-    // ONLY re-activate if this is an explicit pairing request
+    // Re-activate if this is an explicit pairing request
     if (isPairing) {
       updatePayload.is_admin_active = true;
     }
 
-    // Only update browser info if provided (extension sync sends these)
+    // Only update browser info if provided
     if (browserName) {
       updatePayload.device_name = `${browserName} Extension`;
       updatePayload.browser_name = browserName;
@@ -61,7 +80,7 @@ export async function GET(req: NextRequest) {
       .update(updatePayload)
       .eq('id', deviceId);
 
-    // Cleanup: delete usage events older than 3 days (fire-and-forget)
+    // 3. Cleanup & Offline handling
     const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
     supabaseAdmin
       .from('usage_events')
@@ -74,21 +93,6 @@ export async function GET(req: NextRequest) {
 
     if (status === 'offline') {
       return NextResponse.json({ success: true, message: 'Device marked offline' });
-    }
-
-    // 1. Fetch device and settings
-    const { data: device, error: deviceError } = await supabaseAdmin
-      .from('devices')
-      .select('is_admin_active')
-      .eq('id', deviceId)
-      .single();
-
-    if (deviceError || !device) {
-      return NextResponse.json({ error: 'Device not found' }, { status: 404 });
-    }
-
-    if (!device.is_admin_active && !isPairing) {
-      return NextResponse.json({ error: 'Device unpaired' }, { status: 404 });
     }
 
     let { data: settings, error: settingsError } = await supabaseAdmin
