@@ -1,78 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Self-Shield | Blocked</title>
+  <title>Access Restricted | Self-Shield</title>
   <style>
     body {
-      background: #0f172a;
+      background: #0b1120;
       color: #f8fafc;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
       margin: 0;
-      text-align: center;
+      overflow: hidden;
     }
     .container {
-      background: #1e293b;
-      padding: 3rem;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 600px;
+      padding: 20px;
+      text-align: center;
+    }
+    .shield-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 2.5rem;
+    }
+    .shield-icon {
+      font-size: 80px;
+      filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
     }
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      background: linear-gradient(to right, #818cf8, #6366f1);
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin: 0 0 1.5rem 0;
+      background: linear-gradient(to bottom, #818cf8, #6366f1);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
     }
     p {
       color: #94a3b8;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       line-height: 1.6;
+      margin: 0;
+      max-width: 450px;
+      font-weight: 400;
     }
-    .shield-icon {
-      font-size: 4rem;
-      margin-bottom: 1.5rem;
-    }
-    .btn {
-      margin-top: 2rem;
-      background: #6366f1;
-      color: white;
-      text-decoration: none;
+    .url-tag {
+      margin-top: 4rem;
+      background: rgba(30, 41, 59, 0.7);
       padding: 0.75rem 1.5rem;
       border-radius: 12px;
-      font-weight: 600;
-      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.95rem;
+      color: #94a3b8;
+      backdrop-filter: blur(8px);
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+    .url-tag code {
+      color: #818cf8;
+      margin-left: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="shield-icon">🛡️</div>
+    <div class="shield-container">
+      <div class="shield-icon">🛡️</div>
+    </div>
     <h1>Access Restricted</h1>
-    <p>This website is blocked by <strong>Self-Shield</strong> to keep you focused and protected.</p>
-    <p>Go back to the admin panel to manage your restrictions.</p>
-    <a href="https://selfshield.app" target="_blank" class="btn">Open Admin Panel</a>
+    <p>This content is blocked by Self-Shield to keep you focused and protected.</p>
   </div>
 
   <script>
-    // Notify background script that a block event occurred
+    // Get original URL if passed via query param or use referrer
     const urlParams = new URLSearchParams(window.location.search);
-    const blockedUrl = document.referrer || 'Unknown';
+    const originalUrl = urlParams.get('url') || document.referrer;
     
+    if (originalUrl) {
+      try {
+        const host = new URL(originalUrl).hostname;
+        document.getElementById('blocked-host').textContent = host;
+      } catch (e) {
+        document.getElementById('blocked-host').textContent = originalUrl;
+      }
+    } else {
+      document.getElementById('blocked-host').textContent = 'Restricted Content';
+    }
+
+    // Report to background for analytics
     chrome.runtime.sendMessage({ 
       action: 'reportBlock', 
-      target: blockedUrl 
+      target: originalUrl || 'Unknown' 
     });
   </script>
 </body>

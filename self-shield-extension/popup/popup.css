@@ -407,3 +407,17 @@ body {
 .hidden {
   display: none !important;
 }
+
+@keyframes error-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.error-shake {
+  animation: error-shake 0.4s ease-in-out;
+  border-color: #ff4d4d !important;
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.2) !important;
+}

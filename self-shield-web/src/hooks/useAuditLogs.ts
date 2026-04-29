@@ -16,6 +16,7 @@ export function useAuditLogs(deviceId?: string, limit = 50) {
 
   return useQuery({
     queryKey: ['audit-logs', deviceId, limit],
+    staleTime: 5000, // Cache for 5 seconds
     queryFn: async () => {
       let query = supabase
         .from('audit_log')

@@ -14,6 +14,10 @@ import { useReports, useReportStats } from '@/hooks/useReports';
 import { useSendCommand } from '@/hooks/useRemoteCommands';
 import { format, parseISO } from 'date-fns';
 import { toast } from 'sonner';
+import { Switch } from '@/components/ui/switch';
+import { Search } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
 
 function DeviceUsageChart({ deviceId }: { deviceId: string }) {
   const { data: reports, isLoading } = useReports(deviceId, 7);
@@ -131,9 +135,32 @@ export default function DeviceDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const { data: devices, isLoading } = useDevices();
+  const queryClient = useQueryClient();
+  const supabase = createClient();
   
   const device = devices?.find(d => d.id === id);
   const [activeTab, setActiveTab] = useState('summary');
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleToggleSafeSearch = async (checked: boolean) => {
+    if (!device) return;
+    setIsUpdating(true);
+    try {
+      const { error } = await supabase
+        .from('device_settings')
+        .update({ safe_search_enabled: checked })
+        .eq('device_id', device.id);
+
+      if (error) throw error;
+      toast.success(`Safe Search ${checked ? 'enabled' : 'disabled'}`);
+      queryClient.invalidateQueries({ queryKey: ['devices'] });
+    } catch (error: any) {
+      console.error('Error updating safe search:', error);
+      toast.error('Failed to update safe search');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   if (isLoading) {
     return <div className="p-8 text-center text-muted-foreground">Loading device details...</div>;
@@ -215,6 +242,17 @@ export default function DeviceDetailPage() {
                   <span className={device.is_device_owner ? 'text-success font-medium' : 'text-warning font-medium'}>
                     {device.is_device_owner ? 'Enabled' : 'Not Enabled'}
                   </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-primary/5 rounded-lg border border-primary/20">
+                  <div className="flex items-center gap-2">
+                    <Search className="w-4 h-4 text-primary" />
+                    <span className="font-medium">Safe Search Enforcement</span>
+                  </div>
+                  <Switch 
+                    checked={device.settings?.safe_search_enabled || false}
+                    onCheckedChange={handleToggleSafeSearch}
+                    disabled={isUpdating}
+                  />
                 </div>
               </CardContent>
             </Card>

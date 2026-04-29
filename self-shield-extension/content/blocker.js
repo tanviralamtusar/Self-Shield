@@ -1,9 +1,87 @@
 // Self-Shield Content Blocker
-// This script runs on every page to provide additional protection layer
+// Highly resilient blocking with INSTANT BLACKOUT to prevent content flashing
 
-// Listen for messages from the admin panel web page
-// When admin changes settings or deletes a device, the page sends a postMessage
-// This content script relays it INSTANTLY to the service worker
+// 1. IMMEDIATELY HIDE EVERYTHING (before any other logic)
+// Set background on html immediately so it's not white
+document.documentElement.style.background = '#0b1120';
+
+const blackoutStyle = document.createElement('style');
+blackoutStyle.id = 'self-shield-blackout';
+// Hide everything except our block UI root
+blackoutStyle.textContent = `
+  html > :not(#self-shield-block-root) { display: none !important; }
+  body { display: none !important; }
+`;
+document.documentElement.appendChild(blackoutStyle);
+
+const EXCLUDED_HOSTS = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com', 'wikipedia.org', 'youtube.com', 'healthline.com'];
+
+function showBlockUI(hostname) {
+  // Use a hard redirect to our local blocked page.
+  // This is MUCH more secure than an overlay because it completely replaces 
+  // the page content and execution context, making it impossible to bypass 
+  // via Inspect Element.
+  const blockedPageUrl = chrome.runtime.getURL('blocked-page/blocked.html');
+  const originalUrl = window.location.href;
+  
+  // Clear the document immediately to prevent any more script execution
+  document.documentElement.innerHTML = '';
+  window.stop();
+  
+  // Perform the redirect
+  window.location.replace(blockedPageUrl + '?url=' + encodeURIComponent(originalUrl));
+}
+
+function checkAndBlock() {
+  chrome.storage.local.get(['safe_search_enabled', 'is_enabled', 'blocked_keywords'], (settings) => {
+    const isSafeSearchEnabled = settings.safe_search_enabled && settings.is_enabled !== false;
+    
+    if (!isSafeSearchEnabled) {
+      removeBlackout();
+      return;
+    }
+
+    const url = window.location.href.toLowerCase();
+    const hostname = window.location.hostname.toLowerCase();
+
+    if (EXCLUDED_HOSTS.some(host => hostname.includes(host))) {
+      removeBlackout();
+      return;
+    }
+
+    const keywords = settings.blocked_keywords && settings.blocked_keywords.length > 0 
+      ? settings.blocked_keywords 
+      : ['porn', 'sex', 'xvideo', 'pornhub', 'xnxx', 'xhamster', 'redtube', 'youporn', 'casino', '1xbet'];
+
+    const isRestricted = keywords.some(kw => url.includes(kw.toLowerCase()));
+
+    if (isRestricted) {
+      console.log('[Self-Shield] Content blocked by keyword filter.');
+      showBlockUI(hostname);
+    } else {
+      removeBlackout();
+    }
+  });
+}
+
+function removeBlackout() {
+  const style = document.getElementById('self-shield-blackout');
+  if (style) style.remove();
+}
+
+// Run immediately
+checkAndBlock();
+
+// Also run when the URL changes (for SPAs)
+let lastUrl = location.href;
+new MutationObserver(() => {
+  if (location.href !== lastUrl) {
+    lastUrl = location.href;
+    checkAndBlock();
+  }
+}).observe(document, { subtree: true, childList: true });
+
+// Listen for pair/unpair messages
 window.addEventListener('message', (event) => {
   // Device deleted — instant unpair
   if (event.data && event.data.type === 'SELF_SHIELD_DEVICE_DELETED') {

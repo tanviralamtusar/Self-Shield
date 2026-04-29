@@ -14,19 +14,17 @@ export async function GET(req: NextRequest) {
   const deviceId = searchParams.get('deviceId');
 
   if (!deviceId) {
-    return NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+    const res = NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    return res;
   }
 
   try {
-    // 0. Update device metadata + last seen
+    const isPairing = searchParams.get('isPairing') === 'true';
     const status = searchParams.get('status');
     const lastSeenValue = status === 'offline' ? '1970-01-01T00:00:00Z' : new Date().toISOString();
 
-    if (status === 'offline') {
-      console.log(`[Extension Sync] Marking device ${deviceId} as OFFLINE`);
-    }
-
-    // Browser info from extension (sent on every sync)
+    // Browser info from extension
     const browserName = searchParams.get('browserName');
     const browserVersion = searchParams.get('browserVersion');
     const osName = searchParams.get('osName');
@@ -37,7 +35,10 @@ export async function GET(req: NextRequest) {
       last_seen_at: lastSeenValue,
     };
 
-    // Only update browser info if provided (extension sync sends these)
+    if (isPairing) {
+      updatePayload.is_admin_active = true;
+    }
+
     if (browserName) {
       updatePayload.device_name = `${browserName} Extension`;
       updatePayload.browser_name = browserName;
@@ -48,75 +49,61 @@ export async function GET(req: NextRequest) {
       if (extVersion) updatePayload.app_version = extVersion;
     }
 
-    await supabaseAdmin
+    // 1. Update and fetch current status in one go
+    const { data: device, error: updateError } = await supabaseAdmin
       .from('devices')
       .update(updatePayload)
-      .eq('id', deviceId);
+      .eq('id', deviceId)
+      .select('is_admin_active')
+      .single();
 
-    // Cleanup: delete usage events older than 3 days (fire-and-forget)
-    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
-    supabaseAdmin
-      .from('usage_events')
-      .delete()
-      .eq('device_id', deviceId)
-      .lt('occurred_at', threeDaysAgo)
-      .then(({ error }) => {
-        if (error) console.error('[Sync] Cleanup error:', error.message);
-      });
-
-    if (status === 'offline') {
-      return NextResponse.json({ success: true, message: 'Device marked offline' });
+    if (updateError || !device) {
+      console.log(`[Sync] Device ${deviceId} update failed:`, updateError?.message);
+      const res = NextResponse.json({ error: 'Device not found' }, { status: 404 });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
     }
 
-    // 1. Fetch device settings
+    // Check if device is unpaired and we're not trying to re-pair it
+    if (!device.is_admin_active && !isPairing) {
+      console.log(`[Sync] Device ${deviceId} is inactive. Returning 404 for heartbeat.`);
+      const res = NextResponse.json({ error: 'Device unpaired' }, { status: 404 });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
+    }
+
+    if (status === 'offline') {
+      const res = NextResponse.json({ success: true, message: 'Device marked offline' });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
+    }
+
+    // 2. Fetch device settings
     let { data: settings, error: settingsError } = await supabaseAdmin
       .from('device_settings')
       .select('*')
       .eq('device_id', deviceId)
       .single();
 
-    // If settings don't exist, let's try to find the device first
     if (settingsError || !settings) {
-      const { data: device, error: deviceError } = await supabaseAdmin
-        .from('devices')
-        .select('*')
-        .eq('id', deviceId)
+      const { data: newSettings, error: createError } = await supabaseAdmin
+        .from('device_settings')
+        .insert({
+          device_id: deviceId,
+          vpn_enabled: true,
+          accessibility_enabled: true,
+          keyword_blocking: true
+        })
+        .select()
         .single();
-
-      if (device) {
-        // Device exists but settings don't. Create settings.
-        const { data: newSettings, error: createError } = await supabaseAdmin
-          .from('device_settings')
-          .insert({
-            device_id: deviceId,
-            vpn_enabled: true,
-            accessibility_enabled: true,
-            keyword_blocking: true
-          })
-          .select()
-          .single();
-        
-        if (createError) {
-          console.error('Error creating default settings:', createError);
-        } else {
-          settings = newSettings;
-        }
-      } else {
-        return NextResponse.json({ error: 'Device not found. Please pair again.' }, { status: 404 });
+      
+      if (createError) {
+        console.error('Error creating default settings:', createError);
+        const res = NextResponse.json({ error: 'Failed to initialize settings' }, { status: 500 });
+        res.headers.set('Access-Control-Allow-Origin', '*');
+        return res;
       }
-    }
-
-    if (!settings) {
-      console.error(`[Extension Sync] Failed to initialize settings for ${deviceId}`);
-      return NextResponse.json({ error: 'Failed to initialize settings' }, { status: 500 });
-    }
-
-    // 2. If vpn_enabled is false, return early (disabled)
-    if (!settings.vpn_enabled) {
-      return NextResponse.json({ 
-        is_enabled: false, 
-        blocked_urls: [] 
-      });
+      settings = newSettings;
     }
 
     // 3. Fetch subscribed blocklists
@@ -126,36 +113,48 @@ export async function GET(req: NextRequest) {
       .eq('device_id', deviceId)
       .eq('is_enabled', true);
 
-    if (subsError) {
-      console.error('Subscriptions fetch error:', subsError);
-      return NextResponse.json({ error: 'Failed to fetch subscriptions' }, { status: 500 });
+    let blocked_urls: string[] = [];
+    let blocked_keywords: string[] = [];
+
+    const activeListIds = (subs || []).map(s => s.block_list_id);
+
+    // 4. Add System Safe Search lists if enabled
+    if (settings.safe_search_enabled) {
+      const { data: systemLists } = await supabaseAdmin
+        .from('block_lists')
+        .select('id')
+        .eq('is_default', true)
+        .eq('category', 'porn');
+      
+      if (systemLists) {
+        systemLists.forEach(l => {
+          if (!activeListIds.includes(l.id)) activeListIds.push(l.id);
+        });
+      }
     }
 
-    const listIds = subs.map(s => s.block_list_id);
+    if (activeListIds.length > 0) {
+      const { data: entries, error: entriesError } = await supabaseAdmin
+        .from('block_list_entries')
+        .select('value, block_lists(type)')
+        .in('block_list_id', activeListIds);
 
-    if (listIds.length === 0) {
-      return NextResponse.json({ 
-        is_enabled: true, 
-        blocked_urls: [] 
-      });
+      if (!entriesError && entries) {
+        entries.forEach((e: any) => {
+          if (e.block_lists?.type === 'keyword') {
+            blocked_keywords.push(e.value);
+          } else {
+            blocked_urls.push(e.value);
+          }
+        });
+      }
     }
-
-    // 4. Fetch entries for those blocklists
-    const { data: entries, error: entriesError } = await supabaseAdmin
-      .from('block_list_entries')
-      .select('value')
-      .in('block_list_id', listIds);
-
-    if (entriesError) {
-      console.error('Entries fetch error:', entriesError);
-      return NextResponse.json({ error: 'Failed to fetch blocklist entries' }, { status: 500 });
-    }
-
-    const blocked_urls = [...new Set(entries.map(e => e.value))];
 
     const response = NextResponse.json({
-      is_enabled: true,
-      blocked_urls
+      is_enabled: settings.vpn_enabled,
+      safe_search_enabled: settings.safe_search_enabled === true,
+      blocked_urls: [...new Set(blocked_urls)],
+      blocked_keywords: [...new Set(blocked_keywords)]
     });
 
     // Add CORS and Cache headers
@@ -170,7 +169,9 @@ export async function GET(req: NextRequest) {
 
   } catch (error: any) {
     console.error('Extension sync error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res = NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    return res;
   }
 }
 
@@ -180,13 +181,13 @@ export async function POST(req: NextRequest) {
     const { deviceId } = body;
 
     if (!deviceId) {
-      return NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+      const res = NextResponse.json({ error: 'Device ID required' }, { status: 400 });
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
     }
 
-    // Support batched events (new) and single event (backward compat)
     const events: Array<{ eventType: string; target: string; occurredAt?: string; durationSec?: number }> = [];
-
-    if (Array.isArray(body.events) && body.events.length > 0) {
+    if (Array.isArray(body.events)) {
       events.push(...body.events);
     } else if (body.eventType && body.target) {
       events.push({
@@ -196,35 +197,32 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (events.length === 0) {
-      return NextResponse.json({ error: 'No events provided' }, { status: 400 });
+    if (events.length > 0) {
+      const { error } = await supabaseAdmin
+        .from('usage_events')
+        .insert(
+          events.map(e => ({
+            device_id: deviceId,
+            event_type: e.eventType,
+            target: e.target,
+            duration_sec: e.durationSec ?? null,
+            occurred_at: e.occurredAt || new Date().toISOString()
+          }))
+        );
+
+      if (error) {
+        console.error('Error logging usage events:', error);
+      }
     }
 
-    const { error } = await supabaseAdmin
-      .from('usage_events')
-      .insert(
-        events.map(e => ({
-          device_id: deviceId,
-          event_type: e.eventType,
-          target: e.target,
-          duration_sec: e.durationSec ?? null,
-          occurred_at: e.occurredAt || new Date().toISOString()
-        }))
-      );
-
-    if (error) {
-      console.error('Error logging usage events:', error);
-      return NextResponse.json({ error: 'Failed to log events' }, { status: 500 });
-    }
-
-    const response = NextResponse.json({ success: true, count: events.length });
+    const response = NextResponse.json({ success: true });
     response.headers.set('Access-Control-Allow-Origin', '*');
     return response;
 
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Extension event error:', msg);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Extension event error:', error);
+    const response = NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    return response;
   }
 }
-
