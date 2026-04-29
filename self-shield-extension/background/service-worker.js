@@ -405,7 +405,7 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
     return;
   }
 
-  // 1. Static Search Engine Rules (Force Safe Search via Parameters)
+  // 1. Static Search Engine Rules (Force Family Mode / Safe Search)
   const rules = [
     // Google: safe=active
     {
@@ -427,7 +427,7 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
       },
       condition: { urlFilter: "||bing.com/search*", resourceTypes: ["main_frame", "sub_frame"] }
     },
-    // DuckDuckGo: kp=1
+    // DuckDuckGo: kp=1 (Family Mode)
     {
       id: 10003,
       priority: 1000,
@@ -437,7 +437,7 @@ async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords 
       },
       condition: { urlFilter: "||duckduckgo.com/*", resourceTypes: ["main_frame", "sub_frame"] }
     },
-    // Yahoo: vm=p
+    // Yahoo: vm=p (Strict Search)
     {
       id: 10004,
       priority: 1000,

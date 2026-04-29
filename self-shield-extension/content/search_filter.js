@@ -19,7 +19,7 @@ function scrubSearch() {
     const url = new URL(window.location.href);
     const hostname = window.location.hostname;
 
-    // 1. Precise Redirection for Search (only if missing param)
+    // 1. Force Safe Search parameters for all major engines
     if (hostname.includes('google.') && url.pathname === '/search') {
       if (url.searchParams.get('safe') !== 'active') {
         url.searchParams.set('safe', 'active');
@@ -36,12 +36,21 @@ function scrubSearch() {
       }
     }
 
-    // 2. Hide "Safe Search" controls and sensitive containers
+    if (hostname.includes('duckduckgo.com')) {
+      if (url.searchParams.get('kp') !== '1') {
+        url.searchParams.set('kp', '1');
+        window.location.replace(url.toString());
+        return;
+      }
+    }
+
+    // 2. Hide "Safe Search" controls so users can't even see the toggle
     const hideSelectors = [
       '#ss-status-container', '.not-safe-search', // Google
       '#h_safesearch', '#ftrB .ftrS', // Bing
       '.safe-search-label', '#ybar-sf-container', // Yahoo
-      '#family-filter-container' // Yandex
+      '#family-filter-container', // Yandex
+      '.onoffswitch' // General toggles
     ];
     
     if (!document.getElementById('self-shield-search-css')) {
@@ -49,8 +58,6 @@ function scrubSearch() {
       style.id = 'self-shield-search-css';
       style.textContent = `
         ${hideSelectors.join(', ')} { display: none !important; visibility: hidden !important; pointer-events: none !important; }
-        /* Instant blackout for potential NSFW containers in image search if not safe */
-        .img-res-item, .mimg, .vr_link, .image-item { opacity: 0.1 !important; filter: blur(20px) !important; }
       `;
       document.documentElement.appendChild(style);
     }
