@@ -1,6 +1,6 @@
 // Import Supabase library first
 try {
-  importScripts('/supabase.js');
+  importScripts('../supabase.js');
 } catch (e) {
   console.error("CRITICAL: Failed to load Supabase library from root. Realtime features will be disabled.", e);
 }
@@ -10,7 +10,7 @@ const API_BASE_URL = "http://localhost:3000";
 const SUPABASE_URL = "https://nkadwmptdzjsmwuujcid.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_U3jPnKL1B65hjpz8aVJFAA_4jMogGtD";
 
-let supabase = null;
+let supabaseClient = null;
 let realtimeChannel = null;
 let currentSubscribedDeviceId = null;
 let isUnpairing = false;
@@ -20,10 +20,10 @@ let activeSession = { hostname: null, startTime: null };
 
 // Initialize Supabase Client
 function initSupabase() {
-  if (typeof supabase === 'undefined' || !supabase) {
+  if (typeof supabaseClient === 'undefined' || !supabaseClient) {
     if (typeof globalThis.supabase !== 'undefined') {
       const { createClient } = globalThis.supabase;
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: { persistSession: false }
       });
     } else {
@@ -36,7 +36,7 @@ initSupabase();
 
 // ─── Realtime: Instant Unpair Listener ───────────────────────────────
 async function setupRealtimeListener(deviceId) {
-  if (!deviceId || !supabase) return;
+  if (!deviceId || !supabaseClient) return;
   
   if (currentSubscribedDeviceId === deviceId && realtimeChannel) return;
 
@@ -51,7 +51,7 @@ async function setupRealtimeListener(deviceId) {
   console.log(`[Realtime] Subscribing to device: ${deviceId}`);
   currentSubscribedDeviceId = deviceId;
   
-  realtimeChannel = supabase
+  realtimeChannel = supabaseClient
     .channel(`device-changes-${deviceId}`)
     .on(
       'postgres_changes',
