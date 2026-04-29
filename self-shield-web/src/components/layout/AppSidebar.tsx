@@ -71,7 +71,7 @@ export function AppSidebar() {
                       render={<Link href={item.url} />} 
                       isActive={pathname === item.url}
                       className={cn(
-                        "group relative h-10",
+                        "group relative h-10 hover:bg-transparent hover:text-sidebar-foreground",
                         pathname === item.url && "bg-primary/10"
                       )}
                     >
@@ -79,13 +79,13 @@ export function AppSidebar() {
                         <div className="mr-3 flex items-center justify-center">
                           <item.icon className={cn(
                             "h-4 w-4",
-                            pathname === item.url ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground"
+                            pathname === item.url ? "text-primary" : "text-muted-foreground/60"
                           )} />
                         </div>
                         
                         <span className={cn(
                           "text-sm font-medium",
-                          pathname === item.url ? "text-foreground font-semibold" : "text-muted-foreground/70 group-hover:text-foreground"
+                          pathname === item.url ? "text-foreground font-semibold" : "text-muted-foreground/70"
                         )}>
                           {item.title}
                         </span>
@@ -108,7 +108,7 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={handleLogout} 
-                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-primary/5 text-primary hover:bg-primary/10"
+                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-primary/5 text-primary"
               >
                 <div className="flex items-center justify-center w-full gap-2 font-semibold">
                   <LogOut className="h-4 w-4" />
