@@ -96,15 +96,20 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
               {device.device_name || 'Unnamed Node'}
             </p>
             <div className="flex items-center gap-2.5 mt-2">
-              {/* Online pill */}
+              {/* Online/Status pill */}
               <span className={cn(
-                "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
-                isOnline
-                   ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                  : "bg-muted/20 text-muted-foreground/60 border-border/20"
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border transition-colors",
+                !device.is_admin_active
+                  ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                  : isOnline
+                    ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                    : "bg-muted/20 text-muted-foreground/60 border-border/20"
               )}>
-                <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", isOnline ? "bg-emerald-500" : "bg-muted-foreground/50")} />
-                {isOnline ? 'Live' : 'Offline'}
+                <span className={cn(
+                  "w-1.5 h-1.5 rounded-full shrink-0", 
+                  !device.is_admin_active ? "bg-amber-500" : isOnline ? "bg-emerald-500" : "bg-muted-foreground/50"
+                )} />
+                {!device.is_admin_active ? 'Unpaired' : isOnline ? 'Live' : 'Offline'}
               </span>
               <span className="text-[11px] text-muted-foreground/50">
                 {device.last_seen_at ? formatDistanceToNow(new Date(device.last_seen_at), { addSuffix: true }) : 'Never'}
@@ -208,7 +213,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
         </Button>
         <Button
           onClick={() => handleAction(false)}
-          disabled={isDeleting || !device.last_seen_at}
+          disabled={isDeleting || !device.is_admin_active}
           variant="outline"
           className="flex-1 h-10 text-[12px] font-black uppercase tracking-wider border-destructive/30 bg-transparent text-destructive/60 hover:bg-destructive hover:text-white hover:border-destructive transform-gpu disabled:opacity-20 disabled:cursor-not-allowed"
         >

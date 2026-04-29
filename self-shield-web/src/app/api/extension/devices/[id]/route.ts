@@ -18,11 +18,10 @@ export async function PATCH(
 
     console.log(`[Device Unpair] User ${user.id} unpairing device ${id}`);
 
-    // Update the device to clear active session data using admin client
+    // Update the device to mark as unpaired while keeping last seen data
     const { error } = await supabaseAdmin
       .from('devices')
       .update({ 
-        last_seen_at: null,
         is_admin_active: false 
       })
       .eq('id', id);

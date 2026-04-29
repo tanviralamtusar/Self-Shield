@@ -53,6 +53,7 @@ export function useDevices() {
       const { data, error } = await supabase
         .from('devices')
         .select('*')
+        .not('last_seen_at', 'is', null)
         .order('created_at', { ascending: false });
 
       if (error) {
