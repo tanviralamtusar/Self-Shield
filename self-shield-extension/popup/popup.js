@@ -87,12 +87,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const errorMsg = (response && response.error) ? response.error : 'Pairing Failed';
             if(statusText) {
               statusText.textContent = errorMsg;
-              statusText.style.color = '#ff4d4d'; // Soft red for error
+              statusText.style.color = '#ff4d4d';
+              
+              // Visual feedback for input error
+              if(deviceIdInput) {
+                deviceIdInput.value = '';
+                deviceIdInput.focus();
+                deviceIdInput.classList.add('error-shake');
+                setTimeout(() => deviceIdInput.classList.remove('error-shake'), 500);
+              }
+
               setTimeout(() => {
                 statusText.style.color = '';
-                if (!deviceIdSpan || deviceIdSpan.textContent === 'Not Paired') {
-                  statusText.textContent = 'Inactive';
-                }
+                // Check if still not paired before resetting text
+                chrome.storage.local.get("deviceId", (data) => {
+                  if (!data.deviceId) {
+                    statusText.textContent = 'Inactive';
+                  }
+                });
               }, 4000);
             }
             pairBtn.disabled = false;
