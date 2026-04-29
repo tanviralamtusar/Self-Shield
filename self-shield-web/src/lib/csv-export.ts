@@ -1,4 +1,4 @@
-export function downloadCSV(data: any[], filename: string) {
+export function downloadCSV(data: Record<string, unknown>[], filename: string) {
   if (data.length === 0) return;
 
   const headers = Object.keys(data[0]);

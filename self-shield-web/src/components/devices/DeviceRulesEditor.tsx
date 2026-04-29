@@ -29,8 +29,9 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
     try {
       await updateSettings.mutateAsync({ device_id: deviceId, [key]: value });
       toast.success('Setting updated');
-    } catch (error: any) {
-      toast.error('Failed to update setting', { description: error.message });
+    } catch (error: unknown) {
+      const err = error as Error;
+      toast.error('Failed to update setting', { description: err.message });
     }
   };
 
@@ -38,8 +39,9 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
     try {
       await updateAppRule.mutateAsync({ id: ruleId, [key]: value });
       toast.success('App rule updated');
-    } catch (error: any) {
-      toast.error('Failed to update app rule', { description: error.message });
+    } catch (error: unknown) {
+      const err = error as Error;
+      toast.error('Failed to update app rule', { description: err.message });
     }
   };
 
@@ -47,8 +49,9 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
     try {
       await toggleSubscription.mutateAsync({ deviceId, blockListId: listId, enabled });
       toast.success('Blocklist subscription updated');
-    } catch (error: any) {
-      toast.error('Failed to update subscription', { description: error.message });
+    } catch (error: unknown) {
+      const err = error as Error;
+      toast.error('Failed to update subscription', { description: err.message });
     }
   };
 
@@ -180,7 +183,6 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
                       <Label htmlFor={`reels-${rule.id}`} className="text-xs cursor-pointer">Block Reels</Label>
                       <Switch 
                         id={`reels-${rule.id}`}
-                        size="sm"
                         checked={rule.inapp_block_reels} 
                         onCheckedChange={(checked) => handleAppToggle(rule.id, 'inapp_block_reels', checked)}
                       />
@@ -189,7 +191,6 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
                       <Label htmlFor={`shorts-${rule.id}`} className="text-xs cursor-pointer">Block Shorts</Label>
                       <Switch 
                         id={`shorts-${rule.id}`}
-                        size="sm"
                         checked={rule.inapp_block_shorts} 
                         onCheckedChange={(checked) => handleAppToggle(rule.id, 'inapp_block_shorts', checked)}
                       />
@@ -198,7 +199,6 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
                       <Label htmlFor={`feed-${rule.id}`} className="text-xs cursor-pointer">Block Feed</Label>
                       <Switch 
                         id={`feed-${rule.id}`}
-                        size="sm"
                         checked={rule.inapp_block_feed} 
                         onCheckedChange={(checked) => handleAppToggle(rule.id, 'inapp_block_feed', checked)}
                       />
@@ -207,7 +207,6 @@ export function DeviceRulesEditor({ deviceId }: { deviceId: string }) {
                       <Label htmlFor={`schedule-${rule.id}`} className="text-xs cursor-pointer">Schedule</Label>
                       <Switch 
                         id={`schedule-${rule.id}`}
-                        size="sm"
                         checked={rule.schedule_enabled} 
                         onCheckedChange={(checked) => handleAppToggle(rule.id, 'schedule_enabled', checked)} 
                       />

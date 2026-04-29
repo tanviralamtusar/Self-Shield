@@ -140,8 +140,14 @@ export async function GET(req: NextRequest) {
         .in('block_list_id', activeListIds);
 
       if (!entriesError && entries) {
-        entries.forEach((e: any) => {
-          if (e.block_lists?.type === 'keyword') {
+        interface BlockListEntry {
+          value: string;
+          block_lists: { type: string } | { type: string }[] | null;
+        }
+        (entries as unknown as BlockListEntry[]).forEach((e) => {
+          const blockLists = e.block_lists;
+          const type = Array.isArray(blockLists) ? blockLists[0]?.type : blockLists?.type;
+          if (type === 'keyword') {
             blocked_keywords.push(e.value);
           } else {
             blocked_urls.push(e.value);
@@ -167,7 +173,7 @@ export async function GET(req: NextRequest) {
 
     return response;
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Extension sync error:', error);
     const res = NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     res.headers.set('Access-Control-Allow-Origin', '*');

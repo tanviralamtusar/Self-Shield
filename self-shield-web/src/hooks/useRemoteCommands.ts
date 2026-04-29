@@ -7,7 +7,7 @@ export type RemoteCommand = {
   id: string;
   device_id: string;
   command_type: 'push_blocklist' | 'reset_pin' | 'approve_override' | 'update_app_rules' | 'sync_request' | 'lock_device';
-  payload: any;
+  payload: unknown;
   status: 'pending' | 'delivered' | 'executed' | 'failed';
   created_at: string;
   executed_at: string | null;
@@ -20,13 +20,13 @@ export function useSendCommand() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ deviceId, commandType, payload }: { deviceId: string; commandType: string; payload?: any }) => {
+    mutationFn: async ({ deviceId, commandType, payload }: { deviceId: string; commandType: string; payload?: unknown }) => {
       const { data, error } = await supabase
         .from('remote_commands')
         .insert({
           device_id: deviceId,
           command_type: commandType,
-          payload: payload || {},
+          payload: (payload as any) || {},
           status: 'pending'
         })
         .select()
@@ -39,7 +39,7 @@ export function useSendCommand() {
       await queryClient.cancelQueries({ queryKey: ['remote-commands', newCommand.deviceId] });
       const previousCommands = queryClient.getQueryData(['remote-commands', newCommand.deviceId]);
 
-      queryClient.setQueryData(['remote-commands', newCommand.deviceId], (old: any) => [
+      queryClient.setQueryData(['remote-commands', newCommand.deviceId], (old: RemoteCommand[] | undefined) => [
         {
           id: Math.random().toString(),
           device_id: newCommand.deviceId,
