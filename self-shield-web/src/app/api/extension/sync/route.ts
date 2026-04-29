@@ -114,22 +114,47 @@ export async function GET(req: NextRequest) {
       .eq('is_enabled', true);
 
     let blocked_urls: string[] = [];
-    if (!subsError && subs && subs.length > 0) {
-      const listIds = subs.map(s => s.block_list_id);
+    let blocked_keywords: string[] = [];
+
+    const activeListIds = (subs || []).map(s => s.block_list_id);
+
+    // 4. Add System Safe Search lists if enabled
+    if (settings.safe_search_enabled) {
+      const { data: systemLists } = await supabaseAdmin
+        .from('block_lists')
+        .select('id')
+        .eq('is_default', true)
+        .eq('category', 'porn');
+      
+      if (systemLists) {
+        systemLists.forEach(l => {
+          if (!activeListIds.includes(l.id)) activeListIds.push(l.id);
+        });
+      }
+    }
+
+    if (activeListIds.length > 0) {
       const { data: entries, error: entriesError } = await supabaseAdmin
         .from('block_list_entries')
-        .select('value')
-        .in('block_list_id', listIds);
+        .select('value, block_lists(type)')
+        .in('block_list_id', activeListIds);
 
       if (!entriesError && entries) {
-        blocked_urls = [...new Set(entries.map(e => e.value))];
+        entries.forEach((e: any) => {
+          if (e.block_lists?.type === 'keyword') {
+            blocked_keywords.push(e.value);
+          } else {
+            blocked_urls.push(e.value);
+          }
+        });
       }
     }
 
     const response = NextResponse.json({
       is_enabled: settings.vpn_enabled,
       safe_search_enabled: settings.safe_search_enabled === true,
-      blocked_urls
+      blocked_urls: [...new Set(blocked_urls)],
+      blocked_keywords: [...new Set(blocked_keywords)]
     });
 
     // Add CORS and Cache headers

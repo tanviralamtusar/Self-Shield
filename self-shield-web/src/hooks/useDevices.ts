@@ -52,7 +52,8 @@ export function useDevices() {
 
   return useQuery({
     queryKey: ['devices'],
-    refetchInterval: 3000, // Faster polling as a fallback
+    staleTime: 5000, // Keep data fresh for 5 seconds to avoid redundant fetches
+    refetchInterval: 30000, // Increase polling to 30 seconds (fallback for Realtime)
     queryFn: async () => {
       const { data, error } = await supabase
         .from('devices')

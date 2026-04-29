@@ -18,6 +18,7 @@ export function useOverrideRequests() {
 
   return useQuery({
     queryKey: ['override-requests'],
+    staleTime: 10000, // Cache for 10 seconds
     queryFn: async () => {
       const { data, error } = await supabase
         .from('override_requests')

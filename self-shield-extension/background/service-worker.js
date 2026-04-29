@@ -79,11 +79,8 @@ async function setupRealtimeListener(deviceId) {
       (payload) => {
         if (payload.new) {
           console.log('[Realtime] Settings updated:', payload.new);
-          chrome.storage.local.set({
-            is_enabled: payload.new.vpn_enabled,
-            safe_search_enabled: payload.new.safe_search_enabled === true
-          });
-          updateSafeSearchRules(payload.new.safe_search_enabled === true);
+          // Trigger a full sync to get latest blocked URLs/Keywords if safe search changed
+          syncWithAdminPanel().catch(() => {});
         }
       }
     )
@@ -343,17 +340,19 @@ async function syncWithAdminPanel() {
     const enabledState = data.is_enabled === true;
     const safeSearchState = data.safe_search_enabled === true;
     const urls = data.blocked_urls || [];
+    const keywords = data.blocked_keywords || [];
 
     await chrome.storage.local.set({ 
       is_enabled: enabledState, 
       safe_search_enabled: safeSearchState,
       blocked_urls: urls,
+      blocked_keywords: keywords,
       everBeenActive: enabledState ? true : undefined
     });
 
     if (enabledState) {
-      if (urls.length > 0) updateBlockingRules(urls).catch(() => {});
-      updateSafeSearchRules(safeSearchState).catch(() => {});
+      updateBlockingRules(urls).catch(() => {});
+      updateSafeSearchRules(safeSearchState, urls, keywords).catch(() => {});
     } else {
       clearBlockingRules().catch(() => {});
     }
@@ -373,8 +372,10 @@ async function updateBlockingRules(urls) {
     condition: { urlFilter: url, resourceTypes: ["main_frame"] }
   }));
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
+  const oldBlockingRuleIds = currentRules.filter(r => r.id < 10000).map(r => r.id);
+  
   await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: currentRules.map(r => r.id),
+    removeRuleIds: oldBlockingRuleIds,
     addRules: rules
   });
 }
@@ -387,20 +388,28 @@ async function clearBlockingRules() {
 }
 
 // ─── Safe Search Enforcement ──────────────────────────────────────────
-async function updateSafeSearchRules(enabled) {
-  const SAFE_SEARCH_RULE_IDS = [10001, 10002, 10003, 10004];
+async function updateSafeSearchRules(enabled, dynamicUrls = [], dynamicKeywords = []) {
+  const START_ID = 10000;
+  const END_ID = 15000;
   
-  // Always remove existing safe search rules first to avoid conflicts
-  await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: SAFE_SEARCH_RULE_IDS
-  });
+  const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
+  const rulesToRemove = currentRules
+    .filter(r => r.id >= START_ID && r.id <= END_ID)
+    .map(r => r.id);
+    
+  if (!enabled) {
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: rulesToRemove
+    });
+    console.log("[SafeSearch] Rules disabled and removed.");
+    return;
+  }
 
-  if (!enabled) return;
-
+  // 1. Static Search Engine Rules
   const rules = [
     {
       id: 10001,
-      priority: 1,
+      priority: 10,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "safe", value: "active" }] } } }
@@ -409,7 +418,7 @@ async function updateSafeSearchRules(enabled) {
     },
     {
       id: 10002,
-      priority: 1,
+      priority: 10,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "adlt", value: "strict" }] } } }
@@ -418,7 +427,7 @@ async function updateSafeSearchRules(enabled) {
     },
     {
       id: 10003,
-      priority: 1,
+      priority: 10,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "kp", value: "1" }] } } }
@@ -427,7 +436,7 @@ async function updateSafeSearchRules(enabled) {
     },
     {
       id: 10004,
-      priority: 1,
+      priority: 10,
       action: {
         type: "redirect",
         redirect: { transform: { queryTransform: { addOrReplaceParams: [{ key: "vm", value: "p" }] } } }
@@ -436,9 +445,44 @@ async function updateSafeSearchRules(enabled) {
     }
   ];
 
+    // 2. Dynamic Domain Rules from Supabase
+    dynamicUrls.forEach((url, index) => {
+      const ruleId = 11000 + index;
+      if (ruleId > 13000) return;
+
+      rules.push({
+        id: ruleId,
+        priority: 30,
+        action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+        condition: { 
+          urlFilter: url.includes('.') ? `*${url}*` : `*${url}*`, 
+          resourceTypes: ["main_frame", "sub_frame"]
+        }
+      });
+    });
+
+    // 3. Dynamic Keyword Rules from Supabase
+    dynamicKeywords.forEach((kw, index) => {
+      const ruleId = 13001 + index;
+      if (ruleId > END_ID) return;
+
+      rules.push({
+        id: ruleId,
+        priority: 30,
+        action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
+        condition: { 
+          urlFilter: kw, 
+          resourceTypes: ["main_frame", "sub_frame"],
+          excludedDomains: ["google.com", "bing.com", "yahoo.com", "duckduckgo.com", "wikipedia.org", "youtube.com"]
+        }
+      });
+    });
+
   await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: rulesToRemove,
     addRules: rules
   });
+  console.log(`[SafeSearch] Dynamic rules enforced from Supabase. Total rules: ${rules.length}`);
 }
 
 // ─── Event Logging ──────────────────────────────────────────────────

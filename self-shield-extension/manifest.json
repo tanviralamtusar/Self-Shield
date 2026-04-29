@@ -37,5 +37,11 @@
       "js": ["content/blocker.js"],
       "run_at": "document_start"
     }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked-page/blocked.html"],
+      "matches": ["<all_urls>"]
+    }
   ]
 }
