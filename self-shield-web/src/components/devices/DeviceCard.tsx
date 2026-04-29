@@ -46,7 +46,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
 
     try {
       const response = await fetch(`/api/extension/devices/${device.id}`, {
-        method: 'DELETE',
+        method: isDelete ? 'DELETE' : 'PATCH',
       });
 
       const data = await response.json();
