@@ -18,6 +18,8 @@ let eventBatch = [];
 const MAX_BATCH_SIZE = 20;
 let activeSession = { hostname: null, startTime: null };
 let localBlockedUrls = [];
+const SERVER_CHECK_CACHE = new Map();
+const CACHE_EXPIRY = 1000 * 60 * 60; // 1 hour
 
 // ─── Built-in Protection Lists ──────────────────────────────────────
 const BUILTIN_ADULT_SITES = [
@@ -247,6 +249,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ success: true });
       }
     });
+    return true;
+  }
+
+  if (request.action === "checkUrl") {
+    const { url } = request;
+    checkUrlWithServer(url)
+      .then(result => sendResponse(result))
+      .catch(err => sendResponse({ blocked: false, error: err.message }));
     return true;
   }
   
@@ -507,7 +517,6 @@ async function updateSafeSearchRules(enabled) {
     addRules: rules
   });
 }
-}
 
 // ─── Event Logging ──────────────────────────────────────────────────
 function logEvent(eventType, target, durationSec = null) {
@@ -573,3 +582,58 @@ chrome.tabs.onUpdated.addListener((id, change, tab) => { if (change.url && tab.a
 chrome.windows.onFocusChanged.addListener((id) => { 
   if (id === chrome.windows.WINDOW_ID_NONE) endCurrentSession(); else trackActiveTab(); 
 });
+
+async function checkUrlWithServer(url) {
+  try {
+    const hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+    
+    // 1. Check in-memory cache
+    if (SERVER_CHECK_CACHE.has(hostname)) {
+      const cached = SERVER_CHECK_CACHE.get(hostname);
+      if (Date.now() - cached.timestamp < CACHE_EXPIRY) {
+        return { blocked: cached.blocked };
+      }
+    }
+
+    // 2. Check local storage cache (for persistence)
+    const { url_cache } = await chrome.storage.local.get("url_cache");
+    const storageCache = url_cache || {};
+    if (storageCache[hostname]) {
+      const cached = storageCache[hostname];
+      if (Date.now() - cached.timestamp < CACHE_EXPIRY) {
+        SERVER_CHECK_CACHE.set(hostname, cached);
+        return { blocked: cached.blocked };
+      }
+    }
+
+    // 3. Fetch from server
+    const { deviceId } = await chrome.storage.local.get("deviceId");
+    if (!deviceId) return { blocked: false };
+
+    const params = new URLSearchParams({ deviceId, url: hostname });
+    const response = await fetch(`${API_BASE_URL}/api/extension/check?${params.toString()}`);
+    
+    if (!response.ok) return { blocked: false };
+    
+    const data = await response.json();
+    const result = { blocked: data.blocked === true, timestamp: Date.now() };
+
+    // 4. Update caches
+    SERVER_CHECK_CACHE.set(hostname, result);
+    storageCache[hostname] = result;
+    
+    // Periodically prune old cache entries to save space
+    const now = Date.now();
+    const prunedCache = Object.fromEntries(
+      Object.entries(storageCache).filter(([_, v]) => now - v.timestamp < (CACHE_EXPIRY * 24))
+    );
+    
+    await chrome.storage.local.set({ url_cache: prunedCache });
+
+    return { blocked: result.blocked };
+
+  } catch (e) {
+    console.error("[ServerCheck] Failed:", e);
+    return { blocked: false };
+  }
+}

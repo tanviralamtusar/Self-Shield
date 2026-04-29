@@ -78,35 +78,9 @@
     <div class="url-tag">
       Restricted Domain: <code id="blocked-host">Checking...</code>
     </div>
-    <button onclick="window.history.back()" style="margin-top: 2rem; background: #6366f1; color: white; border: none; padding: 0.75rem 2rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Go Back to Safety</button>
+    <button id="back-button" style="margin-top: 2rem; background: #6366f1; color: white; border: none; padding: 0.75rem 2rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Go Back to Safety</button>
   </div>
 
-  <script>
-    // Get original URL if passed via query param or use referrer
-    const urlParams = new URLSearchParams(window.location.search);
-    const originalUrl = urlParams.get('url') || document.referrer;
-    
-    const hostElement = document.getElementById('blocked-host');
-
-    if (originalUrl) {
-      try {
-        const urlObj = new URL(originalUrl);
-        const host = urlObj.hostname;
-        if (hostElement) hostElement.textContent = host;
-      } catch (e) {
-        if (hostElement) hostElement.textContent = originalUrl;
-      }
-    } else {
-      if (hostElement) hostElement.textContent = 'Restricted Content';
-    }
-
-    // Report to background for analytics
-    try {
-      chrome.runtime.sendMessage({ 
-        action: 'reportBlock', 
-        target: originalUrl || 'Unknown' 
-      });
-    } catch (e) {}
-  </script>
+  <script src="blocked.js"></script>
 </body>
 </html>

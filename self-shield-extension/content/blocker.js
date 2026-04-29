@@ -1,20 +1,38 @@
 // Self-Shield Content Blocker
 // Highly resilient blocking with INSTANT BLACKOUT to prevent content flashing
 
-// 1. IMMEDIATELY HIDE EVERYTHING (before any other logic)
-// Set background on html immediately so it's not white
-document.documentElement.style.background = '#0b1120';
+// 1. IMMEDIATELY CREATE BLACKOUT OVERLAY
+// We use a DIV instead of a STYLE tag to be more CSP-friendly
+const blackoutOverlay = document.createElement('div');
+blackoutOverlay.id = 'self-shield-blackout-overlay';
+Object.assign(blackoutOverlay.style, {
+  position: 'fixed',
+  top: '0',
+  left: '0',
+  width: '100vw',
+  height: '100vh',
+  backgroundColor: '#0b1120',
+  zIndex: '2147483647',
+  display: 'block',
+  pointerEvents: 'none' // Allow interaction if something goes wrong
+});
 
-const blackoutStyle = document.createElement('style');
-blackoutStyle.id = 'self-shield-blackout';
-// Hide everything except our block UI root
-blackoutStyle.textContent = `
-  html > :not(#self-shield-block-root) { display: none !important; }
-  body { display: none !important; }
-`;
-document.documentElement.appendChild(blackoutStyle);
+// Use a trick to ensure it's the first thing in the DOM
+if (document.documentElement) {
+  document.documentElement.appendChild(blackoutOverlay);
+  document.documentElement.style.backgroundColor = '#0b1120';
+}
 
-const SEARCH_ENGINES = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com'];
+// 2. Safety Timeout: Remove blackout after 1.5 seconds NO MATTER WHAT
+setTimeout(removeBlackout, 1500);
+
+function removeBlackout() {
+  const overlay = document.getElementById('self-shield-blackout-overlay');
+  if (overlay) overlay.remove();
+  document.documentElement.style.backgroundColor = '';
+}
+
+const SEARCH_ENGINES = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com', 'ecosia.org'];
 const SAFE_LIST = ['wikipedia.org', 'healthline.com', 'medicalnewstoday.com', 'selfshield.app'];
 
 function showBlockUI(hostname) {
@@ -64,21 +82,50 @@ function checkAndBlock() {
 
     const isRestricted = keywords.some(kw => {
       const lowerKw = kw.toLowerCase();
-      const regex = new RegExp(`[?&/=]${lowerKw}|\\b${lowerKw}\\b`, 'i');
-      return regex.test(url);
+      // Improved regex: Match keyword as a whole word OR as a substring in query parameters
+      // This catches "porn" in "pornography" if we remove the word boundaries, 
+      // but to avoid false positives (like "button" in "butt"), we use a more balanced approach.
+      // We check if the keyword exists at all in the URL.
+      if (url.includes(lowerKw)) {
+        // Special case: if it's a known search engine, we want to be more specific 
+        // to avoid blocking "butt" when user types "button"
+        if (isSearchEngine) {
+          const searchRegex = new RegExp(`[?&q=]${lowerKw}|[+ ]${lowerKw}|\\b${lowerKw}`, 'i');
+          return searchRegex.test(url);
+        }
+        return true;
+      }
+      return false;
     });
 
     if (isRestricted) {
       showBlockUI(hostname);
+    } else if (!isSearchEngine) {
+      // 4. Final Fallback: Server-Based Checking (Only for non-search engines)
+      try {
+        chrome.runtime.sendMessage({ action: 'checkUrl', url: window.location.href }, (response) => {
+          if (chrome.runtime.lastError) {
+            console.warn('[Self-Shield] Background script unavailable:', chrome.runtime.lastError.message);
+            removeBlackout();
+            return;
+          }
+          
+          if (response && response.blocked) {
+            console.log('[Self-Shield] Site blocked by server-side verification.');
+            showBlockUI(hostname);
+          } else {
+            removeBlackout();
+          }
+        });
+      } catch (e) {
+        console.error('[Self-Shield] Failed to communicate with background:', e);
+        removeBlackout();
+      }
     } else {
+      // It's a search engine and no keywords matched
       removeBlackout();
     }
   });
-}
-
-function removeBlackout() {
-  const style = document.getElementById('self-shield-blackout');
-  if (style) style.remove();
 }
 
 // Run immediately
