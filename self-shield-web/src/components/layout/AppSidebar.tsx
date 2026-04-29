@@ -71,25 +71,20 @@ export function AppSidebar() {
                       render={<Link href={item.url} />} 
                       isActive={pathname === item.url}
                       className={cn(
-                        "group relative transition-colors duration-200 h-10",
-                        pathname === item.url && "bg-primary/5"
+                        "group relative h-10",
+                        pathname === item.url && "bg-primary/10"
                       )}
                     >
                       <div className="relative z-10 flex items-center w-full px-2">
-                        <div className="relative mr-3 flex items-center justify-center">
+                        <div className="mr-3 flex items-center justify-center">
                           <item.icon className={cn(
-                            "h-4 w-4 transition-colors duration-200",
+                            "h-4 w-4",
                             pathname === item.url ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground"
                           )} />
-                          
-                          {/* Active subtle glow */}
-                          {pathname === item.url && (
-                            <div className="absolute inset-0 bg-primary/20 blur-md rounded-full" />
-                          )}
                         </div>
                         
                         <span className={cn(
-                          "text-sm font-medium transition-colors duration-200",
+                          "text-sm font-medium",
                           pathname === item.url ? "text-foreground font-semibold" : "text-muted-foreground/70 group-hover:text-foreground"
                         )}>
                           {item.title}
@@ -113,10 +108,10 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton 
                 onClick={handleLogout} 
-                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-primary/5 text-primary transition-colors duration-200 hover:bg-primary/10"
+                className="group relative h-10 w-full overflow-hidden rounded-xl border border-transparent bg-primary/5 text-primary hover:bg-primary/10"
               >
                 <div className="flex items-center justify-center w-full gap-2 font-semibold">
-                  <LogOut className="h-4 w-4 transition-colors duration-200" />
+                  <LogOut className="h-4 w-4" />
                   <span>Sign Out</span>
                 </div>
               </SidebarMenuButton>
