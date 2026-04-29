@@ -44,8 +44,10 @@ function showBlockUI(hostname) {
 }
 
 function checkAndBlock() {
-  chrome.storage.local.get(['is_enabled', 'blocked_keywords', 'blocked_urls', 'local_blocked_urls'], (settings) => {
+    chrome.storage.local.get(['is_enabled', 'blocked_keywords', 'blocked_urls', 'local_blocked_urls', 'keyword_blocking'], (settings) => {
     const isEnabled = settings.is_enabled !== false;
+    const keywordBlockingEnabled = settings.keyword_blocking !== false;
+
     if (!isEnabled) {
       removeBlackout();
       return;
@@ -75,7 +77,17 @@ function checkAndBlock() {
       }
     }
 
-    // 3. Check for Blocked Keywords (Always check, even on search engines)
+    // 3. Check for Blocked Keywords (Always check, even on search engines, if enabled)
+    if (!keywordBlockingEnabled) {
+      // If keyword blocking is off, move to server-side check or finish
+      if (!isSearchEngine) {
+        performServerCheck(hostname);
+      } else {
+        removeBlackout();
+      }
+      return;
+    }
+
     const keywords = settings.blocked_keywords && settings.blocked_keywords.length > 0 
       ? settings.blocked_keywords 
       : ['porn', 'sex', 'xvideo', 'pornhub', 'xnxx', 'xhamster', 'redtube', 'youporn', 'casino', '1xbet'];
@@ -101,31 +113,35 @@ function checkAndBlock() {
     if (isRestricted) {
       showBlockUI(hostname);
     } else if (!isSearchEngine) {
-      // 4. Final Fallback: Server-Based Checking (Only for non-search engines)
-      try {
-        chrome.runtime.sendMessage({ action: 'checkUrl', url: window.location.href }, (response) => {
-          if (chrome.runtime.lastError) {
-            console.warn('[Self-Shield] Background script unavailable:', chrome.runtime.lastError.message);
-            removeBlackout();
-            return;
-          }
-          
-          if (response && response.blocked) {
-            console.log('[Self-Shield] Site blocked by server-side verification.');
-            showBlockUI(hostname);
-          } else {
-            removeBlackout();
-          }
-        });
-      } catch (e) {
-        console.error('[Self-Shield] Failed to communicate with background:', e);
-        removeBlackout();
-      }
+      performServerCheck(hostname);
     } else {
       // It's a search engine and no keywords matched
       removeBlackout();
     }
   });
+}
+
+function performServerCheck(hostname) {
+  // 4. Final Fallback: Server-Based Checking (Only for non-search engines)
+  try {
+    chrome.runtime.sendMessage({ action: 'checkUrl', url: window.location.href }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.warn('[Self-Shield] Background script unavailable:', chrome.runtime.lastError.message);
+        removeBlackout();
+        return;
+      }
+      
+      if (response && response.blocked) {
+        console.log('[Self-Shield] Site blocked by server-side verification.');
+        showBlockUI(hostname);
+      } else {
+        removeBlackout();
+      }
+    });
+  } catch (e) {
+    console.error('[Self-Shield] Failed to communicate with background:', e);
+    removeBlackout();
+  }
 }
 
 // Run immediately

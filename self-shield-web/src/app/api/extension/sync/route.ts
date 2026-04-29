@@ -153,6 +153,8 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.json({
       is_enabled: settings.vpn_enabled,
       safe_search_enabled: settings.safe_search_enabled === true,
+      keyword_blocking: settings.keyword_blocking === true,
+      server_side_check_enabled: settings.server_side_check_enabled === true,
       blocked_urls: [...new Set(blocked_urls)],
       blocked_keywords: [...new Set(blocked_keywords)]
     });

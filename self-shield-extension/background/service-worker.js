@@ -376,6 +376,9 @@ async function syncWithAdminPanel() {
     const data = await response.json();
     const enabledState = data.is_enabled === true;
     const safeSearchState = data.safe_search_enabled === true;
+    const keywordBlockingState = data.keyword_blocking === true;
+    const serverSideCheckState = data.server_side_check_enabled === true;
+    
     const urls = data.blocked_urls || [];
     const keywords = data.blocked_keywords || [];
     const { local_blocked_urls } = await chrome.storage.local.get("local_blocked_urls");
@@ -384,6 +387,8 @@ async function syncWithAdminPanel() {
     await chrome.storage.local.set({ 
       is_enabled: enabledState, 
       safe_search_enabled: safeSearchState,
+      keyword_blocking: keywordBlockingState,
+      server_side_check_enabled: serverSideCheckState,
       blocked_urls: urls,
       blocked_keywords: keywords,
       everBeenActive: enabledState ? true : undefined
@@ -396,8 +401,15 @@ async function syncWithAdminPanel() {
       // Update blocking rules (IDs 1-10000)
       updateBlockingRules(combinedUrls).catch(() => {});
       
-      // Update keyword rules (IDs 20000-25000) - ALWAYS apply if enabled
-      updateKeywordRules(combinedKeywords).catch(() => {});
+      // Update keyword rules (IDs 20000-25000) - respect setting
+      if (keywordBlockingState) {
+        updateKeywordRules(combinedKeywords).catch(() => {});
+      } else {
+        chrome.declarativeNetRequest.getDynamicRules().then(rules => {
+          const ids = rules.filter(r => r.id >= 20000 && r.id < 30000).map(r => r.id);
+          chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: ids });
+        });
+      }
       
       // Update safe search rules (IDs 10000-11000)
       updateSafeSearchRules(safeSearchState).catch(() => {});
@@ -607,8 +619,8 @@ async function checkUrlWithServer(url) {
     }
 
     // 3. Fetch from server
-    const { deviceId } = await chrome.storage.local.get("deviceId");
-    if (!deviceId) return { blocked: false };
+    const { deviceId, server_side_check_enabled } = await chrome.storage.local.get(["deviceId", "server_side_check_enabled"]);
+    if (!deviceId || server_side_check_enabled === false) return { blocked: false };
 
     const params = new URLSearchParams({ deviceId, url: hostname });
     const response = await fetch(`${API_BASE_URL}/api/extension/check?${params.toString()}`);

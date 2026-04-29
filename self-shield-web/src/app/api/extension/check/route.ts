@@ -37,11 +37,11 @@ export async function GET(req: NextRequest) {
     // 2. Fetch device settings to see if protection is enabled
     const { data: settings } = await supabaseAdmin
       .from('device_settings')
-      .select('vpn_enabled, safe_search_enabled')
+      .select('vpn_enabled, safe_search_enabled, server_side_check_enabled')
       .eq('device_id', deviceId)
       .single();
 
-    if (!settings || !settings.vpn_enabled) {
+    if (!settings || !settings.vpn_enabled || !settings.server_side_check_enabled) {
       const res = NextResponse.json({ blocked: false });
       res.headers.set('Access-Control-Allow-Origin', '*');
       return res;
