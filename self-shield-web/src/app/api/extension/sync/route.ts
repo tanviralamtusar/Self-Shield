@@ -153,8 +153,8 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.json({
       is_enabled: settings.vpn_enabled,
       safe_search_enabled: settings.safe_search_enabled === true,
-      blocked_urls: [...new Set(blocked_urls)],
-      blocked_keywords: [...new Set(blocked_keywords)]
+      blocked_urls: Array.from(new Set(blocked_urls)),
+      blocked_keywords: Array.from(new Set(blocked_keywords))
     });
 
     // Add CORS and Cache headers
