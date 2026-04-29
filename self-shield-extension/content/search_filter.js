@@ -36,7 +36,7 @@ function scrubSearch() {
       }
     }
 
-    if (hostname.includes('duckduckgo.com')) {
+    if (hostname === 'duckduckgo.com' || hostname.endsWith('.duckduckgo.com')) {
       if (url.searchParams.get('kp') !== '1') {
         url.searchParams.set('kp', '1');
         window.location.replace(url.toString());
