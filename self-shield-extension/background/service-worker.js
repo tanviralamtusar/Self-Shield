@@ -1,5 +1,84 @@
-// In development, use localhost. In production, use your actual domain.
 const API_BASE_URL = "http://localhost:3000";
+const SUPABASE_URL = "https://nkadwmptdzjsmwuujcid.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_U3jPnKL1B65hjpz8aVJFAA_4jMogGtD";
+
+// Import Supabase library
+importScripts('supabase.js');
+
+let supabase = null;
+let realtimeChannel = null;
+
+// Initialize Supabase
+if (typeof supabase === 'undefined' || !supabase) {
+  const { createClient } = this.supabase;
+  supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+// ─── Realtime: Instant Unpair Listener ───────────────────────────────
+async function setupRealtimeListener(deviceId) {
+  if (!deviceId || !supabase) return;
+  
+  // Cleanup existing
+  if (realtimeChannel) {
+    realtimeChannel.unsubscribe();
+  }
+
+  console.log(`[Realtime] Subscribing to device: ${deviceId}`);
+  
+  realtimeChannel = supabase
+    .channel(`device-changes-${deviceId}`)
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'devices',
+        filter: `id=eq.${deviceId}`
+      },
+      (payload) => {
+        console.log('[Realtime] Device updated:', payload);
+        if (payload.new && payload.new.is_admin_active === false) {
+          console.log('[Realtime] Instant unpair signal received!');
+          handleDeviceDeleted();
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log(`[Realtime] Subscription status: ${status}`);
+    });
+}
+
+async function handleDeviceDeleted() {
+  if (isUnpairing) return;
+  isUnpairing = true;
+  
+  console.log("INSTANT: Device unpairing via Realtime...");
+
+  // 1. Clear storage
+  await chrome.storage.local.set({
+    is_enabled: false,
+    deviceId: null,
+    pairedAt: null,
+    everBeenActive: false,
+    blocked_urls: []
+  });
+
+  // 2. Clear blocking rules
+  const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+  const ruleIds = existingRules.map(rule => rule.id);
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: ruleIds
+  });
+
+  // 3. Clear Realtime
+  if (realtimeChannel) {
+    realtimeChannel.unsubscribe();
+    realtimeChannel = null;
+  }
+
+  isUnpairing = false;
+  console.log("INSTANT: Unpairing complete.");
+}
 
 // ─── Event Batch Queue ──────────────────────────────────────────────
 const MAX_BATCH_SIZE = 20;
@@ -77,6 +156,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             is_enabled: data.is_enabled === true,
             blocked_urls: data.blocked_urls || []
           }, () => {
+            setupRealtimeListener(request.deviceId);
             sendResponse({ success: true });
           });
         } else {
@@ -236,6 +316,9 @@ async function syncWithAdminPanel() {
   try {
     const { deviceId } = await chrome.storage.local.get("deviceId");
     if (!deviceId) return;
+
+    // Start listening for instant unpair signals
+    setupRealtimeListener(deviceId);
 
     // Flush any pending events while we're syncing
     await flushEventBatch(deviceId);
