@@ -381,9 +381,9 @@ async function updateBlockingRules(urls) {
   if (!urls || !Array.isArray(urls)) return;
   const rules = urls.map((url, index) => ({
     id: index + 1,
-    priority: 1,
+    priority: 100,
     action: { type: "redirect", redirect: { extensionPath: "/blocked-page/blocked.html" } },
-    condition: { urlFilter: `||${url}`, resourceTypes: ["main_frame"] }
+    condition: { urlFilter: `||${url}^`, resourceTypes: ["main_frame"] }
   }));
   const currentRules = await chrome.declarativeNetRequest.getDynamicRules();
   const oldBlockingRuleIds = currentRules.filter(r => r.id < 10000).map(r => r.id);
