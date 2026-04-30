@@ -140,8 +140,14 @@ export async function GET(req: NextRequest) {
         .in('block_list_id', activeListIds);
 
       if (!entriesError && entries) {
-        entries.forEach((e: any) => {
-          if (e.block_lists?.type === 'keyword') {
+        interface BlockListEntry {
+          value: string;
+          block_lists: { type: string } | { type: string }[] | null;
+        }
+        (entries as unknown as BlockListEntry[]).forEach((e) => {
+          const blockLists = e.block_lists;
+          const type = Array.isArray(blockLists) ? blockLists[0]?.type : blockLists?.type;
+          if (type === 'keyword') {
             blocked_keywords.push(e.value);
           } else {
             blocked_urls.push(e.value);
@@ -155,8 +161,8 @@ export async function GET(req: NextRequest) {
       safe_search_enabled: settings.safe_search_enabled === true,
       keyword_blocking: settings.keyword_blocking === true,
       server_side_check_enabled: settings.server_side_check_enabled === true,
-      blocked_urls: [...new Set(blocked_urls)],
-      blocked_keywords: [...new Set(blocked_keywords)]
+      blocked_urls: Array.from(new Set(blocked_urls)),
+      blocked_keywords: Array.from(new Set(blocked_keywords))
     });
 
     // Add CORS and Cache headers
@@ -169,7 +175,7 @@ export async function GET(req: NextRequest) {
 
     return response;
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Extension sync error:', error);
     const res = NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     res.headers.set('Access-Control-Allow-Origin', '*');

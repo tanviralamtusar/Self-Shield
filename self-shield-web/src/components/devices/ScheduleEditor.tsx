@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 interface ScheduleEditorProps {
   appRuleId: string;
   appName: string;
-  trigger?: React.ReactNode;
+  trigger?: React.ReactElement;
 }
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -49,8 +49,9 @@ export function ScheduleEditor({ appRuleId, appName, trigger }: ScheduleEditorPr
       });
       setNewSchedule({ day_of_week: [], start_time: '09:00', end_time: '17:00' });
       toast.success('Schedule added');
-    } catch (error: any) {
-      toast.error('Failed to add schedule', { description: error.message });
+    } catch (error: unknown) {
+      const err = error as Error;
+      toast.error('Failed to add schedule', { description: err.message });
     }
   };
 
@@ -58,8 +59,9 @@ export function ScheduleEditor({ appRuleId, appName, trigger }: ScheduleEditorPr
     try {
       await deleteSchedule.mutateAsync({ id, appRuleId });
       toast.success('Schedule deleted');
-    } catch (error: any) {
-      toast.error('Failed to delete schedule', { description: error.message });
+    } catch (error: unknown) {
+      const err = error as Error;
+      toast.error('Failed to delete schedule', { description: err.message });
     }
   };
 

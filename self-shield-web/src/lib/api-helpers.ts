@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Standard API response shape: { success, data, error }
@@ -19,7 +20,7 @@ export function apiError(code: string, message: string, status = 400) {
  * Returns userId or an error NextResponse.
  */
 export async function requireAuth(
-  supabaseAdmin: any,
+  supabaseAdmin: SupabaseClient,
   request: Request
 ): Promise<{ userId: string; role: string } | NextResponse> {
   const auth = request.headers.get('authorization');
@@ -45,6 +46,6 @@ export async function requireAuth(
 }
 
 /** Type guard: checks if requireAuth returned an error response */
-export function isAuthError(result: any): result is NextResponse {
+export function isAuthError(result: unknown): result is NextResponse {
   return result instanceof NextResponse;
 }
