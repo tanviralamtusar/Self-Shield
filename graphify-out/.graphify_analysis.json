@@ -1,0 +1,1171 @@
+{
+  "communities": {
+    "0": [
+      "self_shield_extension_supabase",
+      "self_shield_extension_supabase_abortsignal",
+      "self_shield_extension_supabase_analytics",
+      "self_shield_extension_supabase_appendparams",
+      "self_shield_extension_supabase_applytransformoptstoquery",
+      "self_shield_extension_supabase_ar",
+      "self_shield_extension_supabase_asstream",
+      "self_shield_extension_supabase_b",
+      "self_shield_extension_supabase_c",
+      "self_shield_extension_supabase_catch",
+      "self_shield_extension_supabase_ce",
+      "self_shield_extension_supabase_channel",
+      "self_shield_extension_supabase_constructor",
+      "self_shield_extension_supabase_copy",
+      "self_shield_extension_supabase_copybindings",
+      "self_shield_extension_supabase_createbucket",
+      "self_shield_extension_supabase_createindex",
+      "self_shield_extension_supabase_createsigneduploadurl",
+      "self_shield_extension_supabase_createsignedurl",
+      "self_shield_extension_supabase_createsignedurls",
+      "self_shield_extension_supabase_csv",
+      "self_shield_extension_supabase_d",
+      "self_shield_extension_supabase_de",
+      "self_shield_extension_supabase_deletebucket",
+      "self_shield_extension_supabase_deleteindex",
+      "self_shield_extension_supabase_deletevectors",
+      "self_shield_extension_supabase_detectenvironment",
+      "self_shield_extension_supabase_download",
+      "self_shield_extension_supabase_e",
+      "self_shield_extension_supabase_ee",
+      "self_shield_extension_supabase_emptybucket",
+      "self_shield_extension_supabase_encodemetadata",
+      "self_shield_extension_supabase_endpoint",
+      "self_shield_extension_supabase_eq",
+      "self_shield_extension_supabase_execute",
+      "self_shield_extension_supabase_exists",
+      "self_shield_extension_supabase_fe",
+      "self_shield_extension_supabase_fetchrequest",
+      "self_shield_extension_supabase_fetchwithtimeout",
+      "self_shield_extension_supabase_filterbindings",
+      "self_shield_extension_supabase_finally",
+      "self_shield_extension_supabase_functions",
+      "self_shield_extension_supabase_geojson",
+      "self_shield_extension_supabase_getbucket",
+      "self_shield_extension_supabase_getchannel",
+      "self_shield_extension_supabase_getchannels",
+      "self_shield_extension_supabase_getfinalpath",
+      "self_shield_extension_supabase_getindex",
+      "self_shield_extension_supabase_getlongpolltransport",
+      "self_shield_extension_supabase_getpayloadrecords",
+      "self_shield_extension_supabase_getpromise",
+      "self_shield_extension_supabase_getpublicurl",
+      "self_shield_extension_supabase_getsocket",
+      "self_shield_extension_supabase_getvectors",
+      "self_shield_extension_supabase_getwebsocketconstructor",
+      "self_shield_extension_supabase_gt",
+      "self_shield_extension_supabase_gte",
+      "self_shield_extension_supabase_handleoperation",
+      "self_shield_extension_supabase_handletokenchanged",
+      "self_shield_extension_supabase_he",
+      "self_shield_extension_supabase_heartbeatintervalms",
+      "self_shield_extension_supabase_heartbeattimer",
+      "self_shield_extension_supabase_httpsend",
+      "self_shield_extension_supabase_i",
+      "self_shield_extension_supabase_ie",
+      "self_shield_extension_supabase_ilike",
+      "self_shield_extension_supabase_index",
+      "self_shield_extension_supabase_info",
+      "self_shield_extension_supabase_initializeoptions",
+      "self_shield_extension_supabase_initrealtimeclient",
+      "self_shield_extension_supabase_initsupabaseauthclient",
+      "self_shield_extension_supabase_invoke",
+      "self_shield_extension_supabase_isactive",
+      "self_shield_extension_supabase_isauthenticationtimeout",
+      "self_shield_extension_supabase_isconflict",
+      "self_shield_extension_supabase_isdistinct",
+      "self_shield_extension_supabase_iserrored",
+      "self_shield_extension_supabase_ismanualtoken",
+      "self_shield_extension_supabase_isnotfound",
+      "self_shield_extension_supabase_isthrowonerrorenabled",
+      "self_shield_extension_supabase_iswebsocketsupported",
+      "self_shield_extension_supabase_joinedonce",
+      "self_shield_extension_supabase_joinpush",
+      "self_shield_extension_supabase_js",
+      "self_shield_extension_supabase_jwks",
+      "self_shield_extension_supabase_jwks_cached_at",
+      "self_shield_extension_supabase_k",
+      "self_shield_extension_supabase_ke",
+      "self_shield_extension_supabase_l",
+      "self_shield_extension_supabase_like",
+      "self_shield_extension_supabase_limit",
+      "self_shield_extension_supabase_listbucketoptionstoquerystring",
+      "self_shield_extension_supabase_listbuckets",
+      "self_shield_extension_supabase_listenforauthevents",
+      "self_shield_extension_supabase_listindexes",
+      "self_shield_extension_supabase_listv2",
+      "self_shield_extension_supabase_listvectors",
+      "self_shield_extension_supabase_logprefix",
+      "self_shield_extension_supabase_lt",
+      "self_shield_extension_supabase_lte",
+      "self_shield_extension_supabase_match",
+      "self_shield_extension_supabase_maxaffected",
+      "self_shield_extension_supabase_maybesingle",
+      "self_shield_extension_supabase_move",
+      "self_shield_extension_supabase_n",
+      "self_shield_extension_supabase_ne",
+      "self_shield_extension_supabase_neq",
+      "self_shield_extension_supabase_normalizeendpoint",
+      "self_shield_extension_supabase_not",
+      "self_shield_extension_supabase_notthischannelevent",
+      "self_shield_extension_supabase_ns",
+      "self_shield_extension_supabase_onauthstatechange",
+      "self_shield_extension_supabase_onheartbeat",
+      "self_shield_extension_supabase_onjoin",
+      "self_shield_extension_supabase_onjoinpayload",
+      "self_shield_extension_supabase_onleave",
+      "self_shield_extension_supabase_onleavepayload",
+      "self_shield_extension_supabase_onsync",
+      "self_shield_extension_supabase_order",
+      "self_shield_extension_supabase_overridetypes",
+      "self_shield_extension_supabase_p",
+      "self_shield_extension_supabase_pendingheartbeatref",
+      "self_shield_extension_supabase_performauth",
+      "self_shield_extension_supabase_presencestate",
+      "self_shield_extension_supabase_processresponse",
+      "self_shield_extension_supabase_protocol",
+      "self_shield_extension_supabase_putvectors",
+      "self_shield_extension_supabase_q",
+      "self_shield_extension_supabase_qe",
+      "self_shield_extension_supabase_queryvectors",
+      "self_shield_extension_supabase_range",
+      "self_shield_extension_supabase_rangeadjacent",
+      "self_shield_extension_supabase_rangegt",
+      "self_shield_extension_supabase_rangegte",
+      "self_shield_extension_supabase_rangelt",
+      "self_shield_extension_supabase_rangelte",
+      "self_shield_extension_supabase_reconnectafterms",
+      "self_shield_extension_supabase_reconnecttimer",
+      "self_shield_extension_supabase_regeximatch",
+      "self_shield_extension_supabase_regexmatch",
+      "self_shield_extension_supabase_rejointimer",
+      "self_shield_extension_supabase_removeemptyfolders",
+      "self_shield_extension_supabase_retry",
+      "self_shield_extension_supabase_returns",
+      "self_shield_extension_supabase_rollback",
+      "self_shield_extension_supabase_s",
+      "self_shield_extension_supabase_schema",
+      "self_shield_extension_supabase_sendbuffer",
+      "self_shield_extension_supabase_serialize",
+      "self_shield_extension_supabase_setauth",
+      "self_shield_extension_supabase_setauthsafely",
+      "self_shield_extension_supabase_setheader",
+      "self_shield_extension_supabase_single",
+      "self_shield_extension_supabase_startworkerheartbeat",
+      "self_shield_extension_supabase_state",
+      "self_shield_extension_supabase_statechangecallbacks",
+      "self_shield_extension_supabase_storesession",
+      "self_shield_extension_supabase_stripnulls",
+      "self_shield_extension_supabase_textsearch",
+      "self_shield_extension_supabase_then",
+      "self_shield_extension_supabase_throwonerror",
+      "self_shield_extension_supabase_timeout",
+      "self_shield_extension_supabase_transformstate",
+      "self_shield_extension_supabase_transport",
+      "self_shield_extension_supabase_u",
+      "self_shield_extension_supabase_ue",
+      "self_shield_extension_supabase_update",
+      "self_shield_extension_supabase_updatebucket",
+      "self_shield_extension_supabase_updatefiltertransform",
+      "self_shield_extension_supabase_updatepayloadtransform",
+      "self_shield_extension_supabase_upload",
+      "self_shield_extension_supabase_uploadorupdate",
+      "self_shield_extension_supabase_uploadtosignedurl",
+      "self_shield_extension_supabase_ur",
+      "self_shield_extension_supabase_v",
+      "self_shield_extension_supabase_vectors",
+      "self_shield_extension_supabase_vsn",
+      "self_shield_extension_supabase_w",
+      "self_shield_extension_supabase_we",
+      "self_shield_extension_supabase_workerobjecturl",
+      "self_shield_extension_supabase_wrapheartbeatcallback",
+      "self_shield_extension_supabase_x"
+    ],
+    "1": [
+      "self_shield_extension_supabase_acquirelock",
+      "self_shield_extension_supabase_admindeletepasskey",
+      "self_shield_extension_supabase_adminlistpasskeys",
+      "self_shield_extension_supabase_approveauthorization",
+      "self_shield_extension_supabase_autorefreshtokentick",
+      "self_shield_extension_supabase_br",
+      "self_shield_extension_supabase_bt",
+      "self_shield_extension_supabase_callrefreshtoken",
+      "self_shield_extension_supabase_createcustomprovider",
+      "self_shield_extension_supabase_createoauthclient",
+      "self_shield_extension_supabase_createuser",
+      "self_shield_extension_supabase_ct",
+      "self_shield_extension_supabase_debug",
+      "self_shield_extension_supabase_delete",
+      "self_shield_extension_supabase_deletecustomprovider",
+      "self_shield_extension_supabase_deletefactor",
+      "self_shield_extension_supabase_deleteoauthclient",
+      "self_shield_extension_supabase_deletepasskey",
+      "self_shield_extension_supabase_deleteuser",
+      "self_shield_extension_supabase_denyauthorization",
+      "self_shield_extension_supabase_emitinitialsession",
+      "self_shield_extension_supabase_enroll",
+      "self_shield_extension_supabase_exchangecodeforsession",
+      "self_shield_extension_supabase_fetchjwk",
+      "self_shield_extension_supabase_generatelink",
+      "self_shield_extension_supabase_getaccesstoken",
+      "self_shield_extension_supabase_getauthenticatorassurancelevel",
+      "self_shield_extension_supabase_getauthorizationdetails",
+      "self_shield_extension_supabase_getclaims",
+      "self_shield_extension_supabase_getcustomprovider",
+      "self_shield_extension_supabase_getoauthclient",
+      "self_shield_extension_supabase_getsession",
+      "self_shield_extension_supabase_getsessionfromurl",
+      "self_shield_extension_supabase_geturlforprovider",
+      "self_shield_extension_supabase_getuser",
+      "self_shield_extension_supabase_getuserbyid",
+      "self_shield_extension_supabase_getuseridentities",
+      "self_shield_extension_supabase_handleprovidersignin",
+      "self_shield_extension_supabase_handlevisibilitychange",
+      "self_shield_extension_supabase_hr",
+      "self_shield_extension_supabase_initialize",
+      "self_shield_extension_supabase_inviteuserbyemail",
+      "self_shield_extension_supabase_ir",
+      "self_shield_extension_supabase_is",
+      "self_shield_extension_supabase_isimplicitgrantcallback",
+      "self_shield_extension_supabase_ispkcecallback",
+      "self_shield_extension_supabase_isvalidsession",
+      "self_shield_extension_supabase_linkidentity",
+      "self_shield_extension_supabase_linkidentityidtoken",
+      "self_shield_extension_supabase_linkidentityoauth",
+      "self_shield_extension_supabase_listcustomproviders",
+      "self_shield_extension_supabase_listfactors",
+      "self_shield_extension_supabase_listoauthclients",
+      "self_shield_extension_supabase_listoauthgrants",
+      "self_shield_extension_supabase_listpasskeys",
+      "self_shield_extension_supabase_listusers",
+      "self_shield_extension_supabase_loadsession",
+      "self_shield_extension_supabase_mr",
+      "self_shield_extension_supabase_notifyallsubscribers",
+      "self_shield_extension_supabase_nr",
+      "self_shield_extension_supabase_nt",
+      "self_shield_extension_supabase_onvisibilitychanged",
+      "self_shield_extension_supabase_or",
+      "self_shield_extension_supabase_pr",
+      "self_shield_extension_supabase_pt",
+      "self_shield_extension_supabase_reauthenticate",
+      "self_shield_extension_supabase_recoverandrefresh",
+      "self_shield_extension_supabase_refreshaccesstoken",
+      "self_shield_extension_supabase_refreshsession",
+      "self_shield_extension_supabase_regenerateoauthclientsecret",
+      "self_shield_extension_supabase_registerpasskey",
+      "self_shield_extension_supabase_removesession",
+      "self_shield_extension_supabase_removevisibilitychangedcallback",
+      "self_shield_extension_supabase_resend",
+      "self_shield_extension_supabase_resetpasswordforemail",
+      "self_shield_extension_supabase_returnresult",
+      "self_shield_extension_supabase_revokeoauthgrant",
+      "self_shield_extension_supabase_rr",
+      "self_shield_extension_supabase_savesession",
+      "self_shield_extension_supabase_setsession",
+      "self_shield_extension_supabase_signinanonymously",
+      "self_shield_extension_supabase_signinwithethereum",
+      "self_shield_extension_supabase_signinwithidtoken",
+      "self_shield_extension_supabase_signinwithoauth",
+      "self_shield_extension_supabase_signinwithotp",
+      "self_shield_extension_supabase_signinwithpasskey",
+      "self_shield_extension_supabase_signinwithpassword",
+      "self_shield_extension_supabase_signinwithsolana",
+      "self_shield_extension_supabase_signinwithsso",
+      "self_shield_extension_supabase_signinwithweb3",
+      "self_shield_extension_supabase_signout",
+      "self_shield_extension_supabase_signup",
+      "self_shield_extension_supabase_sr",
+      "self_shield_extension_supabase_startautorefresh",
+      "self_shield_extension_supabase_startpasskeyauthentication",
+      "self_shield_extension_supabase_startpasskeyregistration",
+      "self_shield_extension_supabase_stopautorefresh",
+      "self_shield_extension_supabase_unenroll",
+      "self_shield_extension_supabase_unlinkidentity",
+      "self_shield_extension_supabase_updatecustomprovider",
+      "self_shield_extension_supabase_updateoauthclient",
+      "self_shield_extension_supabase_updatepasskey",
+      "self_shield_extension_supabase_updateuser",
+      "self_shield_extension_supabase_updateuserbyid",
+      "self_shield_extension_supabase_usesession",
+      "self_shield_extension_supabase_verifyotp",
+      "self_shield_extension_supabase_verifypasskeyauthentication",
+      "self_shield_extension_supabase_verifypasskeyregistration",
+      "self_shield_extension_supabase_wt",
+      "self_shield_extension_supabase_yr"
+    ],
+    "2": [
+      "self_shield_extension_supabase_cancelpendingdisconnect",
+      "self_shield_extension_supabase_cancelrefevent",
+      "self_shield_extension_supabase_canceltimeout",
+      "self_shield_extension_supabase_canpush",
+      "self_shield_extension_supabase_clearheartbeats",
+      "self_shield_extension_supabase_close",
+      "self_shield_extension_supabase_closeandretry",
+      "self_shield_extension_supabase_connect",
+      "self_shield_extension_supabase_connectionstate",
+      "self_shield_extension_supabase_connectwithfallback",
+      "self_shield_extension_supabase_destroy",
+      "self_shield_extension_supabase_disconnect",
+      "self_shield_extension_supabase_endpointurl",
+      "self_shield_extension_supabase_flushsendbuffer",
+      "self_shield_extension_supabase_h",
+      "self_shield_extension_supabase_handlenodejsracecondition",
+      "self_shield_extension_supabase_haslogger",
+      "self_shield_extension_supabase_hasreceived",
+      "self_shield_extension_supabase_heartbeatcallback",
+      "self_shield_extension_supabase_heartbeattimeout",
+      "self_shield_extension_supabase_inpendingsyncstate",
+      "self_shield_extension_supabase_isclosed",
+      "self_shield_extension_supabase_isconnected",
+      "self_shield_extension_supabase_isconnecting",
+      "self_shield_extension_supabase_isdisconnecting",
+      "self_shield_extension_supabase_isfiltervalueequal",
+      "self_shield_extension_supabase_isjoined",
+      "self_shield_extension_supabase_isjoining",
+      "self_shield_extension_supabase_ismember",
+      "self_shield_extension_supabase_joinref",
+      "self_shield_extension_supabase_leave",
+      "self_shield_extension_supabase_leaveopentopic",
+      "self_shield_extension_supabase_log",
+      "self_shield_extension_supabase_makeref",
+      "self_shield_extension_supabase_off",
+      "self_shield_extension_supabase_on",
+      "self_shield_extension_supabase_onclose",
+      "self_shield_extension_supabase_onconnclose",
+      "self_shield_extension_supabase_onconnerror",
+      "self_shield_extension_supabase_onconnopen",
+      "self_shield_extension_supabase_onerror",
+      "self_shield_extension_supabase_onmessage",
+      "self_shield_extension_supabase_onopen",
+      "self_shield_extension_supabase_ontimeout",
+      "self_shield_extension_supabase_parsejson",
+      "self_shield_extension_supabase_ping",
+      "self_shield_extension_supabase_push",
+      "self_shield_extension_supabase_receive",
+      "self_shield_extension_supabase_reconnectauth",
+      "self_shield_extension_supabase_remove",
+      "self_shield_extension_supabase_removeallchannels",
+      "self_shield_extension_supabase_removechannel",
+      "self_shield_extension_supabase_replacetransport",
+      "self_shield_extension_supabase_replyeventname",
+      "self_shield_extension_supabase_reset",
+      "self_shield_extension_supabase_resetheartbeat",
+      "self_shield_extension_supabase_schedulependingdisconnect",
+      "self_shield_extension_supabase_scheduletimeout",
+      "self_shield_extension_supabase_send",
+      "self_shield_extension_supabase_sendheartbeat",
+      "self_shield_extension_supabase_setupconnectionhandlers",
+      "self_shield_extension_supabase_starttimeout",
+      "self_shield_extension_supabase_subscribe",
+      "self_shield_extension_supabase_teardown",
+      "self_shield_extension_supabase_terminateworker",
+      "self_shield_extension_supabase_track",
+      "self_shield_extension_supabase_transportconnect",
+      "self_shield_extension_supabase_transportname",
+      "self_shield_extension_supabase_trigger",
+      "self_shield_extension_supabase_triggerchanerror",
+      "self_shield_extension_supabase_triggerstatecallbacks",
+      "self_shield_extension_supabase_unsubscribe",
+      "self_shield_extension_supabase_untrack",
+      "self_shield_extension_supabase_updatefilterbindings",
+      "self_shield_extension_supabase_updatefiltermessage",
+      "self_shield_extension_supabase_updatejoinpayload",
+      "self_shield_extension_supabase_updatepostgresbindings",
+      "self_shield_extension_supabase_waitforauthifneeded",
+      "self_shield_extension_supabase_waitforbufferdone",
+      "self_shield_extension_supabase_xdomainrequest",
+      "self_shield_extension_supabase_xhrrequest"
+    ],
+    "3": [
+      "audit_route_get",
+      "audit_route_post",
+      "blocklists_route_get",
+      "blocklists_route_post",
+      "cleanup_route_post",
+      "commands_route_get",
+      "commands_route_post",
+      "dashboard_layout_dashboardlayout",
+      "deviceid_route_post",
+      "devices_route_get",
+      "devices_route_post",
+      "eid_route_delete",
+      "entries_route_post",
+      "id_route_delete",
+      "id_route_get",
+      "id_route_patch",
+      "lib_api_helpers_apierror",
+      "lib_api_helpers_apisuccess",
+      "lib_api_helpers_isautherror",
+      "lib_api_helpers_requireauth",
+      "lib_firebase_getfirebaseadmin",
+      "lib_firebase_sendfcmmessage",
+      "me_route_get",
+      "overrides_route_get",
+      "overrides_route_post",
+      "overview_route_get",
+      "register_route_post",
+      "reports_route_get",
+      "screenshots_route_get",
+      "self_shield_web_src_app_api_audit_route_ts",
+      "self_shield_web_src_app_api_audit_screenshots_route_ts",
+      "self_shield_web_src_app_api_auth_me_route_ts",
+      "self_shield_web_src_app_api_blocklists_id_entries_eid_route_ts",
+      "self_shield_web_src_app_api_blocklists_id_entries_route_ts",
+      "self_shield_web_src_app_api_blocklists_id_route_ts",
+      "self_shield_web_src_app_api_blocklists_push_deviceid_route_ts",
+      "self_shield_web_src_app_api_blocklists_route_ts",
+      "self_shield_web_src_app_api_commands_id_route_ts",
+      "self_shield_web_src_app_api_commands_route_ts",
+      "self_shield_web_src_app_api_devices_id_route_ts",
+      "self_shield_web_src_app_api_devices_id_sync_route_ts",
+      "self_shield_web_src_app_api_devices_route_ts",
+      "self_shield_web_src_app_api_extension_devices_cleanup_route_ts",
+      "self_shield_web_src_app_api_extension_devices_id_route_ts",
+      "self_shield_web_src_app_api_extension_register_route_ts",
+      "self_shield_web_src_app_api_extension_sync_route_ts",
+      "self_shield_web_src_app_api_overrides_id_route_ts",
+      "self_shield_web_src_app_api_overrides_route_ts",
+      "self_shield_web_src_app_api_reports_overview_route_ts",
+      "self_shield_web_src_app_api_reports_route_ts",
+      "self_shield_web_src_app_api_reports_usage_route_ts",
+      "self_shield_web_src_app_dashboard_layout_tsx",
+      "self_shield_web_src_lib_api_helpers_ts",
+      "self_shield_web_src_lib_firebase_ts",
+      "self_shield_web_src_lib_supabase_server_ts",
+      "supabase_server_createserversupabase",
+      "sync_route_get",
+      "sync_route_options",
+      "sync_route_post",
+      "usage_route_get"
+    ],
+    "4": [
+      "audit_page_auditpage",
+      "devices_activitylog_formatduration",
+      "devices_devicesettings_devicesettings",
+      "hooks_useactivitylog_useactivitylog",
+      "hooks_useapprules_useapprules",
+      "hooks_useapprules_useupdateapprule",
+      "hooks_useappschedules_useappschedules",
+      "hooks_useappschedules_usedeleteappschedule",
+      "hooks_useappschedules_useupsertappschedule",
+      "hooks_useauditlogs_useauditlogs",
+      "hooks_useblocklists_useaddentry",
+      "hooks_useblocklists_useblocklistentries",
+      "hooks_useblocklists_useblocklists",
+      "hooks_useblocklists_usedeleteentry",
+      "hooks_useblocklists_usedevicesubscriptions",
+      "hooks_useblocklists_usetogglesubscription",
+      "hooks_usedevices_usedevices",
+      "hooks_usedevicesettings_usedevicesettings",
+      "hooks_usedevicesettings_useupdatedevicesettings",
+      "hooks_usemasterlockdown_usemasterlockdown",
+      "hooks_useoverriderequests_useoverriderequests",
+      "hooks_useoverriderequests_useresolveoverride",
+      "hooks_useremotecommands_usesendcommand",
+      "hooks_usereports_usereports",
+      "hooks_usereports_usereportstats",
+      "id_page_deviceusagechart",
+      "layout_overridenotificationlistener_overridenotificationlistener",
+      "layout_tamperalertlistener_tamperalertlistener",
+      "login_page_loginpage",
+      "reports_page_reportspage",
+      "self_shield_web_src_app_auth_login_page_tsx",
+      "self_shield_web_src_app_dashboard_audit_page_tsx",
+      "self_shield_web_src_app_dashboard_devices_id_page_tsx",
+      "self_shield_web_src_app_dashboard_reports_page_tsx",
+      "self_shield_web_src_app_dashboard_settings_page_tsx",
+      "self_shield_web_src_components_devices_activitylog_tsx",
+      "self_shield_web_src_components_devices_devicesettings_tsx",
+      "self_shield_web_src_components_layout_overridenotificationlistener_tsx",
+      "self_shield_web_src_components_layout_tamperalertlistener_tsx",
+      "self_shield_web_src_hooks_useactivitylog_ts",
+      "self_shield_web_src_hooks_useapprules_ts",
+      "self_shield_web_src_hooks_useappschedules_ts",
+      "self_shield_web_src_hooks_useauditlogs_ts",
+      "self_shield_web_src_hooks_useblocklists_ts",
+      "self_shield_web_src_hooks_usedevices_ts",
+      "self_shield_web_src_hooks_usedevicesettings_ts",
+      "self_shield_web_src_hooks_usemasterlockdown_ts",
+      "self_shield_web_src_hooks_useoverriderequests_ts",
+      "self_shield_web_src_hooks_useremotecommands_ts",
+      "self_shield_web_src_hooks_usereports_ts",
+      "self_shield_web_src_lib_supabase_client_ts",
+      "settings_page_settingspage",
+      "supabase_client_createclient"
+    ],
+    "5": [
+      "self_shield_extension_supabase_binaryencode",
+      "self_shield_extension_supabase_binaryencodeuserbroadcastpush",
+      "self_shield_extension_supabase_clone",
+      "self_shield_extension_supabase_clonerequeststate",
+      "self_shield_extension_supabase_containedby",
+      "self_shield_extension_supabase_contains",
+      "self_shield_extension_supabase_dr",
+      "self_shield_extension_supabase_encode",
+      "self_shield_extension_supabase_encodebinaryuserbroadcastpush",
+      "self_shield_extension_supabase_encodejsonuserbroadcastpush",
+      "self_shield_extension_supabase_encodeuserbroadcastpush",
+      "self_shield_extension_supabase_explain",
+      "self_shield_extension_supabase_filter",
+      "self_shield_extension_supabase_from",
+      "self_shield_extension_supabase_ilikeallof",
+      "self_shield_extension_supabase_ilikeanyof",
+      "self_shield_extension_supabase_in",
+      "self_shield_extension_supabase_insert",
+      "self_shield_extension_supabase_isarraybuffer",
+      "self_shield_extension_supabase_isleaving",
+      "self_shield_extension_supabase_join",
+      "self_shield_extension_supabase_likeallof",
+      "self_shield_extension_supabase_likeanyof",
+      "self_shield_extension_supabase_list",
+      "self_shield_extension_supabase_map",
+      "self_shield_extension_supabase_matchreceive",
+      "self_shield_extension_supabase_me",
+      "self_shield_extension_supabase_notin",
+      "self_shield_extension_supabase_overlaps",
+      "self_shield_extension_supabase_pick",
+      "self_shield_extension_supabase_qr",
+      "self_shield_extension_supabase_rejoin",
+      "self_shield_extension_supabase_rpc",
+      "self_shield_extension_supabase_select",
+      "self_shield_extension_supabase_syncdiff",
+      "self_shield_extension_supabase_syncstate",
+      "self_shield_extension_supabase_tobase64",
+      "self_shield_extension_supabase_upsert",
+      "self_shield_extension_supabase_wr",
+      "self_shield_extension_supabase_xe"
+    ],
+    "6": [
+      "self_shield_extension_supabase_authenticate",
+      "self_shield_extension_supabase_binarydecode",
+      "self_shield_extension_supabase_challenge",
+      "self_shield_extension_supabase_challengeandverify",
+      "self_shield_extension_supabase_cr",
+      "self_shield_extension_supabase_decode",
+      "self_shield_extension_supabase_decodebroadcast",
+      "self_shield_extension_supabase_decodepush",
+      "self_shield_extension_supabase_decodereply",
+      "self_shield_extension_supabase_decodeuserbroadcast",
+      "self_shield_extension_supabase_er",
+      "self_shield_extension_supabase_gr",
+      "self_shield_extension_supabase_jr",
+      "self_shield_extension_supabase_kr",
+      "self_shield_extension_supabase_onconnmessage",
+      "self_shield_extension_supabase_qt",
+      "self_shield_extension_supabase_r",
+      "self_shield_extension_supabase_register",
+      "self_shield_extension_supabase_rs",
+      "self_shield_extension_supabase_ss",
+      "self_shield_extension_supabase_t",
+      "self_shield_extension_supabase_tojson",
+      "self_shield_extension_supabase_tr",
+      "self_shield_extension_supabase_verify",
+      "self_shield_extension_supabase_vr",
+      "self_shield_extension_supabase_waitforsocketclosed",
+      "self_shield_extension_supabase_xr",
+      "self_shield_extension_supabase_xt",
+      "self_shield_extension_supabase_yt",
+      "self_shield_extension_supabase_zr",
+      "self_shield_extension_supabase_zt"
+    ],
+    "7": [
+      "self_shield_extension_supabase_ajax",
+      "self_shield_extension_supabase_batchsend",
+      "self_shield_extension_supabase_createnamespace",
+      "self_shield_extension_supabase_createnamespaceifnotexists",
+      "self_shield_extension_supabase_createtable",
+      "self_shield_extension_supabase_createtableifnotexists",
+      "self_shield_extension_supabase_dropnamespace",
+      "self_shield_extension_supabase_droptable",
+      "self_shield_extension_supabase_listnamespaces",
+      "self_shield_extension_supabase_listtables",
+      "self_shield_extension_supabase_loadnamespacemetadata",
+      "self_shield_extension_supabase_loadtable",
+      "self_shield_extension_supabase_namespaceexists",
+      "self_shield_extension_supabase_oe",
+      "self_shield_extension_supabase_poll",
+      "self_shield_extension_supabase_re",
+      "self_shield_extension_supabase_request",
+      "self_shield_extension_supabase_tableexists",
+      "self_shield_extension_supabase_updatetable"
+    ],
+    "8": [
+      "background_service_worker_checkurlwithserver",
+      "background_service_worker_clearallrules",
+      "background_service_worker_endcurrentsession",
+      "background_service_worker_flusheventbatch",
+      "background_service_worker_getbrowserinfo",
+      "background_service_worker_initsupabase",
+      "background_service_worker_logevent",
+      "background_service_worker_performunpair",
+      "background_service_worker_setuprealtimelistener",
+      "background_service_worker_startsession",
+      "background_service_worker_syncwithadminpanel",
+      "background_service_worker_trackactivetab",
+      "background_service_worker_updateblockingrules",
+      "background_service_worker_updatekeywordrules",
+      "background_service_worker_updatesafesearchrules",
+      "self_shield_extension_background_service_worker_js"
+    ],
+    "9": [
+      "self_shield_web_src_components_ui_sheet_tsx",
+      "ui_sheet_cn",
+      "ui_sheet_sheet",
+      "ui_sheet_sheetclose",
+      "ui_sheet_sheetdescription",
+      "ui_sheet_sheetportal",
+      "ui_sheet_sheettitle",
+      "ui_sheet_sheettrigger"
+    ],
+    "10": [
+      "self_shield_web_src_components_ui_dialog_tsx",
+      "ui_dialog_cn",
+      "ui_dialog_dialog",
+      "ui_dialog_dialogclose",
+      "ui_dialog_dialogportal",
+      "ui_dialog_dialogtrigger"
+    ],
+    "11": [
+      "self_shield_web_src_components_ui_dropdown_menu_tsx",
+      "ui_dropdown_menu_cn",
+      "ui_dropdown_menu_dropdownmenu",
+      "ui_dropdown_menu_dropdownmenucheckboxitem",
+      "ui_dropdown_menu_dropdownmenuportal",
+      "ui_dropdown_menu_dropdownmenutrigger"
+    ],
+    "12": [
+      "content_blocker_checkandblock",
+      "content_blocker_performservercheck",
+      "content_blocker_removeblackout",
+      "content_blocker_showblockui",
+      "self_shield_extension_content_blocker_js"
+    ],
+    "13": [
+      "self_shield_web_src_components_ui_sidebar_tsx",
+      "ui_sidebar_cn",
+      "ui_sidebar_handlekeydown",
+      "ui_sidebar_sidebarmenusubbutton",
+      "ui_sidebar_usesidebar"
+    ],
+    "14": [
+      "self_shield_web_src_components_ui_table_tsx",
+      "ui_table_cn",
+      "ui_table_table",
+      "ui_table_tablebody",
+      "ui_table_tableheader"
+    ],
+    "15": [
+      "popup_popup_updatestatusui",
+      "popup_popup_updateui",
+      "popup_popup_updateuiforcurrenttab",
+      "self_shield_extension_popup_popup_js"
+    ],
+    "16": [
+      "self_shield_web_src_lib_supabase_middleware_ts",
+      "self_shield_web_src_proxy_ts",
+      "src_proxy_proxy",
+      "supabase_middleware_updatesession"
+    ],
+    "17": [
+      "audit_auditlogtable_getseveritycolor",
+      "audit_auditlogtable_getseverityicon",
+      "audit_auditlogtable_mapeventtype",
+      "self_shield_web_src_components_audit_auditlogtable_tsx"
+    ],
+    "18": [
+      "devices_connectextensionmodal_connectextension",
+      "devices_connectextensionmodal_copytoclipboard",
+      "devices_connectextensionmodal_handleopenchange",
+      "self_shield_web_src_components_devices_connectextensionmodal_tsx"
+    ],
+    "19": [
+      "devices_deviceruleseditor_handleapptoggle",
+      "devices_deviceruleseditor_handleglobaltoggle",
+      "devices_deviceruleseditor_handlelisttoggle",
+      "self_shield_web_src_components_devices_deviceruleseditor_tsx"
+    ],
+    "20": [
+      "devices_keywordmanager_handleaddkeyword",
+      "devices_keywordmanager_handledeletekeyword",
+      "devices_keywordmanager_initlist",
+      "self_shield_web_src_components_devices_keywordmanager_tsx"
+    ],
+    "21": [
+      "devices_pairdevicemodal_copytoclipboard",
+      "devices_pairdevicemodal_generatecode",
+      "devices_pairdevicemodal_handleopenchange",
+      "self_shield_web_src_components_devices_pairdevicemodal_tsx"
+    ],
+    "22": [
+      "devices_scheduleeditor_handleadd",
+      "devices_scheduleeditor_handledelete",
+      "devices_scheduleeditor_toggleday",
+      "self_shield_web_src_components_devices_scheduleeditor_tsx"
+    ],
+    "23": [
+      "protection_strictprotection_addapp",
+      "protection_strictprotection_removeapp",
+      "protection_strictprotection_togglesetting",
+      "self_shield_web_src_components_protection_strictprotection_tsx"
+    ],
+    "24": [
+      "self_shield_web_src_app_auth_signup_page_tsx",
+      "signup_page_handlesignup",
+      "signup_page_validateform"
+    ],
+    "25": [
+      "check_route_get",
+      "check_route_options",
+      "self_shield_web_src_app_api_extension_check_route_ts"
+    ],
+    "26": [
+      "dashboard_devicehealthgrid_getdeviceicon",
+      "dashboard_devicehealthgrid_getstatus",
+      "self_shield_web_src_components_dashboard_devicehealthgrid_tsx"
+    ],
+    "27": [
+      "dashboard_devicestatustable_getdeviceicon",
+      "dashboard_devicestatustable_getstatus",
+      "self_shield_web_src_components_dashboard_devicestatustable_tsx"
+    ],
+    "28": [
+      "devices_devicecard_getdeviceicon",
+      "devices_devicecard_handleaction",
+      "self_shield_web_src_components_devices_devicecard_tsx"
+    ],
+    "29": [
+      "self_shield_web_src_components_settings_accountsettings_tsx",
+      "settings_accountsettings_accountsettings",
+      "settings_accountsettings_key"
+    ],
+    "30": [
+      "self_shield_web_src_components_ui_avatar_tsx",
+      "ui_avatar_avatarbadge",
+      "ui_avatar_cn"
+    ],
+    "31": [
+      "self_shield_web_src_components_ui_card_tsx",
+      "ui_card_cardaction",
+      "ui_card_cn"
+    ],
+    "32": [
+      "content_search_filter_scrubsearch",
+      "self_shield_extension_content_search_filter_js"
+    ],
+    "33": [
+      "scratch_activate_user_device_activatedevice",
+      "self_shield_web_scratch_activate_user_device_ts"
+    ],
+    "34": [
+      "scratch_check_device_state_checkdevice",
+      "self_shield_web_scratch_check_device_state_ts"
+    ],
+    "35": [
+      "scripts_check_users_checkusers",
+      "self_shield_web_scripts_check_users_ts"
+    ],
+    "36": [
+      "scripts_seed_blocklists_seed",
+      "self_shield_web_scripts_seed_blocklists_ts"
+    ],
+    "37": [
+      "scripts_sync_users_syncusers",
+      "self_shield_web_scripts_sync_users_ts"
+    ],
+    "38": [
+      "app_layout_rootlayout",
+      "self_shield_web_src_app_layout_tsx"
+    ],
+    "39": [
+      "dashboard_page_dashboardoverview",
+      "self_shield_web_src_app_dashboard_page_tsx"
+    ],
+    "40": [
+      "blocklists_page_blocklistspage",
+      "self_shield_web_src_app_dashboard_blocklists_page_tsx"
+    ],
+    "41": [
+      "devices_page_rendersectionheader",
+      "self_shield_web_src_app_dashboard_devices_page_tsx"
+    ],
+    "42": [
+      "dns_page_dnspage",
+      "self_shield_web_src_app_dashboard_dns_page_tsx"
+    ],
+    "43": [
+      "overrides_page_handleresolve",
+      "self_shield_web_src_app_dashboard_overrides_page_tsx"
+    ],
+    "44": [
+      "protection_page_protectionpage",
+      "self_shield_web_src_app_dashboard_protection_page_tsx"
+    ],
+    "45": [
+      "health_route_get",
+      "self_shield_web_src_app_api_health_route_ts"
+    ],
+    "46": [
+      "dashboard_quickactions_quickactions",
+      "self_shield_web_src_components_dashboard_quickactions_tsx"
+    ],
+    "47": [
+      "dashboard_systemhealth_systemhealth",
+      "self_shield_web_src_components_dashboard_systemhealth_tsx"
+    ],
+    "48": [
+      "layout_appsidebar_handlelogout",
+      "self_shield_web_src_components_layout_appsidebar_tsx"
+    ],
+    "49": [
+      "layout_header_header",
+      "self_shield_web_src_components_layout_header_tsx"
+    ],
+    "50": [
+      "overrides_overrideslist_handleaction",
+      "self_shield_web_src_components_overrides_overrideslist_tsx"
+    ],
+    "51": [
+      "providers_providers_providers",
+      "self_shield_web_src_components_providers_providers_tsx"
+    ],
+    "52": [
+      "reports_weeklyreportpreview_weeklyreportpreview",
+      "self_shield_web_src_components_reports_weeklyreportpreview_tsx"
+    ],
+    "53": [
+      "self_shield_web_src_components_ui_backbutton_tsx",
+      "ui_backbutton_backbutton"
+    ],
+    "54": [
+      "self_shield_web_src_components_ui_badge_tsx",
+      "ui_badge_badge"
+    ],
+    "55": [
+      "self_shield_web_src_components_ui_button_tsx",
+      "ui_button_cn"
+    ],
+    "56": [
+      "self_shield_web_src_components_ui_input_tsx",
+      "ui_input_input"
+    ],
+    "57": [
+      "self_shield_web_src_components_ui_label_tsx",
+      "ui_label_cn"
+    ],
+    "58": [
+      "self_shield_web_src_components_ui_separator_tsx",
+      "ui_separator_cn"
+    ],
+    "59": [
+      "self_shield_web_src_components_ui_skeleton_tsx",
+      "ui_skeleton_skeleton"
+    ],
+    "60": [
+      "self_shield_web_src_components_ui_tooltip_tsx",
+      "ui_tooltip_tooltipcontent"
+    ],
+    "61": [
+      "hooks_use_mobile_useismobile",
+      "self_shield_web_src_hooks_use_mobile_ts"
+    ],
+    "62": [
+      "lib_csv_export_downloadcsv",
+      "self_shield_web_src_lib_csv_export_ts"
+    ],
+    "63": [
+      "lib_utils_cn",
+      "self_shield_web_src_lib_utils_ts"
+    ],
+    "64": [
+      "self_shield_extension_blocked_page_blocked_js"
+    ],
+    "65": [
+      "self_shield_web_eslint_config_mjs"
+    ],
+    "66": [
+      "self_shield_web_next_env_d_ts"
+    ],
+    "67": [
+      "self_shield_web_next_config_ts"
+    ],
+    "68": [
+      "self_shield_web_postcss_config_mjs"
+    ],
+    "69": [
+      "self_shield_web_src_components_themetoggle_tsx"
+    ],
+    "70": [
+      "self_shield_web_src_components_blocklists_blocklisttable_tsx"
+    ],
+    "71": [
+      "self_shield_web_src_components_dashboard_categorydistribution_tsx"
+    ],
+    "72": [
+      "self_shield_web_src_components_dashboard_recentauditfeed_tsx"
+    ],
+    "73": [
+      "self_shield_web_src_components_dashboard_statcards_tsx"
+    ],
+    "74": [
+      "self_shield_web_src_components_dashboard_threatanalysis_tsx"
+    ],
+    "75": [
+      "self_shield_web_src_components_devices_schedulegrid_tsx"
+    ],
+    "76": [
+      "self_shield_web_src_components_dns_dnsfilteringtools_tsx"
+    ],
+    "77": [
+      "self_shield_web_src_components_reports_usagechart_tsx"
+    ],
+    "78": [
+      "self_shield_web_src_components_ui_progress_tsx"
+    ],
+    "79": [
+      "self_shield_web_src_components_ui_sonner_tsx"
+    ],
+    "80": [
+      "self_shield_web_src_components_ui_switch_tsx"
+    ],
+    "81": [
+      "self_shield_web_src_components_ui_tabs_tsx"
+    ],
+    "82": [
+      "self_shield_web_src_lib_supabase_admin_ts"
+    ]
+  },
+  "cohesion": {
+    "0": 0.02,
+    "1": 0.05,
+    "2": 0.05,
+    "3": 0.08,
+    "4": 0.05,
+    "5": 0.08,
+    "6": 0.09,
+    "7": 0.16,
+    "8": 0.23,
+    "9": 0.25,
+    "10": 0.33,
+    "11": 0.33,
+    "12": 0.5,
+    "13": 0.5,
+    "14": 0.4,
+    "15": 0.67,
+    "16": 0.5,
+    "17": 0.5,
+    "18": 0.5,
+    "19": 0.5,
+    "20": 0.5,
+    "21": 0.67,
+    "22": 0.5,
+    "23": 0.5,
+    "24": 1.0,
+    "25": 0.67,
+    "26": 0.67,
+    "27": 0.67,
+    "28": 0.67,
+    "29": 0.67,
+    "30": 0.67,
+    "31": 0.67,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0,
+    "77": 1.0,
+    "78": 1.0,
+    "79": 1.0,
+    "80": 1.0,
+    "81": 1.0,
+    "82": 1.0
+  },
+  "gods": [
+    {
+      "id": "self_shield_extension_supabase_pt",
+      "label": "Pt()",
+      "degree": 73
+    },
+    {
+      "id": "self_shield_extension_supabase_returnresult",
+      "label": "_returnResult()",
+      "degree": 44
+    },
+    {
+      "id": "self_shield_extension_supabase_sr",
+      "label": "Sr()",
+      "degree": 42
+    },
+    {
+      "id": "self_shield_extension_supabase_constructor",
+      "label": "constructor()",
+      "degree": 33
+    },
+    {
+      "id": "self_shield_extension_supabase_join",
+      "label": "join()",
+      "degree": 29
+    },
+    {
+      "id": "self_shield_extension_supabase_handleoperation",
+      "label": "handleOperation()",
+      "degree": 28
+    },
+    {
+      "id": "supabase_client_createclient",
+      "label": "createClient()",
+      "degree": 27
+    },
+    {
+      "id": "self_shield_extension_supabase_push",
+      "label": "push()",
+      "degree": 24
+    },
+    {
+      "id": "self_shield_extension_supabase_usesession",
+      "label": "_useSession()",
+      "degree": 24
+    },
+    {
+      "id": "lib_api_helpers_requireauth",
+      "label": "requireAuth()",
+      "degree": 24
+    }
+  ],
+  "surprises": [
+    {
+      "source": "initSupabase()",
+      "target": "createClient()",
+      "source_files": [
+        "self-shield-extension\\background\\service-worker.js",
+        "self-shield-web\\src\\lib\\supabase\\client.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities; peripheral node `initSupabase()` unexpectedly reaches hub `createClient()`"
+    },
+    {
+      "source": "LoginPage()",
+      "target": "createClient()",
+      "source_files": [
+        "self-shield-web\\src\\app\\(auth)\\login\\page.tsx",
+        "self-shield-web\\src\\lib\\supabase\\client.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `LoginPage()` unexpectedly reaches hub `createClient()`"
+    },
+    {
+      "source": "DashboardLayout()",
+      "target": "createServerSupabase()",
+      "source_files": [
+        "self-shield-web\\src\\app\\(dashboard)\\layout.tsx",
+        "self-shield-web\\src\\lib\\supabase\\server.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `DashboardLayout()` unexpectedly reaches hub `createServerSupabase()`"
+    },
+    {
+      "source": "POST()",
+      "target": "createServerSupabase()",
+      "source_files": [
+        "self-shield-web\\src\\app\\api\\extension\\devices\\cleanup\\route.ts",
+        "self-shield-web\\src\\lib\\supabase\\server.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `POST()` unexpectedly reaches hub `createServerSupabase()`"
+    },
+    {
+      "source": "POST()",
+      "target": "createServerSupabase()",
+      "source_files": [
+        "self-shield-web\\src\\app\\api\\extension\\register\\route.ts",
+        "self-shield-web\\src\\lib\\supabase\\server.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `POST()` unexpectedly reaches hub `createServerSupabase()`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `createClient()` connect `Community 4` to `Community 8`?",
+      "why": "High betweenness centrality (0.007) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Pt()` connect `Community 1` to `Community 0`, `Community 6`?",
+      "why": "High betweenness centrality (0.003) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `initSupabase()` connect `Community 8` to `Community 4`?",
+      "why": "High betweenness centrality (0.003) - this node is a cross-community bridge."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.02 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 1` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.05 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 2` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.05 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 3` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
