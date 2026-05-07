@@ -3042,7 +3042,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_cr",
-      "community": 6,
+      "community": 1,
       "norm_label": "cr()"
     },
     {
@@ -4554,7 +4554,7 @@
       "source_file": "self-shield-web\\src\\proxy.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_proxy_ts",
-      "community": 16,
+      "community": 23,
       "norm_label": "proxy.ts"
     },
     {
@@ -4563,7 +4563,7 @@
       "source_file": "self-shield-web\\src\\proxy.ts",
       "source_location": "L4",
       "id": "src_proxy_proxy",
-      "community": 16,
+      "community": 23,
       "norm_label": "proxy()"
     },
     {
@@ -5319,7 +5319,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_audit_auditlogtable_tsx",
-      "community": 17,
+      "community": 16,
       "norm_label": "auditlogtable.tsx"
     },
     {
@@ -5328,7 +5328,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L12",
       "id": "audit_auditlogtable_getseverityicon",
-      "community": 17,
+      "community": 16,
       "norm_label": "getseverityicon()"
     },
     {
@@ -5337,7 +5337,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L21",
       "id": "audit_auditlogtable_getseveritycolor",
-      "community": 17,
+      "community": 16,
       "norm_label": "getseveritycolor()"
     },
     {
@@ -5346,7 +5346,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L30",
       "id": "audit_auditlogtable_mapeventtype",
-      "community": 17,
+      "community": 16,
       "norm_label": "mapeventtype()"
     },
     {
@@ -5508,7 +5508,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_connectextensionmodal_tsx",
-      "community": 18,
+      "community": 17,
       "norm_label": "connectextensionmodal.tsx"
     },
     {
@@ -5517,7 +5517,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L17",
       "id": "devices_connectextensionmodal_handleopenchange",
-      "community": 18,
+      "community": 17,
       "norm_label": "handleopenchange()"
     },
     {
@@ -5526,7 +5526,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L25",
       "id": "devices_connectextensionmodal_connectextension",
-      "community": 18,
+      "community": 17,
       "norm_label": "connectextension()"
     },
     {
@@ -5535,7 +5535,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L52",
       "id": "devices_connectextensionmodal_copytoclipboard",
-      "community": 18,
+      "community": 17,
       "norm_label": "copytoclipboard()"
     },
     {
@@ -5571,7 +5571,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_deviceruleseditor_tsx",
-      "community": 19,
+      "community": 18,
       "norm_label": "deviceruleseditor.tsx"
     },
     {
@@ -5580,7 +5580,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L29",
       "id": "devices_deviceruleseditor_handleglobaltoggle",
-      "community": 19,
+      "community": 18,
       "norm_label": "handleglobaltoggle()"
     },
     {
@@ -5589,7 +5589,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L39",
       "id": "devices_deviceruleseditor_handleapptoggle",
-      "community": 19,
+      "community": 18,
       "norm_label": "handleapptoggle()"
     },
     {
@@ -5598,7 +5598,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L49",
       "id": "devices_deviceruleseditor_handlelisttoggle",
-      "community": 19,
+      "community": 18,
       "norm_label": "handlelisttoggle()"
     },
     {
@@ -5625,7 +5625,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_keywordmanager_tsx",
-      "community": 20,
+      "community": 19,
       "norm_label": "keywordmanager.tsx"
     },
     {
@@ -5634,7 +5634,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L42",
       "id": "devices_keywordmanager_initlist",
-      "community": 20,
+      "community": 19,
       "norm_label": "initlist()"
     },
     {
@@ -5643,7 +5643,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L105",
       "id": "devices_keywordmanager_handleaddkeyword",
-      "community": 20,
+      "community": 19,
       "norm_label": "handleaddkeyword()"
     },
     {
@@ -5652,7 +5652,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L121",
       "id": "devices_keywordmanager_handledeletekeyword",
-      "community": 20,
+      "community": 19,
       "norm_label": "handledeletekeyword()"
     },
     {
@@ -5661,7 +5661,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_pairdevicemodal_tsx",
-      "community": 21,
+      "community": 20,
       "norm_label": "pairdevicemodal.tsx"
     },
     {
@@ -5670,7 +5670,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L19",
       "id": "devices_pairdevicemodal_generatecode",
-      "community": 21,
+      "community": 20,
       "norm_label": "generatecode()"
     },
     {
@@ -5679,7 +5679,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L42",
       "id": "devices_pairdevicemodal_handleopenchange",
-      "community": 21,
+      "community": 20,
       "norm_label": "handleopenchange()"
     },
     {
@@ -5688,7 +5688,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L55",
       "id": "devices_pairdevicemodal_copytoclipboard",
-      "community": 21,
+      "community": 20,
       "norm_label": "copytoclipboard()"
     },
     {
@@ -5697,7 +5697,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_scheduleeditor_tsx",
-      "community": 22,
+      "community": 21,
       "norm_label": "scheduleeditor.tsx"
     },
     {
@@ -5706,7 +5706,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L30",
       "id": "devices_scheduleeditor_toggleday",
-      "community": 22,
+      "community": 21,
       "norm_label": "toggleday()"
     },
     {
@@ -5715,7 +5715,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L39",
       "id": "devices_scheduleeditor_handleadd",
-      "community": 22,
+      "community": 21,
       "norm_label": "handleadd()"
     },
     {
@@ -5724,7 +5724,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L58",
       "id": "devices_scheduleeditor_handledelete",
-      "community": 22,
+      "community": 21,
       "norm_label": "handledelete()"
     },
     {
@@ -5841,7 +5841,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_protection_strictprotection_tsx",
-      "community": 23,
+      "community": 22,
       "norm_label": "strictprotection.tsx"
     },
     {
@@ -5850,7 +5850,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L24",
       "id": "protection_strictprotection_togglesetting",
-      "community": 23,
+      "community": 22,
       "norm_label": "togglesetting()"
     },
     {
@@ -5859,7 +5859,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L33",
       "id": "protection_strictprotection_addapp",
-      "community": 23,
+      "community": 22,
       "norm_label": "addapp()"
     },
     {
@@ -5868,7 +5868,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L41",
       "id": "protection_strictprotection_removeapp",
-      "community": 23,
+      "community": 22,
       "norm_label": "removeapp()"
     },
     {
@@ -6903,7 +6903,7 @@
       "source_file": "self-shield-web\\src\\lib\\supabase\\middleware.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_supabase_middleware_ts",
-      "community": 16,
+      "community": 23,
       "norm_label": "middleware.ts"
     },
     {
@@ -6912,7 +6912,7 @@
       "source_file": "self-shield-web\\src\\lib\\supabase\\middleware.ts",
       "source_location": "L4",
       "id": "supabase_middleware_updatesession",
-      "community": 16,
+      "community": 23,
       "norm_label": "updatesession()"
     },
     {
@@ -22803,6 +22803,18 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-extension\\background\\service-worker.js",
+      "source_location": "L126",
+      "weight": 1.0,
+      "_src": "background_service_worker_performunpair",
+      "_tgt": "background_service_worker_clearallrules",
+      "source": "background_service_worker_performunpair",
+      "target": "background_service_worker_clearallrules",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-extension\\background\\service-worker.js",
       "source_location": "L384",
       "weight": 1.0,
       "_src": "background_service_worker_syncwithadminpanel",
@@ -26346,8 +26358,8 @@
       "source_file": "self-shield-web\\src\\hooks\\useMasterLockdown.ts",
       "source_location": "L8",
       "weight": 1.0,
-      "_src": "hooks_usemasterlockdown_usemasterlockdown",
-      "_tgt": "hooks_usedevices_usedevices",
+      "_src": "hooks_usedevices_usedevices",
+      "_tgt": "hooks_usemasterlockdown_usemasterlockdown",
       "source": "hooks_usedevices_usedevices",
       "target": "hooks_usemasterlockdown_usemasterlockdown"
     },
