@@ -2,6 +2,7 @@
 
 ## Corpus Check
 - 124 files · ~110,850 words
+- 124 files · ~118,692 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -24,6 +25,8 @@
 - [[_COMMUNITY_Community 15|Community 15]]
 - [[_COMMUNITY_Community 20|Community 20]]
 - [[_COMMUNITY_Community 23|Community 23]]
+- [[_COMMUNITY_Community 16|Community 16]]
+- [[_COMMUNITY_Community 21|Community 21]]
 - [[_COMMUNITY_Community 24|Community 24]]
 
 ## God Nodes (most connected - your core abstractions)
@@ -85,7 +88,7 @@ Cohesion: 0.16
 Nodes (19): ajax(), batchSend(), createNamespace(), createNamespaceIfNotExists(), createTable(), createTableIfNotExists(), dropNamespace(), dropTable() (+11 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.24
+Cohesion: 0.23
 Nodes (14): clearAllRules(), endCurrentSession(), flushEventBatch(), getBrowserInfo(), initSupabase(), logEvent(), performUnpair(), setupRealtimeListener() (+6 more)
 
 ### Community 12 - "Community 12"
@@ -100,13 +103,13 @@ Nodes (2): cn(), SidebarMenuSubButton()
 Cohesion: 0.67
 Nodes (2): updateStatusUI(), updateUI()
 
-### Community 20 - "Community 20"
-Cohesion: 0.67
-Nodes (2): generateCode(), handleOpenChange()
-
-### Community 23 - "Community 23"
+### Community 16 - "Community 16"
 Cohesion: 0.5
 Nodes (2): proxy(), updateSession()
+
+### Community 21 - "Community 21"
+Cohesion: 0.67
+Nodes (2): generateCode(), handleOpenChange()
 
 ### Community 24 - "Community 24"
 Cohesion: 1.0
@@ -119,9 +122,9 @@ Nodes (2): handleSignup(), validateForm()
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 15`** (4 nodes): `updateStatusUI()`, `updateUI()`, `updateUIForCurrentTab()`, `popup.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 20`** (4 nodes): `copyToClipboard()`, `generateCode()`, `handleOpenChange()`, `PairDeviceModal.tsx`
+- **Thin community `Community 16`** (4 nodes): `middleware.ts`, `proxy.ts`, `proxy()`, `updateSession()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 23`** (4 nodes): `middleware.ts`, `proxy.ts`, `proxy()`, `updateSession()`
+- **Thin community `Community 21`** (4 nodes): `copyToClipboard()`, `generateCode()`, `handleOpenChange()`, `PairDeviceModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 24`** (3 nodes): `page.tsx`, `handleSignup()`, `validateForm()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
