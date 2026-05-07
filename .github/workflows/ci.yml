@@ -1,0 +1,42 @@
+name: Production CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: self-shield-web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./self-shield-web
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./self-shield-web
+        run: npm run lint
+
+      - name: Type Check
+        working-directory: ./self-shield-web
+        run: npx tsc --noEmit
+
+      - name: Build Check
+        working-directory: ./self-shield-web
+        run: npm run build
+        env:
+          # Add any build-time env vars needed for Next.js build
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_TELEMETRY_DISABLED: 1
