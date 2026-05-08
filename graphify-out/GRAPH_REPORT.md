@@ -1,4 +1,4 @@
-# Graph Report - self-shield  (2026-05-07)
+# Graph Report - self-shield  (2026-05-08)
 
 ## Corpus Check
 - 124 files · ~118,692 words
