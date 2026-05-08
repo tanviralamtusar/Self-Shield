@@ -6,6 +6,30 @@
         <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/core-data" />
+            <option value="$PROJECT_DIR$/core/core-database" />
+            <option value="$PROJECT_DIR$/core/core-network" />
+            <option value="$PROJECT_DIR$/core/core-security" />
+            <option value="$PROJECT_DIR$/core/core-ui" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/feature-appblock" />
+            <option value="$PROJECT_DIR$/feature/feature-blocklist" />
+            <option value="$PROJECT_DIR$/feature/feature-dashboard" />
+            <option value="$PROJECT_DIR$/feature/feature-focusmode" />
+            <option value="$PROJECT_DIR$/feature/feature-onboarding" />
+            <option value="$PROJECT_DIR$/feature/feature-reports" />
+            <option value="$PROJECT_DIR$/feature/feature-settings" />
+            <option value="$PROJECT_DIR$/service" />
+            <option value="$PROJECT_DIR$/service/accessibility" />
+            <option value="$PROJECT_DIR$/service/vpn" />
+            <option value="$PROJECT_DIR$/service/watchdog" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
