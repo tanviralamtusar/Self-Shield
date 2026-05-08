@@ -1,0 +1,31 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.kapt)
+}
+
+android {
+    namespace 'com.selfshield.feature.settings'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.11'
+    }
+}
+
+dependencies {
+    implementation(project(':core:core-ui'))
+    implementation(project(':core:core-data'))
+    implementation(libs.androidx.core-ktx)
+    implementation(libs.androidx.material3)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}
