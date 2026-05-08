@@ -123,7 +123,7 @@ async function performUnpair() {
     });
 
     // 2. Clear blocking rules
-    await clearBlockingRules().catch(() => {});
+    await clearAllRules().catch(() => {});
 
     // 3. Clear Realtime
     if (realtimeChannel) {

@@ -23211,6 +23211,18 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-extension\\background\\service-worker.js",
+      "source_location": "L126",
+      "weight": 1.0,
+      "_src": "background_service_worker_performunpair",
+      "_tgt": "background_service_worker_clearallrules",
+      "source": "background_service_worker_performunpair",
+      "target": "background_service_worker_clearallrules",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-extension\\background\\service-worker.js",
       "source_location": "L384",
       "weight": 1.0,
       "_src": "background_service_worker_syncwithadminpanel",
