@@ -147,12 +147,13 @@ See [instruction.md](./instruction.md) for detailed setup instructions.
 ## 🤝 Contributors
 
 - **Tanvir Alam Tusar** - Project Creator & Lead Developer
+- **Mehrab Ahmed Saif** -  Lead Developer
 
 ---
 
 ## 📄 License
 
-[Add your license here]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
