@@ -4,6 +4,222 @@
   "graph": {},
   "nodes": [
     {
+      "label": "MainActivity.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
+      "community": 13,
+      "norm_label": "mainactivity.kt"
+    },
+    {
+      "label": "MainActivity",
+      "file_type": "code",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L16",
+      "id": "selfshield_mainactivity_mainactivity",
+      "community": 13,
+      "norm_label": "mainactivity"
+    },
+    {
+      "label": ".onCreate()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L18",
+      "id": "selfshield_mainactivity_mainactivity_oncreate",
+      "community": 13,
+      "norm_label": ".oncreate()"
+    },
+    {
+      "label": "Greeting()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L34",
+      "id": "selfshield_mainactivity_greeting",
+      "community": 13,
+      "norm_label": "greeting()"
+    },
+    {
+      "label": "GreetingPreview()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L42",
+      "id": "selfshield_mainactivity_greetingpreview",
+      "community": 13,
+      "norm_label": "greetingpreview()"
+    },
+    {
+      "label": "SelfShieldApplication.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\SelfShieldApplication.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_app_src_main_java_com_selfshield_selfshieldapplication_kt",
+      "community": 37,
+      "norm_label": "selfshieldapplication.kt"
+    },
+    {
+      "label": "SelfShieldApplication",
+      "file_type": "code",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\SelfShieldApplication.kt",
+      "source_location": "L6",
+      "id": "selfshield_selfshieldapplication_selfshieldapplication",
+      "community": 37,
+      "norm_label": "selfshieldapplication"
+    },
+    {
+      "label": "Color.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Color.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_color_kt",
+      "community": 71,
+      "norm_label": "color.kt"
+    },
+    {
+      "label": "Theme.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Theme.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_theme_kt",
+      "community": 38,
+      "norm_label": "theme.kt"
+    },
+    {
+      "label": "SelfShieldTheme()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Theme.kt",
+      "source_location": "L36",
+      "id": "theme_theme_selfshieldtheme",
+      "community": 38,
+      "norm_label": "selfshieldtheme()"
+    },
+    {
+      "label": "Type.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Type.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_type_kt",
+      "community": 72,
+      "norm_label": "type.kt"
+    },
+    {
+      "label": "SelfShieldAccessibilityService.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\accessibility\\src\\main\\java\\com\\selfshield\\service\\accessibility\\SelfShieldAccessibilityService.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_service_accessibility_src_main_java_com_selfshield_service_accessibility_selfshieldaccessibilityservice_kt",
+      "community": 18,
+      "norm_label": "selfshieldaccessibilityservice.kt"
+    },
+    {
+      "label": "SelfShieldAccessibilityService",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\accessibility\\src\\main\\java\\com\\selfshield\\service\\accessibility\\SelfShieldAccessibilityService.kt",
+      "source_location": "L7",
+      "id": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice",
+      "community": 18,
+      "norm_label": "selfshieldaccessibilityservice"
+    },
+    {
+      "label": ".onAccessibilityEvent()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\accessibility\\src\\main\\java\\com\\selfshield\\service\\accessibility\\SelfShieldAccessibilityService.kt",
+      "source_location": "L10",
+      "id": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice_onaccessibilityevent",
+      "community": 18,
+      "norm_label": ".onaccessibilityevent()"
+    },
+    {
+      "label": ".onInterrupt()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\accessibility\\src\\main\\java\\com\\selfshield\\service\\accessibility\\SelfShieldAccessibilityService.kt",
+      "source_location": "L22",
+      "id": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice_oninterrupt",
+      "community": 18,
+      "norm_label": ".oninterrupt()"
+    },
+    {
+      "label": "SelfShieldVpnService.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_service_vpn_src_main_java_com_selfshield_service_vpn_selfshieldvpnservice_kt",
+      "community": 14,
+      "norm_label": "selfshieldvpnservice.kt"
+    },
+    {
+      "label": "SelfShieldVpnService",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L7",
+      "id": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "community": 14,
+      "norm_label": "selfshieldvpnservice"
+    },
+    {
+      "label": ".onStartCommand()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L10",
+      "id": "vpn_selfshieldvpnservice_selfshieldvpnservice_onstartcommand",
+      "community": 14,
+      "norm_label": ".onstartcommand()"
+    },
+    {
+      "label": ".onDestroy()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L16",
+      "id": "vpn_selfshieldvpnservice_selfshieldvpnservice_ondestroy",
+      "community": 14,
+      "norm_label": ".ondestroy()"
+    },
+    {
+      "label": ".startVpnTunnel()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L21",
+      "id": "vpn_selfshieldvpnservice_selfshieldvpnservice_startvpntunnel",
+      "community": 14,
+      "norm_label": ".startvpntunnel()"
+    },
+    {
+      "label": "WatchdogService.kt",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\watchdog\\src\\main\\java\\com\\selfshield\\service\\watchdog\\WatchdogService.kt",
+      "source_location": "L1",
+      "id": "self_shield_android_service_watchdog_src_main_java_com_selfshield_service_watchdog_watchdogservice_kt",
+      "community": 19,
+      "norm_label": "watchdogservice.kt"
+    },
+    {
+      "label": "WatchdogService",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\watchdog\\src\\main\\java\\com\\selfshield\\service\\watchdog\\WatchdogService.kt",
+      "source_location": "L8",
+      "id": "watchdog_watchdogservice_watchdogservice",
+      "community": 19,
+      "norm_label": "watchdogservice"
+    },
+    {
+      "label": ".onBind()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\watchdog\\src\\main\\java\\com\\selfshield\\service\\watchdog\\WatchdogService.kt",
+      "source_location": "L11",
+      "id": "watchdog_watchdogservice_watchdogservice_onbind",
+      "community": 19,
+      "norm_label": ".onbind()"
+    },
+    {
+      "label": ".onStartCommand()",
+      "file_type": "code",
+      "source_file": "self-shield-android\\service\\watchdog\\src\\main\\java\\com\\selfshield\\service\\watchdog\\WatchdogService.kt",
+      "source_location": "L13",
+      "id": "watchdog_watchdogservice_watchdogservice_onstartcommand",
+      "community": 19,
+      "norm_label": ".onstartcommand()"
+    },
+    {
       "label": "supabase.js",
       "file_type": "code",
       "source_file": "self-shield-extension\\supabase.js",
@@ -18,7 +234,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_t",
-      "community": 6,
+      "community": 9,
       "norm_label": "t()"
     },
     {
@@ -27,7 +243,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_constructor",
-      "community": 0,
+      "community": 1,
       "norm_label": "constructor()"
     },
     {
@@ -36,7 +252,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_tojson",
-      "community": 6,
+      "community": 0,
       "norm_label": "tojson()"
     },
     {
@@ -54,7 +270,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_invoke",
-      "community": 0,
+      "community": 1,
       "norm_label": "invoke()"
     },
     {
@@ -63,7 +279,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_h",
-      "community": 2,
+      "community": 1,
       "norm_label": "h()"
     },
     {
@@ -126,7 +342,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_then",
-      "community": 0,
+      "community": 6,
       "norm_label": "then()"
     },
     {
@@ -396,7 +612,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_is",
-      "community": 1,
+      "community": 2,
       "norm_label": "is()"
     },
     {
@@ -531,7 +747,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_or",
-      "community": 1,
+      "community": 2,
       "norm_label": "or()"
     },
     {
@@ -585,7 +801,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_delete",
-      "community": 1,
+      "community": 5,
       "norm_label": "delete()"
     },
     {
@@ -738,7 +954,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_decode",
-      "community": 6,
+      "community": 0,
       "norm_label": "decode()"
     },
     {
@@ -747,7 +963,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_binarydecode",
-      "community": 6,
+      "community": 0,
       "norm_label": "_binarydecode()"
     },
     {
@@ -756,7 +972,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_decodeuserbroadcast",
-      "community": 6,
+      "community": 0,
       "norm_label": "_decodeuserbroadcast()"
     },
     {
@@ -810,7 +1026,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_n",
-      "community": 0,
+      "community": 1,
       "norm_label": "n()"
     },
     {
@@ -846,7 +1062,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_q",
-      "community": 0,
+      "community": 1,
       "norm_label": "q()"
     },
     {
@@ -855,7 +1071,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_resend",
-      "community": 1,
+      "community": 2,
       "norm_label": "resend()"
     },
     {
@@ -864,7 +1080,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_send",
-      "community": 2,
+      "community": 1,
       "norm_label": "send()"
     },
     {
@@ -873,7 +1089,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_receive",
-      "community": 2,
+      "community": 1,
       "norm_label": "receive()"
     },
     {
@@ -882,7 +1098,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_reset",
-      "community": 2,
+      "community": 1,
       "norm_label": "reset()"
     },
     {
@@ -891,7 +1107,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_destroy",
-      "community": 2,
+      "community": 1,
       "norm_label": "destroy()"
     },
     {
@@ -909,7 +1125,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_cancelrefevent",
-      "community": 2,
+      "community": 1,
       "norm_label": "cancelrefevent()"
     },
     {
@@ -918,7 +1134,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_canceltimeout",
-      "community": 2,
+      "community": 1,
       "norm_label": "canceltimeout()"
     },
     {
@@ -927,7 +1143,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_starttimeout",
-      "community": 2,
+      "community": 1,
       "norm_label": "starttimeout()"
     },
     {
@@ -936,7 +1152,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_hasreceived",
-      "community": 2,
+      "community": 1,
       "norm_label": "hasreceived()"
     },
     {
@@ -945,7 +1161,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_trigger",
-      "community": 2,
+      "community": 1,
       "norm_label": "trigger()"
     },
     {
@@ -954,7 +1170,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_scheduletimeout",
-      "community": 2,
+      "community": 1,
       "norm_label": "scheduletimeout()"
     },
     {
@@ -972,7 +1188,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_teardown",
-      "community": 2,
+      "community": 1,
       "norm_label": "teardown()"
     },
     {
@@ -981,7 +1197,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onclose",
-      "community": 2,
+      "community": 1,
       "norm_label": "onclose()"
     },
     {
@@ -990,7 +1206,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onerror",
-      "community": 2,
+      "community": 1,
       "norm_label": "onerror()"
     },
     {
@@ -999,7 +1215,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_on",
-      "community": 2,
+      "community": 1,
       "norm_label": "on()"
     },
     {
@@ -1008,7 +1224,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_off",
-      "community": 2,
+      "community": 1,
       "norm_label": "off()"
     },
     {
@@ -1017,7 +1233,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_canpush",
-      "community": 2,
+      "community": 1,
       "norm_label": "canpush()"
     },
     {
@@ -1026,7 +1242,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_push",
-      "community": 2,
+      "community": 1,
       "norm_label": "push()"
     },
     {
@@ -1035,7 +1251,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_leave",
-      "community": 2,
+      "community": 1,
       "norm_label": "leave()"
     },
     {
@@ -1044,7 +1260,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onmessage",
-      "community": 2,
+      "community": 1,
       "norm_label": "onmessage()"
     },
     {
@@ -1062,7 +1278,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ismember",
-      "community": 2,
+      "community": 1,
       "norm_label": "ismember()"
     },
     {
@@ -1071,7 +1287,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_joinref",
-      "community": 2,
+      "community": 1,
       "norm_label": "joinref()"
     },
     {
@@ -1080,7 +1296,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_rejoin",
-      "community": 5,
+      "community": 1,
       "norm_label": "rejoin()"
     },
     {
@@ -1089,7 +1305,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_replyeventname",
-      "community": 2,
+      "community": 1,
       "norm_label": "replyeventname()"
     },
     {
@@ -1098,7 +1314,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isclosed",
-      "community": 2,
+      "community": 1,
       "norm_label": "isclosed()"
     },
     {
@@ -1116,7 +1332,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isjoined",
-      "community": 2,
+      "community": 1,
       "norm_label": "isjoined()"
     },
     {
@@ -1125,7 +1341,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isjoining",
-      "community": 2,
+      "community": 1,
       "norm_label": "isjoining()"
     },
     {
@@ -1134,7 +1350,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isleaving",
-      "community": 5,
+      "community": 1,
       "norm_label": "isleaving()"
     },
     {
@@ -1143,7 +1359,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_request",
-      "community": 7,
+      "community": 6,
       "norm_label": "request()"
     },
     {
@@ -1152,7 +1368,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_fetchrequest",
-      "community": 0,
+      "community": 6,
       "norm_label": "fetchrequest()"
     },
     {
@@ -1161,7 +1377,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_xdomainrequest",
-      "community": 2,
+      "community": 1,
       "norm_label": "xdomainrequest()"
     },
     {
@@ -1170,7 +1386,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_xhrrequest",
-      "community": 2,
+      "community": 1,
       "norm_label": "xhrrequest()"
     },
     {
@@ -1179,7 +1395,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_parsejson",
-      "community": 2,
+      "community": 1,
       "norm_label": "parsejson()"
     },
     {
@@ -1206,7 +1422,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_normalizeendpoint",
-      "community": 0,
+      "community": 1,
       "norm_label": "normalizeendpoint()"
     },
     {
@@ -1215,7 +1431,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_endpointurl",
-      "community": 2,
+      "community": 0,
       "norm_label": "endpointurl()"
     },
     {
@@ -1224,7 +1440,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_closeandretry",
-      "community": 2,
+      "community": 1,
       "norm_label": "closeandretry()"
     },
     {
@@ -1233,7 +1449,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ontimeout",
-      "community": 2,
+      "community": 1,
       "norm_label": "ontimeout()"
     },
     {
@@ -1251,7 +1467,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_poll",
-      "community": 7,
+      "community": 0,
       "norm_label": "poll()"
     },
     {
@@ -1260,7 +1476,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_batchsend",
-      "community": 7,
+      "community": 0,
       "norm_label": "batchsend()"
     },
     {
@@ -1269,7 +1485,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_close",
-      "community": 2,
+      "community": 1,
       "norm_label": "close()"
     },
     {
@@ -1278,7 +1494,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ajax",
-      "community": 7,
+      "community": 0,
       "norm_label": "ajax()"
     },
     {
@@ -1287,7 +1503,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onjoin",
-      "community": 0,
+      "community": 1,
       "norm_label": "onjoin()"
     },
     {
@@ -1296,7 +1512,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onleave",
-      "community": 0,
+      "community": 1,
       "norm_label": "onleave()"
     },
     {
@@ -1305,7 +1521,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onsync",
-      "community": 0,
+      "community": 1,
       "norm_label": "onsync()"
     },
     {
@@ -1323,7 +1539,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_inpendingsyncstate",
-      "community": 2,
+      "community": 1,
       "norm_label": "inpendingsyncstate()"
     },
     {
@@ -1377,7 +1593,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_decodepush",
-      "community": 6,
+      "community": 0,
       "norm_label": "decodepush()"
     },
     {
@@ -1386,7 +1602,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_decodereply",
-      "community": 6,
+      "community": 0,
       "norm_label": "decodereply()"
     },
     {
@@ -1395,7 +1611,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_decodebroadcast",
-      "community": 6,
+      "community": 0,
       "norm_label": "decodebroadcast()"
     },
     {
@@ -1413,7 +1629,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_replacetransport",
-      "community": 2,
+      "community": 1,
       "norm_label": "replacetransport()"
     },
     {
@@ -1431,7 +1647,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_disconnect",
-      "community": 2,
+      "community": 1,
       "norm_label": "disconnect()"
     },
     {
@@ -1440,7 +1656,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_connect",
-      "community": 2,
+      "community": 1,
       "norm_label": "connect()"
     },
     {
@@ -1449,7 +1665,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_log",
-      "community": 2,
+      "community": 1,
       "norm_label": "log()"
     },
     {
@@ -1458,7 +1674,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_haslogger",
-      "community": 2,
+      "community": 1,
       "norm_label": "haslogger()"
     },
     {
@@ -1467,7 +1683,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onopen",
-      "community": 2,
+      "community": 1,
       "norm_label": "onopen()"
     },
     {
@@ -1485,7 +1701,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ping",
-      "community": 2,
+      "community": 1,
       "norm_label": "ping()"
     },
     {
@@ -1494,7 +1710,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_transportname",
-      "community": 2,
+      "community": 1,
       "norm_label": "transportname()"
     },
     {
@@ -1503,7 +1719,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_transportconnect",
-      "community": 2,
+      "community": 0,
       "norm_label": "transportconnect()"
     },
     {
@@ -1512,7 +1728,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getsession",
-      "community": 1,
+      "community": 9,
       "norm_label": "getsession()"
     },
     {
@@ -1530,7 +1746,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_connectwithfallback",
-      "community": 2,
+      "community": 1,
       "norm_label": "connectwithfallback()"
     },
     {
@@ -1539,7 +1755,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_clearheartbeats",
-      "community": 2,
+      "community": 1,
       "norm_label": "clearheartbeats()"
     },
     {
@@ -1548,7 +1764,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onconnopen",
-      "community": 2,
+      "community": 1,
       "norm_label": "onconnopen()"
     },
     {
@@ -1557,7 +1773,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_heartbeattimeout",
-      "community": 2,
+      "community": 1,
       "norm_label": "heartbeattimeout()"
     },
     {
@@ -1566,7 +1782,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_resetheartbeat",
-      "community": 2,
+      "community": 1,
       "norm_label": "resetheartbeat()"
     },
     {
@@ -1575,7 +1791,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_waitforbufferdone",
-      "community": 2,
+      "community": 1,
       "norm_label": "waitforbufferdone()"
     },
     {
@@ -1584,7 +1800,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_waitforsocketclosed",
-      "community": 6,
+      "community": 9,
       "norm_label": "waitforsocketclosed()"
     },
     {
@@ -1593,7 +1809,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onconnclose",
-      "community": 2,
+      "community": 1,
       "norm_label": "onconnclose()"
     },
     {
@@ -1602,7 +1818,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onconnerror",
-      "community": 2,
+      "community": 1,
       "norm_label": "onconnerror()"
     },
     {
@@ -1611,7 +1827,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_triggerchanerror",
-      "community": 2,
+      "community": 1,
       "norm_label": "triggerchanerror()"
     },
     {
@@ -1620,7 +1836,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_connectionstate",
-      "community": 2,
+      "community": 1,
       "norm_label": "connectionstate()"
     },
     {
@@ -1629,7 +1845,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isconnected",
-      "community": 2,
+      "community": 1,
       "norm_label": "isconnected()"
     },
     {
@@ -1638,7 +1854,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_remove",
-      "community": 2,
+      "community": 1,
       "norm_label": "remove()"
     },
     {
@@ -1647,7 +1863,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_channel",
-      "community": 0,
+      "community": 1,
       "norm_label": "channel()"
     },
     {
@@ -1656,7 +1872,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_makeref",
-      "community": 2,
+      "community": 1,
       "norm_label": "makeref()"
     },
     {
@@ -1665,7 +1881,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_sendheartbeat",
-      "community": 2,
+      "community": 1,
       "norm_label": "sendheartbeat()"
     },
     {
@@ -1674,7 +1890,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_flushsendbuffer",
-      "community": 2,
+      "community": 1,
       "norm_label": "flushsendbuffer()"
     },
     {
@@ -1683,7 +1899,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onconnmessage",
-      "community": 6,
+      "community": 0,
       "norm_label": "onconnmessage()"
     },
     {
@@ -1692,7 +1908,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_triggerstatecallbacks",
-      "community": 2,
+      "community": 1,
       "norm_label": "triggerstatecallbacks()"
     },
     {
@@ -1701,7 +1917,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_leaveopentopic",
-      "community": 2,
+      "community": 1,
       "norm_label": "leaveopentopic()"
     },
     {
@@ -1791,7 +2007,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_subscribe",
-      "community": 2,
+      "community": 1,
       "norm_label": "subscribe()"
     },
     {
@@ -1800,7 +2016,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_unsubscribe",
-      "community": 2,
+      "community": 1,
       "norm_label": "unsubscribe()"
     },
     {
@@ -1809,7 +2025,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updatejoinpayload",
-      "community": 2,
+      "community": 1,
       "norm_label": "updatejoinpayload()"
     },
     {
@@ -1818,7 +2034,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updatefilterbindings",
-      "community": 2,
+      "community": 1,
       "norm_label": "updatefilterbindings()"
     },
     {
@@ -1836,7 +2052,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getchannel",
-      "community": 0,
+      "community": 1,
       "norm_label": "getchannel()"
     },
     {
@@ -1854,7 +2070,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updatepostgresbindings",
-      "community": 2,
+      "community": 1,
       "norm_label": "_updatepostgresbindings()"
     },
     {
@@ -1872,7 +2088,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_track",
-      "community": 2,
+      "community": 1,
       "norm_label": "track()"
     },
     {
@@ -1881,7 +2097,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_untrack",
-      "community": 2,
+      "community": 1,
       "norm_label": "untrack()"
     },
     {
@@ -1908,7 +2124,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updatefiltermessage",
-      "community": 2,
+      "community": 1,
       "norm_label": "_updatefiltermessage()"
     },
     {
@@ -1944,7 +2160,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isfiltervalueequal",
-      "community": 2,
+      "community": 1,
       "norm_label": "isfiltervalueequal()"
     },
     {
@@ -1989,7 +2205,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_heartbeatcallback",
-      "community": 2,
+      "community": 1,
       "norm_label": "heartbeatcallback()"
     },
     {
@@ -2061,7 +2277,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isconnecting",
-      "community": 2,
+      "community": 1,
       "norm_label": "isconnecting()"
     },
     {
@@ -2070,7 +2286,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isdisconnecting",
-      "community": 2,
+      "community": 1,
       "norm_label": "isdisconnecting()"
     },
     {
@@ -2079,7 +2295,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getsocket",
-      "community": 0,
+      "community": 1,
       "norm_label": "getsocket()"
     },
     {
@@ -2088,7 +2304,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getchannels",
-      "community": 0,
+      "community": 1,
       "norm_label": "getchannels()"
     },
     {
@@ -2097,7 +2313,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_removechannel",
-      "community": 2,
+      "community": 1,
       "norm_label": "removechannel()"
     },
     {
@@ -2106,7 +2322,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_removeallchannels",
-      "community": 2,
+      "community": 1,
       "norm_label": "removeallchannels()"
     },
     {
@@ -2124,7 +2340,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_schedulependingdisconnect",
-      "community": 2,
+      "community": 1,
       "norm_label": "_schedulependingdisconnect()"
     },
     {
@@ -2133,7 +2349,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_cancelpendingdisconnect",
-      "community": 2,
+      "community": 1,
       "norm_label": "_cancelpendingdisconnect()"
     },
     {
@@ -2151,7 +2367,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_waitforauthifneeded",
-      "community": 2,
+      "community": 1,
       "norm_label": "_waitforauthifneeded()"
     },
     {
@@ -2169,7 +2385,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_setupconnectionhandlers",
-      "community": 2,
+      "community": 1,
       "norm_label": "_setupconnectionhandlers()"
     },
     {
@@ -2178,7 +2394,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_handlenodejsracecondition",
-      "community": 2,
+      "community": 1,
       "norm_label": "_handlenodejsracecondition()"
     },
     {
@@ -2205,7 +2421,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_terminateworker",
-      "community": 2,
+      "community": 1,
       "norm_label": "_terminateworker()"
     },
     {
@@ -2232,7 +2448,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_reconnectauth",
-      "community": 2,
+      "community": 1,
       "norm_label": "_reconnectauth()"
     },
     {
@@ -2268,7 +2484,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ee",
-      "community": 0,
+      "community": 1,
       "norm_label": "ee()"
     },
     {
@@ -2277,7 +2493,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_re",
-      "community": 7,
+      "community": 6,
       "norm_label": "re()"
     },
     {
@@ -2286,7 +2502,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listnamespaces",
-      "community": 7,
+      "community": 6,
       "norm_label": "listnamespaces()"
     },
     {
@@ -2295,7 +2511,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_createnamespace",
-      "community": 7,
+      "community": 0,
       "norm_label": "createnamespace()"
     },
     {
@@ -2304,7 +2520,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_dropnamespace",
-      "community": 7,
+      "community": 6,
       "norm_label": "dropnamespace()"
     },
     {
@@ -2313,7 +2529,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_loadnamespacemetadata",
-      "community": 7,
+      "community": 6,
       "norm_label": "loadnamespacemetadata()"
     },
     {
@@ -2322,7 +2538,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_namespaceexists",
-      "community": 7,
+      "community": 6,
       "norm_label": "namespaceexists()"
     },
     {
@@ -2331,7 +2547,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_createnamespaceifnotexists",
-      "community": 7,
+      "community": 0,
       "norm_label": "createnamespaceifnotexists()"
     },
     {
@@ -2340,7 +2556,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_oe",
-      "community": 7,
+      "community": 6,
       "norm_label": "oe()"
     },
     {
@@ -2349,7 +2565,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listtables",
-      "community": 7,
+      "community": 6,
       "norm_label": "listtables()"
     },
     {
@@ -2358,7 +2574,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_createtable",
-      "community": 7,
+      "community": 6,
       "norm_label": "createtable()"
     },
     {
@@ -2367,7 +2583,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updatetable",
-      "community": 7,
+      "community": 6,
       "norm_label": "updatetable()"
     },
     {
@@ -2376,7 +2592,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_droptable",
-      "community": 7,
+      "community": 6,
       "norm_label": "droptable()"
     },
     {
@@ -2385,7 +2601,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_loadtable",
-      "community": 7,
+      "community": 6,
       "norm_label": "loadtable()"
     },
     {
@@ -2394,7 +2610,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_tableexists",
-      "community": 7,
+      "community": 6,
       "norm_label": "tableexists()"
     },
     {
@@ -2403,7 +2619,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_createtableifnotexists",
-      "community": 7,
+      "community": 6,
       "norm_label": "createtableifnotexists()"
     },
     {
@@ -2520,7 +2736,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_execute",
-      "community": 0,
+      "community": 6,
       "norm_label": "execute()"
     },
     {
@@ -2538,7 +2754,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_catch",
-      "community": 0,
+      "community": 6,
       "norm_label": "catch()"
     },
     {
@@ -2547,7 +2763,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_finally",
-      "community": 0,
+      "community": 6,
       "norm_label": "finally()"
     },
     {
@@ -2556,7 +2772,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getpromise",
-      "community": 0,
+      "community": 6,
       "norm_label": "getpromise()"
     },
     {
@@ -2898,7 +3114,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_pt",
-      "community": 1,
+      "community": 2,
       "norm_label": "pt()"
     },
     {
@@ -2907,7 +3123,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ct",
-      "community": 1,
+      "community": 2,
       "norm_label": "ct()"
     },
     {
@@ -2916,7 +3132,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_nt",
-      "community": 1,
+      "community": 2,
       "norm_label": "nt()"
     },
     {
@@ -2925,7 +3141,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_bt",
-      "community": 1,
+      "community": 7,
       "norm_label": "bt()"
     },
     {
@@ -2934,7 +3150,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_wt",
-      "community": 1,
+      "community": 2,
       "norm_label": "wt()"
     },
     {
@@ -2943,7 +3159,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_zt",
-      "community": 6,
+      "community": 9,
       "norm_label": "zt()"
     },
     {
@@ -2952,7 +3168,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_yt",
-      "community": 6,
+      "community": 9,
       "norm_label": "yt()"
     },
     {
@@ -2961,7 +3177,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_xt",
-      "community": 6,
+      "community": 9,
       "norm_label": "xt()"
     },
     {
@@ -2970,7 +3186,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_qt",
-      "community": 6,
+      "community": 9,
       "norm_label": "qt()"
     },
     {
@@ -2979,7 +3195,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_er",
-      "community": 6,
+      "community": 9,
       "norm_label": "er()"
     },
     {
@@ -2988,7 +3204,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_tr",
-      "community": 6,
+      "community": 9,
       "norm_label": "tr()"
     },
     {
@@ -2997,7 +3213,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_rr",
-      "community": 1,
+      "community": 7,
       "norm_label": "rr()"
     },
     {
@@ -3006,7 +3222,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ir",
-      "community": 1,
+      "community": 7,
       "norm_label": "ir()"
     },
     {
@@ -3015,7 +3231,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ar",
-      "community": 0,
+      "community": 1,
       "norm_label": "ar()"
     },
     {
@@ -3024,7 +3240,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_nr",
-      "community": 1,
+      "community": 2,
       "norm_label": "nr()"
     },
     {
@@ -3033,7 +3249,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_hr",
-      "community": 1,
+      "community": 2,
       "norm_label": "hr()"
     },
     {
@@ -3042,7 +3258,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_cr",
-      "community": 6,
+      "community": 9,
       "norm_label": "cr()"
     },
     {
@@ -3051,7 +3267,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ur",
-      "community": 0,
+      "community": 6,
       "norm_label": "ur()"
     },
     {
@@ -3069,7 +3285,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_pr",
-      "community": 1,
+      "community": 2,
       "norm_label": "pr()"
     },
     {
@@ -3078,7 +3294,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_mr",
-      "community": 1,
+      "community": 2,
       "norm_label": "mr()"
     },
     {
@@ -3087,7 +3303,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_yr",
-      "community": 1,
+      "community": 2,
       "norm_label": "yr()"
     },
     {
@@ -3096,7 +3312,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_br",
-      "community": 1,
+      "community": 2,
       "norm_label": "br()"
     },
     {
@@ -3114,7 +3330,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_r",
-      "community": 6,
+      "community": 0,
       "norm_label": "_r()"
     },
     {
@@ -3123,7 +3339,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_vr",
-      "community": 6,
+      "community": 0,
       "norm_label": "vr()"
     },
     {
@@ -3132,7 +3348,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_sr",
-      "community": 1,
+      "community": 2,
       "norm_label": "sr()"
     },
     {
@@ -3141,7 +3357,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signout",
-      "community": 1,
+      "community": 2,
       "norm_label": "signout()"
     },
     {
@@ -3150,7 +3366,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_inviteuserbyemail",
-      "community": 1,
+      "community": 2,
       "norm_label": "inviteuserbyemail()"
     },
     {
@@ -3159,7 +3375,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_generatelink",
-      "community": 1,
+      "community": 2,
       "norm_label": "generatelink()"
     },
     {
@@ -3168,7 +3384,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_createuser",
-      "community": 1,
+      "community": 2,
       "norm_label": "createuser()"
     },
     {
@@ -3177,7 +3393,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listusers",
-      "community": 1,
+      "community": 2,
       "norm_label": "listusers()"
     },
     {
@@ -3186,7 +3402,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getuserbyid",
-      "community": 1,
+      "community": 2,
       "norm_label": "getuserbyid()"
     },
     {
@@ -3195,7 +3411,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updateuserbyid",
-      "community": 1,
+      "community": 2,
       "norm_label": "updateuserbyid()"
     },
     {
@@ -3204,7 +3420,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_deleteuser",
-      "community": 1,
+      "community": 2,
       "norm_label": "deleteuser()"
     },
     {
@@ -3213,7 +3429,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listfactors",
-      "community": 1,
+      "community": 2,
       "norm_label": "_listfactors()"
     },
     {
@@ -3222,7 +3438,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_deletefactor",
-      "community": 1,
+      "community": 2,
       "norm_label": "_deletefactor()"
     },
     {
@@ -3231,7 +3447,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listoauthclients",
-      "community": 1,
+      "community": 2,
       "norm_label": "_listoauthclients()"
     },
     {
@@ -3240,7 +3456,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_createoauthclient",
-      "community": 1,
+      "community": 2,
       "norm_label": "_createoauthclient()"
     },
     {
@@ -3249,7 +3465,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getoauthclient",
-      "community": 1,
+      "community": 2,
       "norm_label": "_getoauthclient()"
     },
     {
@@ -3258,7 +3474,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updateoauthclient",
-      "community": 1,
+      "community": 2,
       "norm_label": "_updateoauthclient()"
     },
     {
@@ -3267,7 +3483,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_deleteoauthclient",
-      "community": 1,
+      "community": 2,
       "norm_label": "_deleteoauthclient()"
     },
     {
@@ -3276,7 +3492,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_regenerateoauthclientsecret",
-      "community": 1,
+      "community": 2,
       "norm_label": "_regenerateoauthclientsecret()"
     },
     {
@@ -3285,7 +3501,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listcustomproviders",
-      "community": 1,
+      "community": 2,
       "norm_label": "_listcustomproviders()"
     },
     {
@@ -3294,7 +3510,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_createcustomprovider",
-      "community": 1,
+      "community": 2,
       "norm_label": "_createcustomprovider()"
     },
     {
@@ -3303,7 +3519,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getcustomprovider",
-      "community": 1,
+      "community": 2,
       "norm_label": "_getcustomprovider()"
     },
     {
@@ -3312,7 +3528,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updatecustomprovider",
-      "community": 1,
+      "community": 2,
       "norm_label": "_updatecustomprovider()"
     },
     {
@@ -3321,7 +3537,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_deletecustomprovider",
-      "community": 1,
+      "community": 2,
       "norm_label": "_deletecustomprovider()"
     },
     {
@@ -3330,7 +3546,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_adminlistpasskeys",
-      "community": 1,
+      "community": 2,
       "norm_label": "_adminlistpasskeys()"
     },
     {
@@ -3339,7 +3555,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_admindeletepasskey",
-      "community": 1,
+      "community": 2,
       "norm_label": "_admindeletepasskey()"
     },
     {
@@ -3357,7 +3573,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_kr",
-      "community": 6,
+      "community": 0,
       "norm_label": "kr()"
     },
     {
@@ -3366,7 +3582,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_jr",
-      "community": 6,
+      "community": 9,
       "norm_label": "jr()"
     },
     {
@@ -3375,7 +3591,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_gr",
-      "community": 6,
+      "community": 9,
       "norm_label": "gr()"
     },
     {
@@ -3384,7 +3600,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_zr",
-      "community": 6,
+      "community": 0,
       "norm_label": "zr()"
     },
     {
@@ -3393,7 +3609,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_xr",
-      "community": 6,
+      "community": 2,
       "norm_label": "xr()"
     },
     {
@@ -3402,7 +3618,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_rs",
-      "community": 6,
+      "community": 2,
       "norm_label": "rs()"
     },
     {
@@ -3411,7 +3627,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ss",
-      "community": 6,
+      "community": 2,
       "norm_label": "ss()"
     },
     {
@@ -3420,7 +3636,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_enroll",
-      "community": 1,
+      "community": 2,
       "norm_label": "_enroll()"
     },
     {
@@ -3429,7 +3645,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_challenge",
-      "community": 6,
+      "community": 2,
       "norm_label": "_challenge()"
     },
     {
@@ -3438,7 +3654,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_verify",
-      "community": 6,
+      "community": 2,
       "norm_label": "_verify()"
     },
     {
@@ -3447,7 +3663,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_authenticate",
-      "community": 6,
+      "community": 2,
       "norm_label": "_authenticate()"
     },
     {
@@ -3456,7 +3672,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_register",
-      "community": 6,
+      "community": 2,
       "norm_label": "_register()"
     },
     {
@@ -3501,7 +3717,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_returnresult",
-      "community": 1,
+      "community": 2,
       "norm_label": "_returnresult()"
     },
     {
@@ -3510,7 +3726,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_logprefix",
-      "community": 0,
+      "community": 7,
       "norm_label": "_logprefix()"
     },
     {
@@ -3519,7 +3735,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_debug",
-      "community": 1,
+      "community": 7,
       "norm_label": "_debug()"
     },
     {
@@ -3528,7 +3744,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_initialize",
-      "community": 1,
+      "community": 7,
       "norm_label": "initialize()"
     },
     {
@@ -3537,7 +3753,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinanonymously",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinanonymously()"
     },
     {
@@ -3546,7 +3762,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signup",
-      "community": 1,
+      "community": 2,
       "norm_label": "signup()"
     },
     {
@@ -3555,7 +3771,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithpassword",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithpassword()"
     },
     {
@@ -3564,7 +3780,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithoauth",
-      "community": 1,
+      "community": 7,
       "norm_label": "signinwithoauth()"
     },
     {
@@ -3573,7 +3789,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_exchangecodeforsession",
-      "community": 1,
+      "community": 2,
       "norm_label": "exchangecodeforsession()"
     },
     {
@@ -3582,7 +3798,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithweb3",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithweb3()"
     },
     {
@@ -3591,7 +3807,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithethereum",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithethereum()"
     },
     {
@@ -3600,7 +3816,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithsolana",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithsolana()"
     },
     {
@@ -3609,7 +3825,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithidtoken",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithidtoken()"
     },
     {
@@ -3618,7 +3834,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithotp",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithotp()"
     },
     {
@@ -3627,7 +3843,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_verifyotp",
-      "community": 1,
+      "community": 2,
       "norm_label": "verifyotp()"
     },
     {
@@ -3636,7 +3852,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithsso",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithsso()"
     },
     {
@@ -3645,7 +3861,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_reauthenticate",
-      "community": 1,
+      "community": 2,
       "norm_label": "reauthenticate()"
     },
     {
@@ -3654,7 +3870,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_acquirelock",
-      "community": 1,
+      "community": 2,
       "norm_label": "_acquirelock()"
     },
     {
@@ -3663,7 +3879,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_usesession",
-      "community": 1,
+      "community": 2,
       "norm_label": "_usesession()"
     },
     {
@@ -3672,7 +3888,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_loadsession",
-      "community": 1,
+      "community": 2,
       "norm_label": "__loadsession()"
     },
     {
@@ -3681,7 +3897,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getuser",
-      "community": 1,
+      "community": 2,
       "norm_label": "getuser()"
     },
     {
@@ -3690,7 +3906,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updateuser",
-      "community": 1,
+      "community": 2,
       "norm_label": "updateuser()"
     },
     {
@@ -3699,7 +3915,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_setsession",
-      "community": 1,
+      "community": 2,
       "norm_label": "setsession()"
     },
     {
@@ -3708,7 +3924,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_refreshsession",
-      "community": 1,
+      "community": 2,
       "norm_label": "refreshsession()"
     },
     {
@@ -3717,7 +3933,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getsessionfromurl",
-      "community": 1,
+      "community": 7,
       "norm_label": "_getsessionfromurl()"
     },
     {
@@ -3726,7 +3942,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isimplicitgrantcallback",
-      "community": 1,
+      "community": 7,
       "norm_label": "_isimplicitgrantcallback()"
     },
     {
@@ -3735,7 +3951,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ispkcecallback",
-      "community": 1,
+      "community": 7,
       "norm_label": "_ispkcecallback()"
     },
     {
@@ -3744,7 +3960,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onauthstatechange",
-      "community": 0,
+      "community": 7,
       "norm_label": "onauthstatechange()"
     },
     {
@@ -3753,7 +3969,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_emitinitialsession",
-      "community": 1,
+      "community": 2,
       "norm_label": "_emitinitialsession()"
     },
     {
@@ -3762,7 +3978,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_resetpasswordforemail",
-      "community": 1,
+      "community": 2,
       "norm_label": "resetpasswordforemail()"
     },
     {
@@ -3771,7 +3987,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getuseridentities",
-      "community": 1,
+      "community": 2,
       "norm_label": "getuseridentities()"
     },
     {
@@ -3780,7 +3996,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_linkidentity",
-      "community": 1,
+      "community": 2,
       "norm_label": "linkidentity()"
     },
     {
@@ -3789,7 +4005,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_linkidentityoauth",
-      "community": 1,
+      "community": 2,
       "norm_label": "linkidentityoauth()"
     },
     {
@@ -3798,7 +4014,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_linkidentityidtoken",
-      "community": 1,
+      "community": 2,
       "norm_label": "linkidentityidtoken()"
     },
     {
@@ -3807,7 +4023,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_unlinkidentity",
-      "community": 1,
+      "community": 2,
       "norm_label": "unlinkidentity()"
     },
     {
@@ -3816,7 +4032,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_refreshaccesstoken",
-      "community": 1,
+      "community": 2,
       "norm_label": "_refreshaccesstoken()"
     },
     {
@@ -3825,7 +4041,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_isvalidsession",
-      "community": 1,
+      "community": 2,
       "norm_label": "_isvalidsession()"
     },
     {
@@ -3834,7 +4050,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_handleprovidersignin",
-      "community": 1,
+      "community": 7,
       "norm_label": "_handleprovidersignin()"
     },
     {
@@ -3843,7 +4059,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_recoverandrefresh",
-      "community": 1,
+      "community": 2,
       "norm_label": "_recoverandrefresh()"
     },
     {
@@ -3852,7 +4068,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_callrefreshtoken",
-      "community": 1,
+      "community": 2,
       "norm_label": "_callrefreshtoken()"
     },
     {
@@ -3861,7 +4077,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_notifyallsubscribers",
-      "community": 1,
+      "community": 2,
       "norm_label": "_notifyallsubscribers()"
     },
     {
@@ -3870,7 +4086,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_savesession",
-      "community": 1,
+      "community": 2,
       "norm_label": "_savesession()"
     },
     {
@@ -3879,7 +4095,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_removesession",
-      "community": 1,
+      "community": 2,
       "norm_label": "_removesession()"
     },
     {
@@ -3888,7 +4104,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_removevisibilitychangedcallback",
-      "community": 1,
+      "community": 7,
       "norm_label": "_removevisibilitychangedcallback()"
     },
     {
@@ -3897,7 +4113,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_startautorefresh",
-      "community": 1,
+      "community": 7,
       "norm_label": "_startautorefresh()"
     },
     {
@@ -3906,7 +4122,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_stopautorefresh",
-      "community": 1,
+      "community": 7,
       "norm_label": "_stopautorefresh()"
     },
     {
@@ -3915,7 +4131,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_autorefreshtokentick",
-      "community": 1,
+      "community": 7,
       "norm_label": "_autorefreshtokentick()"
     },
     {
@@ -3924,7 +4140,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_handlevisibilitychange",
-      "community": 1,
+      "community": 7,
       "norm_label": "_handlevisibilitychange()"
     },
     {
@@ -3933,7 +4149,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_onvisibilitychanged",
-      "community": 1,
+      "community": 7,
       "norm_label": "_onvisibilitychanged()"
     },
     {
@@ -3942,7 +4158,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_geturlforprovider",
-      "community": 1,
+      "community": 7,
       "norm_label": "_geturlforprovider()"
     },
     {
@@ -3951,7 +4167,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_unenroll",
-      "community": 1,
+      "community": 2,
       "norm_label": "_unenroll()"
     },
     {
@@ -3960,7 +4176,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_challengeandverify",
-      "community": 6,
+      "community": 2,
       "norm_label": "_challengeandverify()"
     },
     {
@@ -3969,7 +4185,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getauthenticatorassurancelevel",
-      "community": 1,
+      "community": 2,
       "norm_label": "_getauthenticatorassurancelevel()"
     },
     {
@@ -3978,7 +4194,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getauthorizationdetails",
-      "community": 1,
+      "community": 2,
       "norm_label": "_getauthorizationdetails()"
     },
     {
@@ -3987,7 +4203,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_approveauthorization",
-      "community": 1,
+      "community": 2,
       "norm_label": "_approveauthorization()"
     },
     {
@@ -3996,7 +4212,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_denyauthorization",
-      "community": 1,
+      "community": 2,
       "norm_label": "_denyauthorization()"
     },
     {
@@ -4005,7 +4221,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listoauthgrants",
-      "community": 1,
+      "community": 2,
       "norm_label": "_listoauthgrants()"
     },
     {
@@ -4014,7 +4230,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_revokeoauthgrant",
-      "community": 1,
+      "community": 2,
       "norm_label": "_revokeoauthgrant()"
     },
     {
@@ -4023,7 +4239,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_fetchjwk",
-      "community": 1,
+      "community": 9,
       "norm_label": "fetchjwk()"
     },
     {
@@ -4032,7 +4248,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getclaims",
-      "community": 1,
+      "community": 9,
       "norm_label": "getclaims()"
     },
     {
@@ -4041,7 +4257,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_signinwithpasskey",
-      "community": 1,
+      "community": 2,
       "norm_label": "signinwithpasskey()"
     },
     {
@@ -4050,7 +4266,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_registerpasskey",
-      "community": 1,
+      "community": 2,
       "norm_label": "registerpasskey()"
     },
     {
@@ -4059,7 +4275,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_startpasskeyregistration",
-      "community": 1,
+      "community": 2,
       "norm_label": "_startpasskeyregistration()"
     },
     {
@@ -4068,7 +4284,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_verifypasskeyregistration",
-      "community": 1,
+      "community": 2,
       "norm_label": "_verifypasskeyregistration()"
     },
     {
@@ -4077,7 +4293,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_startpasskeyauthentication",
-      "community": 1,
+      "community": 2,
       "norm_label": "_startpasskeyauthentication()"
     },
     {
@@ -4086,7 +4302,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_verifypasskeyauthentication",
-      "community": 1,
+      "community": 2,
       "norm_label": "_verifypasskeyauthentication()"
     },
     {
@@ -4095,7 +4311,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listpasskeys",
-      "community": 1,
+      "community": 2,
       "norm_label": "_listpasskeys()"
     },
     {
@@ -4104,7 +4320,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_updatepasskey",
-      "community": 1,
+      "community": 2,
       "norm_label": "_updatepasskey()"
     },
     {
@@ -4113,7 +4329,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_deletepasskey",
-      "community": 1,
+      "community": 2,
       "norm_label": "_deletepasskey()"
     },
     {
@@ -4131,7 +4347,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getaccesstoken",
-      "community": 1,
+      "community": 9,
       "norm_label": "_getaccesstoken()"
     },
     {
@@ -4140,7 +4356,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_initsupabaseauthclient",
-      "community": 0,
+      "community": 1,
       "norm_label": "_initsupabaseauthclient()"
     },
     {
@@ -4149,7 +4365,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_initrealtimeclient",
-      "community": 0,
+      "community": 1,
       "norm_label": "_initrealtimeclient()"
     },
     {
@@ -4158,7 +4374,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_listenforauthevents",
-      "community": 0,
+      "community": 7,
       "norm_label": "_listenforauthevents()"
     },
     {
@@ -4320,7 +4536,7 @@
       "source_file": "self-shield-extension\\blocked-page\\blocked.js",
       "source_location": "L1",
       "id": "self_shield_extension_blocked_page_blocked_js",
-      "community": 64,
+      "community": 73,
       "norm_label": "blocked.js"
     },
     {
@@ -4329,7 +4545,7 @@
       "source_file": "self-shield-extension\\content\\blocker.js",
       "source_location": "L1",
       "id": "self_shield_extension_content_blocker_js",
-      "community": 12,
+      "community": 15,
       "norm_label": "blocker.js"
     },
     {
@@ -4338,7 +4554,7 @@
       "source_file": "self-shield-extension\\content\\blocker.js",
       "source_location": "L29",
       "id": "content_blocker_removeblackout",
-      "community": 12,
+      "community": 15,
       "norm_label": "removeblackout()"
     },
     {
@@ -4347,7 +4563,7 @@
       "source_file": "self-shield-extension\\content\\blocker.js",
       "source_location": "L38",
       "id": "content_blocker_showblockui",
-      "community": 12,
+      "community": 15,
       "norm_label": "showblockui()"
     },
     {
@@ -4356,7 +4572,7 @@
       "source_file": "self-shield-extension\\content\\blocker.js",
       "source_location": "L46",
       "id": "content_blocker_checkandblock",
-      "community": 12,
+      "community": 15,
       "norm_label": "checkandblock()"
     },
     {
@@ -4365,7 +4581,7 @@
       "source_file": "self-shield-extension\\content\\blocker.js",
       "source_location": "L124",
       "id": "content_blocker_performservercheck",
-      "community": 12,
+      "community": 15,
       "norm_label": "performservercheck()"
     },
     {
@@ -4374,7 +4590,7 @@
       "source_file": "self-shield-extension\\content\\search_filter.js",
       "source_location": "L1",
       "id": "self_shield_extension_content_search_filter_js",
-      "community": 32,
+      "community": 39,
       "norm_label": "search_filter.js"
     },
     {
@@ -4383,7 +4599,7 @@
       "source_file": "self-shield-extension\\content\\search_filter.js",
       "source_location": "L15",
       "id": "content_search_filter_scrubsearch",
-      "community": 32,
+      "community": 39,
       "norm_label": "scrubsearch()"
     },
     {
@@ -4392,7 +4608,7 @@
       "source_file": "self-shield-extension\\popup\\popup.js",
       "source_location": "L1",
       "id": "self_shield_extension_popup_popup_js",
-      "community": 15,
+      "community": 20,
       "norm_label": "popup.js"
     },
     {
@@ -4401,7 +4617,7 @@
       "source_file": "self-shield-extension\\popup\\popup.js",
       "source_location": "L50",
       "id": "popup_popup_updateuiforcurrenttab",
-      "community": 15,
+      "community": 20,
       "norm_label": "updateuiforcurrenttab()"
     },
     {
@@ -4410,7 +4626,7 @@
       "source_file": "self-shield-extension\\popup\\popup.js",
       "source_location": "L71",
       "id": "popup_popup_updatestatusui",
-      "community": 15,
+      "community": 20,
       "norm_label": "updatestatusui()"
     },
     {
@@ -4419,7 +4635,7 @@
       "source_file": "self-shield-extension\\popup\\popup.js",
       "source_location": "L91",
       "id": "popup_popup_updateui",
-      "community": 15,
+      "community": 20,
       "norm_label": "updateui()"
     },
     {
@@ -4428,7 +4644,7 @@
       "source_file": "self-shield-web\\eslint.config.mjs",
       "source_location": "L1",
       "id": "self_shield_web_eslint_config_mjs",
-      "community": 65,
+      "community": 74,
       "norm_label": "eslint.config.mjs"
     },
     {
@@ -4437,7 +4653,7 @@
       "source_file": "self-shield-web\\next-env.d.ts",
       "source_location": "L1",
       "id": "self_shield_web_next_env_d_ts",
-      "community": 66,
+      "community": 75,
       "norm_label": "next-env.d.ts"
     },
     {
@@ -4446,7 +4662,7 @@
       "source_file": "self-shield-web\\next.config.ts",
       "source_location": "L1",
       "id": "self_shield_web_next_config_ts",
-      "community": 67,
+      "community": 76,
       "norm_label": "next.config.ts"
     },
     {
@@ -4455,7 +4671,7 @@
       "source_file": "self-shield-web\\postcss.config.mjs",
       "source_location": "L1",
       "id": "self_shield_web_postcss_config_mjs",
-      "community": 68,
+      "community": 77,
       "norm_label": "postcss.config.mjs"
     },
     {
@@ -4464,7 +4680,7 @@
       "source_file": "self-shield-web\\scratch\\activate-user-device.ts",
       "source_location": "L1",
       "id": "self_shield_web_scratch_activate_user_device_ts",
-      "community": 33,
+      "community": 40,
       "norm_label": "activate-user-device.ts"
     },
     {
@@ -4473,7 +4689,7 @@
       "source_file": "self-shield-web\\scratch\\activate-user-device.ts",
       "source_location": "L6",
       "id": "scratch_activate_user_device_activatedevice",
-      "community": 33,
+      "community": 40,
       "norm_label": "activatedevice()"
     },
     {
@@ -4482,7 +4698,7 @@
       "source_file": "self-shield-web\\scratch\\check-device-state.ts",
       "source_location": "L1",
       "id": "self_shield_web_scratch_check_device_state_ts",
-      "community": 34,
+      "community": 41,
       "norm_label": "check-device-state.ts"
     },
     {
@@ -4491,7 +4707,7 @@
       "source_file": "self-shield-web\\scratch\\check-device-state.ts",
       "source_location": "L17",
       "id": "scratch_check_device_state_checkdevice",
-      "community": 34,
+      "community": 41,
       "norm_label": "checkdevice()"
     },
     {
@@ -4500,7 +4716,7 @@
       "source_file": "self-shield-web\\scripts\\check-users.ts",
       "source_location": "L1",
       "id": "self_shield_web_scripts_check_users_ts",
-      "community": 35,
+      "community": 42,
       "norm_label": "check-users.ts"
     },
     {
@@ -4509,7 +4725,7 @@
       "source_file": "self-shield-web\\scripts\\check-users.ts",
       "source_location": "L10",
       "id": "scripts_check_users_checkusers",
-      "community": 35,
+      "community": 42,
       "norm_label": "checkusers()"
     },
     {
@@ -4518,7 +4734,7 @@
       "source_file": "self-shield-web\\scripts\\seed-blocklists.ts",
       "source_location": "L1",
       "id": "self_shield_web_scripts_seed_blocklists_ts",
-      "community": 36,
+      "community": 43,
       "norm_label": "seed-blocklists.ts"
     },
     {
@@ -4527,7 +4743,7 @@
       "source_file": "self-shield-web\\scripts\\seed-blocklists.ts",
       "source_location": "L21",
       "id": "scripts_seed_blocklists_seed",
-      "community": 36,
+      "community": 43,
       "norm_label": "seed()"
     },
     {
@@ -4536,7 +4752,7 @@
       "source_file": "self-shield-web\\scripts\\sync-users.ts",
       "source_location": "L1",
       "id": "self_shield_web_scripts_sync_users_ts",
-      "community": 37,
+      "community": 44,
       "norm_label": "sync-users.ts"
     },
     {
@@ -4545,7 +4761,7 @@
       "source_file": "self-shield-web\\scripts\\sync-users.ts",
       "source_location": "L10",
       "id": "scripts_sync_users_syncusers",
-      "community": 37,
+      "community": 44,
       "norm_label": "syncusers()"
     },
     {
@@ -4554,7 +4770,7 @@
       "source_file": "self-shield-web\\src\\proxy.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_proxy_ts",
-      "community": 16,
+      "community": 28,
       "norm_label": "proxy.ts"
     },
     {
@@ -4563,7 +4779,7 @@
       "source_file": "self-shield-web\\src\\proxy.ts",
       "source_location": "L4",
       "id": "src_proxy_proxy",
-      "community": 16,
+      "community": 28,
       "norm_label": "proxy()"
     },
     {
@@ -4572,7 +4788,7 @@
       "source_file": "self-shield-web\\src\\app\\layout.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_layout_tsx",
-      "community": 38,
+      "community": 45,
       "norm_label": "layout.tsx"
     },
     {
@@ -4581,7 +4797,7 @@
       "source_file": "self-shield-web\\src\\app\\layout.tsx",
       "source_location": "L13",
       "id": "app_layout_rootlayout",
-      "community": 38,
+      "community": 45,
       "norm_label": "rootlayout()"
     },
     {
@@ -4608,7 +4824,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_auth_signup_page_tsx",
-      "community": 24,
+      "community": 29,
       "norm_label": "page.tsx"
     },
     {
@@ -4617,7 +4833,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L23",
       "id": "signup_page_validateform",
-      "community": 24,
+      "community": 29,
       "norm_label": "validateform()"
     },
     {
@@ -4626,7 +4842,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L48",
       "id": "signup_page_handlesignup",
-      "community": 24,
+      "community": 29,
       "norm_label": "handlesignup()"
     },
     {
@@ -4653,7 +4869,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_page_tsx",
-      "community": 39,
+      "community": 46,
       "norm_label": "page.tsx"
     },
     {
@@ -4662,7 +4878,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\page.tsx",
       "source_location": "L8",
       "id": "dashboard_page_dashboardoverview",
-      "community": 39,
+      "community": 46,
       "norm_label": "dashboardoverview()"
     },
     {
@@ -4689,7 +4905,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\blocklists\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_blocklists_page_tsx",
-      "community": 40,
+      "community": 47,
       "norm_label": "page.tsx"
     },
     {
@@ -4698,7 +4914,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\blocklists\\page.tsx",
       "source_location": "L6",
       "id": "blocklists_page_blocklistspage",
-      "community": 40,
+      "community": 47,
       "norm_label": "blocklistspage()"
     },
     {
@@ -4707,7 +4923,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\devices\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_devices_page_tsx",
-      "community": 41,
+      "community": 48,
       "norm_label": "page.tsx"
     },
     {
@@ -4716,7 +4932,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\devices\\page.tsx",
       "source_location": "L70",
       "id": "devices_page_rendersectionheader",
-      "community": 41,
+      "community": 48,
       "norm_label": "rendersectionheader()"
     },
     {
@@ -4743,7 +4959,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\dns\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_dns_page_tsx",
-      "community": 42,
+      "community": 49,
       "norm_label": "page.tsx"
     },
     {
@@ -4752,7 +4968,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\dns\\page.tsx",
       "source_location": "L9",
       "id": "dns_page_dnspage",
-      "community": 42,
+      "community": 49,
       "norm_label": "dnspage()"
     },
     {
@@ -4761,7 +4977,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\overrides\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_overrides_page_tsx",
-      "community": 43,
+      "community": 50,
       "norm_label": "page.tsx"
     },
     {
@@ -4770,7 +4986,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\overrides\\page.tsx",
       "source_location": "L15",
       "id": "overrides_page_handleresolve",
-      "community": 43,
+      "community": 50,
       "norm_label": "handleresolve()"
     },
     {
@@ -4779,7 +4995,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\protection\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_protection_page_tsx",
-      "community": 44,
+      "community": 51,
       "norm_label": "page.tsx"
     },
     {
@@ -4788,7 +5004,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\protection\\page.tsx",
       "source_location": "L9",
       "id": "protection_page_protectionpage",
-      "community": 44,
+      "community": 51,
       "norm_label": "protectionpage()"
     },
     {
@@ -5103,7 +5319,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\extension\\check\\route.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_app_api_extension_check_route_ts",
-      "community": 25,
+      "community": 30,
       "norm_label": "route.ts"
     },
     {
@@ -5112,7 +5328,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\extension\\check\\route.ts",
       "source_location": "L4",
       "id": "check_route_options",
-      "community": 25,
+      "community": 30,
       "norm_label": "options()"
     },
     {
@@ -5121,7 +5337,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\extension\\check\\route.ts",
       "source_location": "L12",
       "id": "check_route_get",
-      "community": 25,
+      "community": 30,
       "norm_label": "get()"
     },
     {
@@ -5202,7 +5418,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\health\\route.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_app_api_health_route_ts",
-      "community": 45,
+      "community": 52,
       "norm_label": "route.ts"
     },
     {
@@ -5211,7 +5427,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\health\\route.ts",
       "source_location": "L3",
       "id": "health_route_get",
-      "community": 45,
+      "community": 52,
       "norm_label": "get()"
     },
     {
@@ -5310,7 +5526,7 @@
       "source_file": "self-shield-web\\src\\components\\ThemeToggle.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_themetoggle_tsx",
-      "community": 69,
+      "community": 78,
       "norm_label": "themetoggle.tsx"
     },
     {
@@ -5319,7 +5535,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_audit_auditlogtable_tsx",
-      "community": 17,
+      "community": 21,
       "norm_label": "auditlogtable.tsx"
     },
     {
@@ -5328,7 +5544,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L12",
       "id": "audit_auditlogtable_getseverityicon",
-      "community": 17,
+      "community": 21,
       "norm_label": "getseverityicon()"
     },
     {
@@ -5337,7 +5553,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L21",
       "id": "audit_auditlogtable_getseveritycolor",
-      "community": 17,
+      "community": 21,
       "norm_label": "getseveritycolor()"
     },
     {
@@ -5346,7 +5562,7 @@
       "source_file": "self-shield-web\\src\\components\\audit\\AuditLogTable.tsx",
       "source_location": "L30",
       "id": "audit_auditlogtable_mapeventtype",
-      "community": 17,
+      "community": 21,
       "norm_label": "mapeventtype()"
     },
     {
@@ -5355,7 +5571,7 @@
       "source_file": "self-shield-web\\src\\components\\blocklists\\BlocklistTable.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_blocklists_blocklisttable_tsx",
-      "community": 70,
+      "community": 79,
       "norm_label": "blocklisttable.tsx"
     },
     {
@@ -5364,7 +5580,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\CategoryDistribution.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_categorydistribution_tsx",
-      "community": 71,
+      "community": 80,
       "norm_label": "categorydistribution.tsx"
     },
     {
@@ -5373,7 +5589,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceHealthGrid.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_devicehealthgrid_tsx",
-      "community": 26,
+      "community": 31,
       "norm_label": "devicehealthgrid.tsx"
     },
     {
@@ -5382,7 +5598,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceHealthGrid.tsx",
       "source_location": "L14",
       "id": "dashboard_devicehealthgrid_getdeviceicon",
-      "community": 26,
+      "community": 31,
       "norm_label": "getdeviceicon()"
     },
     {
@@ -5391,7 +5607,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceHealthGrid.tsx",
       "source_location": "L25",
       "id": "dashboard_devicehealthgrid_getstatus",
-      "community": 26,
+      "community": 31,
       "norm_label": "getstatus()"
     },
     {
@@ -5400,7 +5616,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceStatusTable.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_devicestatustable_tsx",
-      "community": 27,
+      "community": 32,
       "norm_label": "devicestatustable.tsx"
     },
     {
@@ -5409,7 +5625,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceStatusTable.tsx",
       "source_location": "L12",
       "id": "dashboard_devicestatustable_getdeviceicon",
-      "community": 27,
+      "community": 32,
       "norm_label": "getdeviceicon()"
     },
     {
@@ -5418,7 +5634,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceStatusTable.tsx",
       "source_location": "L26",
       "id": "dashboard_devicestatustable_getstatus",
-      "community": 27,
+      "community": 32,
       "norm_label": "getstatus()"
     },
     {
@@ -5427,7 +5643,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\QuickActions.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_quickactions_tsx",
-      "community": 46,
+      "community": 53,
       "norm_label": "quickactions.tsx"
     },
     {
@@ -5436,7 +5652,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\QuickActions.tsx",
       "source_location": "L5",
       "id": "dashboard_quickactions_quickactions",
-      "community": 46,
+      "community": 53,
       "norm_label": "quickactions()"
     },
     {
@@ -5445,7 +5661,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\RecentAuditFeed.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_recentauditfeed_tsx",
-      "community": 72,
+      "community": 81,
       "norm_label": "recentauditfeed.tsx"
     },
     {
@@ -5454,7 +5670,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\StatCards.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_statcards_tsx",
-      "community": 73,
+      "community": 82,
       "norm_label": "statcards.tsx"
     },
     {
@@ -5463,7 +5679,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\SystemHealth.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_systemhealth_tsx",
-      "community": 47,
+      "community": 54,
       "norm_label": "systemhealth.tsx"
     },
     {
@@ -5472,7 +5688,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\SystemHealth.tsx",
       "source_location": "L8",
       "id": "dashboard_systemhealth_systemhealth",
-      "community": 47,
+      "community": 54,
       "norm_label": "systemhealth()"
     },
     {
@@ -5481,7 +5697,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\ThreatAnalysis.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_threatanalysis_tsx",
-      "community": 74,
+      "community": 83,
       "norm_label": "threatanalysis.tsx"
     },
     {
@@ -5508,7 +5724,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_connectextensionmodal_tsx",
-      "community": 18,
+      "community": 22,
       "norm_label": "connectextensionmodal.tsx"
     },
     {
@@ -5517,7 +5733,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L17",
       "id": "devices_connectextensionmodal_handleopenchange",
-      "community": 18,
+      "community": 22,
       "norm_label": "handleopenchange()"
     },
     {
@@ -5526,7 +5742,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L25",
       "id": "devices_connectextensionmodal_connectextension",
-      "community": 18,
+      "community": 22,
       "norm_label": "connectextension()"
     },
     {
@@ -5535,7 +5751,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ConnectExtensionModal.tsx",
       "source_location": "L52",
       "id": "devices_connectextensionmodal_copytoclipboard",
-      "community": 18,
+      "community": 22,
       "norm_label": "copytoclipboard()"
     },
     {
@@ -5544,7 +5760,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceCard.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_devicecard_tsx",
-      "community": 28,
+      "community": 33,
       "norm_label": "devicecard.tsx"
     },
     {
@@ -5553,7 +5769,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceCard.tsx",
       "source_location": "L13",
       "id": "devices_devicecard_getdeviceicon",
-      "community": 28,
+      "community": 33,
       "norm_label": "getdeviceicon()"
     },
     {
@@ -5562,7 +5778,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceCard.tsx",
       "source_location": "L34",
       "id": "devices_devicecard_handleaction",
-      "community": 28,
+      "community": 33,
       "norm_label": "handleaction()"
     },
     {
@@ -5571,7 +5787,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_deviceruleseditor_tsx",
-      "community": 19,
+      "community": 23,
       "norm_label": "deviceruleseditor.tsx"
     },
     {
@@ -5580,7 +5796,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L29",
       "id": "devices_deviceruleseditor_handleglobaltoggle",
-      "community": 19,
+      "community": 23,
       "norm_label": "handleglobaltoggle()"
     },
     {
@@ -5589,7 +5805,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L39",
       "id": "devices_deviceruleseditor_handleapptoggle",
-      "community": 19,
+      "community": 23,
       "norm_label": "handleapptoggle()"
     },
     {
@@ -5598,7 +5814,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceRulesEditor.tsx",
       "source_location": "L49",
       "id": "devices_deviceruleseditor_handlelisttoggle",
-      "community": 19,
+      "community": 23,
       "norm_label": "handlelisttoggle()"
     },
     {
@@ -5625,7 +5841,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_keywordmanager_tsx",
-      "community": 20,
+      "community": 24,
       "norm_label": "keywordmanager.tsx"
     },
     {
@@ -5634,7 +5850,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L42",
       "id": "devices_keywordmanager_initlist",
-      "community": 20,
+      "community": 24,
       "norm_label": "initlist()"
     },
     {
@@ -5643,7 +5859,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L105",
       "id": "devices_keywordmanager_handleaddkeyword",
-      "community": 20,
+      "community": 24,
       "norm_label": "handleaddkeyword()"
     },
     {
@@ -5652,7 +5868,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\KeywordManager.tsx",
       "source_location": "L121",
       "id": "devices_keywordmanager_handledeletekeyword",
-      "community": 20,
+      "community": 24,
       "norm_label": "handledeletekeyword()"
     },
     {
@@ -5661,7 +5877,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_pairdevicemodal_tsx",
-      "community": 21,
+      "community": 25,
       "norm_label": "pairdevicemodal.tsx"
     },
     {
@@ -5670,7 +5886,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L19",
       "id": "devices_pairdevicemodal_generatecode",
-      "community": 21,
+      "community": 25,
       "norm_label": "generatecode()"
     },
     {
@@ -5679,7 +5895,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L42",
       "id": "devices_pairdevicemodal_handleopenchange",
-      "community": 21,
+      "community": 25,
       "norm_label": "handleopenchange()"
     },
     {
@@ -5688,7 +5904,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\PairDeviceModal.tsx",
       "source_location": "L55",
       "id": "devices_pairdevicemodal_copytoclipboard",
-      "community": 21,
+      "community": 25,
       "norm_label": "copytoclipboard()"
     },
     {
@@ -5697,7 +5913,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_scheduleeditor_tsx",
-      "community": 22,
+      "community": 26,
       "norm_label": "scheduleeditor.tsx"
     },
     {
@@ -5706,7 +5922,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L30",
       "id": "devices_scheduleeditor_toggleday",
-      "community": 22,
+      "community": 26,
       "norm_label": "toggleday()"
     },
     {
@@ -5715,7 +5931,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L39",
       "id": "devices_scheduleeditor_handleadd",
-      "community": 22,
+      "community": 26,
       "norm_label": "handleadd()"
     },
     {
@@ -5724,7 +5940,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleEditor.tsx",
       "source_location": "L58",
       "id": "devices_scheduleeditor_handledelete",
-      "community": 22,
+      "community": 26,
       "norm_label": "handledelete()"
     },
     {
@@ -5733,7 +5949,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleGrid.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_schedulegrid_tsx",
-      "community": 75,
+      "community": 84,
       "norm_label": "schedulegrid.tsx"
     },
     {
@@ -5742,7 +5958,7 @@
       "source_file": "self-shield-web\\src\\components\\dns\\DNSFilteringTools.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dns_dnsfilteringtools_tsx",
-      "community": 76,
+      "community": 85,
       "norm_label": "dnsfilteringtools.tsx"
     },
     {
@@ -5751,7 +5967,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\AppSidebar.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_layout_appsidebar_tsx",
-      "community": 48,
+      "community": 55,
       "norm_label": "appsidebar.tsx"
     },
     {
@@ -5760,7 +5976,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\AppSidebar.tsx",
       "source_location": "L41",
       "id": "layout_appsidebar_handlelogout",
-      "community": 48,
+      "community": 55,
       "norm_label": "handlelogout()"
     },
     {
@@ -5769,7 +5985,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\Header.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_layout_header_tsx",
-      "community": 49,
+      "community": 56,
       "norm_label": "header.tsx"
     },
     {
@@ -5778,7 +5994,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\Header.tsx",
       "source_location": "L8",
       "id": "layout_header_header",
-      "community": 49,
+      "community": 56,
       "norm_label": "header()"
     },
     {
@@ -5823,7 +6039,7 @@
       "source_file": "self-shield-web\\src\\components\\overrides\\OverridesList.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_overrides_overrideslist_tsx",
-      "community": 50,
+      "community": 57,
       "norm_label": "overrideslist.tsx"
     },
     {
@@ -5832,7 +6048,7 @@
       "source_file": "self-shield-web\\src\\components\\overrides\\OverridesList.tsx",
       "source_location": "L32",
       "id": "overrides_overrideslist_handleaction",
-      "community": 50,
+      "community": 57,
       "norm_label": "handleaction()"
     },
     {
@@ -5841,7 +6057,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_protection_strictprotection_tsx",
-      "community": 23,
+      "community": 27,
       "norm_label": "strictprotection.tsx"
     },
     {
@@ -5850,7 +6066,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L24",
       "id": "protection_strictprotection_togglesetting",
-      "community": 23,
+      "community": 27,
       "norm_label": "togglesetting()"
     },
     {
@@ -5859,7 +6075,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L33",
       "id": "protection_strictprotection_addapp",
-      "community": 23,
+      "community": 27,
       "norm_label": "addapp()"
     },
     {
@@ -5868,7 +6084,7 @@
       "source_file": "self-shield-web\\src\\components\\protection\\StrictProtection.tsx",
       "source_location": "L41",
       "id": "protection_strictprotection_removeapp",
-      "community": 23,
+      "community": 27,
       "norm_label": "removeapp()"
     },
     {
@@ -5877,7 +6093,7 @@
       "source_file": "self-shield-web\\src\\components\\providers\\Providers.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_providers_providers_tsx",
-      "community": 51,
+      "community": 58,
       "norm_label": "providers.tsx"
     },
     {
@@ -5886,7 +6102,7 @@
       "source_file": "self-shield-web\\src\\components\\providers\\Providers.tsx",
       "source_location": "L9",
       "id": "providers_providers_providers",
-      "community": 51,
+      "community": 58,
       "norm_label": "providers()"
     },
     {
@@ -5895,7 +6111,7 @@
       "source_file": "self-shield-web\\src\\components\\reports\\UsageChart.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_reports_usagechart_tsx",
-      "community": 77,
+      "community": 86,
       "norm_label": "usagechart.tsx"
     },
     {
@@ -5904,7 +6120,7 @@
       "source_file": "self-shield-web\\src\\components\\reports\\WeeklyReportPreview.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_reports_weeklyreportpreview_tsx",
-      "community": 52,
+      "community": 59,
       "norm_label": "weeklyreportpreview.tsx"
     },
     {
@@ -5913,7 +6129,7 @@
       "source_file": "self-shield-web\\src\\components\\reports\\WeeklyReportPreview.tsx",
       "source_location": "L5",
       "id": "reports_weeklyreportpreview_weeklyreportpreview",
-      "community": 52,
+      "community": 59,
       "norm_label": "weeklyreportpreview()"
     },
     {
@@ -5922,7 +6138,7 @@
       "source_file": "self-shield-web\\src\\components\\settings\\AccountSettings.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_settings_accountsettings_tsx",
-      "community": 29,
+      "community": 34,
       "norm_label": "accountsettings.tsx"
     },
     {
@@ -5931,7 +6147,7 @@
       "source_file": "self-shield-web\\src\\components\\settings\\AccountSettings.tsx",
       "source_location": "L12",
       "id": "settings_accountsettings_accountsettings",
-      "community": 29,
+      "community": 34,
       "norm_label": "accountsettings()"
     },
     {
@@ -5940,7 +6156,7 @@
       "source_file": "self-shield-web\\src\\components\\settings\\AccountSettings.tsx",
       "source_location": "L110",
       "id": "settings_accountsettings_key",
-      "community": 29,
+      "community": 34,
       "norm_label": "key()"
     },
     {
@@ -5949,7 +6165,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\avatar.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_avatar_tsx",
-      "community": 30,
+      "community": 35,
       "norm_label": "avatar.tsx"
     },
     {
@@ -5958,7 +6174,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\avatar.tsx",
       "source_location": "L32",
       "id": "ui_avatar_cn",
-      "community": 30,
+      "community": 35,
       "norm_label": "cn()"
     },
     {
@@ -5967,7 +6183,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\avatar.tsx",
       "source_location": "L57",
       "id": "ui_avatar_avatarbadge",
-      "community": 30,
+      "community": 35,
       "norm_label": "avatarbadge()"
     },
     {
@@ -5976,7 +6192,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\BackButton.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_backbutton_tsx",
-      "community": 53,
+      "community": 60,
       "norm_label": "backbutton.tsx"
     },
     {
@@ -5985,7 +6201,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\BackButton.tsx",
       "source_location": "L7",
       "id": "ui_backbutton_backbutton",
-      "community": 53,
+      "community": 60,
       "norm_label": "backbutton()"
     },
     {
@@ -5994,7 +6210,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\badge.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_badge_tsx",
-      "community": 54,
+      "community": 61,
       "norm_label": "badge.tsx"
     },
     {
@@ -6003,7 +6219,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\badge.tsx",
       "source_location": "L30",
       "id": "ui_badge_badge",
-      "community": 54,
+      "community": 61,
       "norm_label": "badge()"
     },
     {
@@ -6012,7 +6228,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\button.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_button_tsx",
-      "community": 55,
+      "community": 62,
       "norm_label": "button.tsx"
     },
     {
@@ -6021,7 +6237,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\button.tsx",
       "source_location": "L52",
       "id": "ui_button_cn",
-      "community": 55,
+      "community": 62,
       "norm_label": "cn()"
     },
     {
@@ -6030,7 +6246,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\card.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_card_tsx",
-      "community": 31,
+      "community": 36,
       "norm_label": "card.tsx"
     },
     {
@@ -6039,7 +6255,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\card.tsx",
       "source_location": "L14",
       "id": "ui_card_cn",
-      "community": 31,
+      "community": 36,
       "norm_label": "cn()"
     },
     {
@@ -6048,7 +6264,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\card.tsx",
       "source_location": "L59",
       "id": "ui_card_cardaction",
-      "community": 31,
+      "community": 36,
       "norm_label": "cardaction()"
     },
     {
@@ -6057,7 +6273,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dialog.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_dialog_tsx",
-      "community": 10,
+      "community": 11,
       "norm_label": "dialog.tsx"
     },
     {
@@ -6066,7 +6282,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dialog.tsx",
       "source_location": "L10",
       "id": "ui_dialog_dialog",
-      "community": 10,
+      "community": 11,
       "norm_label": "dialog()"
     },
     {
@@ -6075,7 +6291,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dialog.tsx",
       "source_location": "L14",
       "id": "ui_dialog_dialogtrigger",
-      "community": 10,
+      "community": 11,
       "norm_label": "dialogtrigger()"
     },
     {
@@ -6084,7 +6300,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dialog.tsx",
       "source_location": "L18",
       "id": "ui_dialog_dialogportal",
-      "community": 10,
+      "community": 11,
       "norm_label": "dialogportal()"
     },
     {
@@ -6093,7 +6309,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dialog.tsx",
       "source_location": "L22",
       "id": "ui_dialog_dialogclose",
-      "community": 10,
+      "community": 11,
       "norm_label": "dialogclose()"
     },
     {
@@ -6102,7 +6318,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dialog.tsx",
       "source_location": "L55",
       "id": "ui_dialog_cn",
-      "community": 10,
+      "community": 11,
       "norm_label": "cn()"
     },
     {
@@ -6111,7 +6327,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dropdown-menu.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_dropdown_menu_tsx",
-      "community": 11,
+      "community": 12,
       "norm_label": "dropdown-menu.tsx"
     },
     {
@@ -6120,7 +6336,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dropdown-menu.tsx",
       "source_location": "L9",
       "id": "ui_dropdown_menu_dropdownmenu",
-      "community": 11,
+      "community": 12,
       "norm_label": "dropdownmenu()"
     },
     {
@@ -6129,7 +6345,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dropdown-menu.tsx",
       "source_location": "L13",
       "id": "ui_dropdown_menu_dropdownmenuportal",
-      "community": 11,
+      "community": 12,
       "norm_label": "dropdownmenuportal()"
     },
     {
@@ -6138,7 +6354,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dropdown-menu.tsx",
       "source_location": "L17",
       "id": "ui_dropdown_menu_dropdownmenutrigger",
-      "community": 11,
+      "community": 12,
       "norm_label": "dropdownmenutrigger()"
     },
     {
@@ -6147,7 +6363,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dropdown-menu.tsx",
       "source_location": "L44",
       "id": "ui_dropdown_menu_cn",
-      "community": 11,
+      "community": 12,
       "norm_label": "cn()"
     },
     {
@@ -6156,7 +6372,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\dropdown-menu.tsx",
       "source_location": "L148",
       "id": "ui_dropdown_menu_dropdownmenucheckboxitem",
-      "community": 11,
+      "community": 12,
       "norm_label": "dropdownmenucheckboxitem()"
     },
     {
@@ -6165,7 +6381,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\input.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_input_tsx",
-      "community": 56,
+      "community": 63,
       "norm_label": "input.tsx"
     },
     {
@@ -6174,7 +6390,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\input.tsx",
       "source_location": "L6",
       "id": "ui_input_input",
-      "community": 56,
+      "community": 63,
       "norm_label": "input()"
     },
     {
@@ -6183,7 +6399,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\label.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_label_tsx",
-      "community": 57,
+      "community": 64,
       "norm_label": "label.tsx"
     },
     {
@@ -6192,7 +6408,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\label.tsx",
       "source_location": "L11",
       "id": "ui_label_cn",
-      "community": 57,
+      "community": 64,
       "norm_label": "cn()"
     },
     {
@@ -6201,7 +6417,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\progress.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_progress_tsx",
-      "community": 78,
+      "community": 87,
       "norm_label": "progress.tsx"
     },
     {
@@ -6210,7 +6426,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\separator.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_separator_tsx",
-      "community": 58,
+      "community": 65,
       "norm_label": "separator.tsx"
     },
     {
@@ -6219,7 +6435,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\separator.tsx",
       "source_location": "L16",
       "id": "ui_separator_cn",
-      "community": 58,
+      "community": 65,
       "norm_label": "cn()"
     },
     {
@@ -6228,7 +6444,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_sheet_tsx",
-      "community": 9,
+      "community": 10,
       "norm_label": "sheet.tsx"
     },
     {
@@ -6237,7 +6453,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L10",
       "id": "ui_sheet_sheet",
-      "community": 9,
+      "community": 10,
       "norm_label": "sheet()"
     },
     {
@@ -6246,7 +6462,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L14",
       "id": "ui_sheet_sheettrigger",
-      "community": 9,
+      "community": 10,
       "norm_label": "sheettrigger()"
     },
     {
@@ -6255,7 +6471,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L18",
       "id": "ui_sheet_sheetclose",
-      "community": 9,
+      "community": 10,
       "norm_label": "sheetclose()"
     },
     {
@@ -6264,7 +6480,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L22",
       "id": "ui_sheet_sheetportal",
-      "community": 9,
+      "community": 10,
       "norm_label": "sheetportal()"
     },
     {
@@ -6273,7 +6489,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L55",
       "id": "ui_sheet_cn",
-      "community": 9,
+      "community": 10,
       "norm_label": "cn()"
     },
     {
@@ -6282,7 +6498,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L103",
       "id": "ui_sheet_sheettitle",
-      "community": 9,
+      "community": 10,
       "norm_label": "sheettitle()"
     },
     {
@@ -6291,7 +6507,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sheet.tsx",
       "source_location": "L116",
       "id": "ui_sheet_sheetdescription",
-      "community": 9,
+      "community": 10,
       "norm_label": "sheetdescription()"
     },
     {
@@ -6300,7 +6516,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sidebar.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_sidebar_tsx",
-      "community": 13,
+      "community": 16,
       "norm_label": "sidebar.tsx"
     },
     {
@@ -6309,7 +6525,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sidebar.tsx",
       "source_location": "L47",
       "id": "ui_sidebar_usesidebar",
-      "community": 13,
+      "community": 16,
       "norm_label": "usesidebar()"
     },
     {
@@ -6318,7 +6534,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sidebar.tsx",
       "source_location": "L98",
       "id": "ui_sidebar_handlekeydown",
-      "community": 13,
+      "community": 16,
       "norm_label": "handlekeydown()"
     },
     {
@@ -6327,7 +6543,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sidebar.tsx",
       "source_location": "L140",
       "id": "ui_sidebar_cn",
-      "community": 13,
+      "community": 16,
       "norm_label": "cn()"
     },
     {
@@ -6336,7 +6552,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sidebar.tsx",
       "source_location": "L666",
       "id": "ui_sidebar_sidebarmenusubbutton",
-      "community": 13,
+      "community": 16,
       "norm_label": "sidebarmenusubbutton()"
     },
     {
@@ -6345,7 +6561,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\skeleton.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_skeleton_tsx",
-      "community": 59,
+      "community": 66,
       "norm_label": "skeleton.tsx"
     },
     {
@@ -6354,7 +6570,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\skeleton.tsx",
       "source_location": "L3",
       "id": "ui_skeleton_skeleton",
-      "community": 59,
+      "community": 66,
       "norm_label": "skeleton()"
     },
     {
@@ -6363,7 +6579,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sonner.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_sonner_tsx",
-      "community": 79,
+      "community": 88,
       "norm_label": "sonner.tsx"
     },
     {
@@ -6372,7 +6588,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\switch.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_switch_tsx",
-      "community": 80,
+      "community": 89,
       "norm_label": "switch.tsx"
     },
     {
@@ -6381,7 +6597,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\table.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_table_tsx",
-      "community": 14,
+      "community": 17,
       "norm_label": "table.tsx"
     },
     {
@@ -6390,7 +6606,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\table.tsx",
       "source_location": "L7",
       "id": "ui_table_table",
-      "community": 14,
+      "community": 17,
       "norm_label": "table()"
     },
     {
@@ -6399,7 +6615,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\table.tsx",
       "source_location": "L22",
       "id": "ui_table_tableheader",
-      "community": 14,
+      "community": 17,
       "norm_label": "tableheader()"
     },
     {
@@ -6408,7 +6624,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\table.tsx",
       "source_location": "L32",
       "id": "ui_table_tablebody",
-      "community": 14,
+      "community": 17,
       "norm_label": "tablebody()"
     },
     {
@@ -6417,7 +6633,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\table.tsx",
       "source_location": "L46",
       "id": "ui_table_cn",
-      "community": 14,
+      "community": 17,
       "norm_label": "cn()"
     },
     {
@@ -6426,7 +6642,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\tabs.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_tabs_tsx",
-      "community": 81,
+      "community": 90,
       "norm_label": "tabs.tsx"
     },
     {
@@ -6435,7 +6651,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\tooltip.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_tooltip_tsx",
-      "community": 60,
+      "community": 67,
       "norm_label": "tooltip.tsx"
     },
     {
@@ -6444,7 +6660,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\tooltip.tsx",
       "source_location": "L28",
       "id": "ui_tooltip_tooltipcontent",
-      "community": 60,
+      "community": 67,
       "norm_label": "tooltipcontent()"
     },
     {
@@ -6453,7 +6669,7 @@
       "source_file": "self-shield-web\\src\\hooks\\use-mobile.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_hooks_use_mobile_ts",
-      "community": 61,
+      "community": 68,
       "norm_label": "use-mobile.ts"
     },
     {
@@ -6462,7 +6678,7 @@
       "source_file": "self-shield-web\\src\\hooks\\use-mobile.ts",
       "source_location": "L5",
       "id": "hooks_use_mobile_useismobile",
-      "community": 61,
+      "community": 68,
       "norm_label": "useismobile()"
     },
     {
@@ -6813,7 +7029,7 @@
       "source_file": "self-shield-web\\src\\lib\\csv-export.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_csv_export_ts",
-      "community": 62,
+      "community": 69,
       "norm_label": "csv-export.ts"
     },
     {
@@ -6822,7 +7038,7 @@
       "source_file": "self-shield-web\\src\\lib\\csv-export.ts",
       "source_location": "L1",
       "id": "lib_csv_export_downloadcsv",
-      "community": 62,
+      "community": 69,
       "norm_label": "downloadcsv()"
     },
     {
@@ -6858,7 +7074,7 @@
       "source_file": "self-shield-web\\src\\lib\\utils.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_utils_ts",
-      "community": 63,
+      "community": 70,
       "norm_label": "utils.ts"
     },
     {
@@ -6867,7 +7083,7 @@
       "source_file": "self-shield-web\\src\\lib\\utils.ts",
       "source_location": "L4",
       "id": "lib_utils_cn",
-      "community": 63,
+      "community": 70,
       "norm_label": "cn()"
     },
     {
@@ -6876,7 +7092,7 @@
       "source_file": "self-shield-web\\src\\lib\\supabase\\admin.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_supabase_admin_ts",
-      "community": 82,
+      "community": 91,
       "norm_label": "admin.ts"
     },
     {
@@ -6903,7 +7119,7 @@
       "source_file": "self-shield-web\\src\\lib\\supabase\\middleware.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_supabase_middleware_ts",
-      "community": 16,
+      "community": 28,
       "norm_label": "middleware.ts"
     },
     {
@@ -6912,7 +7128,7 @@
       "source_file": "self-shield-web\\src\\lib\\supabase\\middleware.ts",
       "source_location": "L4",
       "id": "supabase_middleware_updatesession",
-      "community": 16,
+      "community": 28,
       "norm_label": "updatesession()"
     },
     {
@@ -6935,6 +7151,198 @@
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_src": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
+      "_tgt": "selfshield_mainactivity_mainactivity",
+      "source": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
+      "target": "selfshield_mainactivity_mainactivity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
+      "_tgt": "selfshield_mainactivity_greeting",
+      "source": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
+      "target": "selfshield_mainactivity_greeting",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_src": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
+      "_tgt": "selfshield_mainactivity_greetingpreview",
+      "source": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
+      "target": "selfshield_mainactivity_greetingpreview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "selfshield_mainactivity_mainactivity",
+      "_tgt": "selfshield_mainactivity_mainactivity_oncreate",
+      "source": "selfshield_mainactivity_mainactivity",
+      "target": "selfshield_mainactivity_mainactivity_oncreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\SelfShieldApplication.kt",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "self_shield_android_app_src_main_java_com_selfshield_selfshieldapplication_kt",
+      "_tgt": "selfshield_selfshieldapplication_selfshieldapplication",
+      "source": "self_shield_android_app_src_main_java_com_selfshield_selfshieldapplication_kt",
+      "target": "selfshield_selfshieldapplication_selfshieldapplication",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Theme.kt",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_src": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_theme_kt",
+      "_tgt": "theme_theme_selfshieldtheme",
+      "source": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_theme_kt",
+      "target": "theme_theme_selfshieldtheme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\accessibility\\src\\main\\java\\com\\selfshield\\service\\accessibility\\SelfShieldAccessibilityService.kt",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "self_shield_android_service_accessibility_src_main_java_com_selfshield_service_accessibility_selfshieldaccessibilityservice_kt",
+      "_tgt": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice",
+      "source": "self_shield_android_service_accessibility_src_main_java_com_selfshield_service_accessibility_selfshieldaccessibilityservice_kt",
+      "target": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\accessibility\\src\\main\\java\\com\\selfshield\\service\\accessibility\\SelfShieldAccessibilityService.kt",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice",
+      "_tgt": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice_onaccessibilityevent",
+      "source": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice",
+      "target": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice_onaccessibilityevent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\accessibility\\src\\main\\java\\com\\selfshield\\service\\accessibility\\SelfShieldAccessibilityService.kt",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_src": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice",
+      "_tgt": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice_oninterrupt",
+      "source": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice",
+      "target": "accessibility_selfshieldaccessibilityservice_selfshieldaccessibilityservice_oninterrupt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "self_shield_android_service_vpn_src_main_java_com_selfshield_service_vpn_selfshieldvpnservice_kt",
+      "_tgt": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "source": "self_shield_android_service_vpn_src_main_java_com_selfshield_service_vpn_selfshieldvpnservice_kt",
+      "target": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "_tgt": "vpn_selfshieldvpnservice_selfshieldvpnservice_onstartcommand",
+      "source": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "target": "vpn_selfshieldvpnservice_selfshieldvpnservice_onstartcommand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_src": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "_tgt": "vpn_selfshieldvpnservice_selfshieldvpnservice_ondestroy",
+      "source": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "target": "vpn_selfshieldvpnservice_selfshieldvpnservice_ondestroy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\vpn\\src\\main\\java\\com\\selfshield\\service\\vpn\\SelfShieldVpnService.kt",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "_tgt": "vpn_selfshieldvpnservice_selfshieldvpnservice_startvpntunnel",
+      "source": "vpn_selfshieldvpnservice_selfshieldvpnservice",
+      "target": "vpn_selfshieldvpnservice_selfshieldvpnservice_startvpntunnel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\watchdog\\src\\main\\java\\com\\selfshield\\service\\watchdog\\WatchdogService.kt",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "self_shield_android_service_watchdog_src_main_java_com_selfshield_service_watchdog_watchdogservice_kt",
+      "_tgt": "watchdog_watchdogservice_watchdogservice",
+      "source": "self_shield_android_service_watchdog_src_main_java_com_selfshield_service_watchdog_watchdogservice_kt",
+      "target": "watchdog_watchdogservice_watchdogservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\watchdog\\src\\main\\java\\com\\selfshield\\service\\watchdog\\WatchdogService.kt",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "watchdog_watchdogservice_watchdogservice",
+      "_tgt": "watchdog_watchdogservice_watchdogservice_onbind",
+      "source": "watchdog_watchdogservice_watchdogservice",
+      "target": "watchdog_watchdogservice_watchdogservice_onbind",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "self-shield-android\\service\\watchdog\\src\\main\\java\\com\\selfshield\\service\\watchdog\\WatchdogService.kt",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "watchdog_watchdogservice_watchdogservice",
+      "_tgt": "watchdog_watchdogservice_watchdogservice_onstartcommand",
+      "source": "watchdog_watchdogservice_watchdogservice",
+      "target": "watchdog_watchdogservice_watchdogservice_onstartcommand",
+      "confidence_score": 1.0
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
