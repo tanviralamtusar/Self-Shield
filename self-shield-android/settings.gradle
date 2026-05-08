@@ -1,0 +1,44 @@
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "Self-Shield"
+include ':app'
+
+// Core Modules
+include ':core:core-ui'
+include ':core:core-data'
+include ':core:core-database'
+include ':core:core-network'
+include ':core:core-security'
+
+// Service Modules
+include ':service:vpn'
+include ':service:accessibility'
+include ':service:watchdog'
+
+// Feature Modules
+include ':feature:feature-dashboard'
+include ':feature:feature-blocklist'
+include ':feature:feature-appblock'
+include ':feature:feature-focusmode'
+include ':feature:feature-reports'
+include ':feature:feature-settings'
+include ':feature:feature-onboarding'
