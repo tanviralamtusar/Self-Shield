@@ -51,15 +51,8 @@ fun MainScreen(context: ComponentActivity) {
         mutableStateOf(prefs.getBoolean("channel_block_enabled", false))
     }
 
-    // Automatically prompt user if permissions are missing
-    LaunchedEffect(Unit) {
-        if (!isAccessibilityEnabled) {
-            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            context.startActivity(intent)
-        } else if (!isDeviceAdminEnabled) {
-            requestDeviceAdmin(context)
-        }
-    }
+    // Removed auto-redirection as requested.
+    // User can now manually enable permissions using the buttons below.
 
     Column(
         modifier = Modifier
