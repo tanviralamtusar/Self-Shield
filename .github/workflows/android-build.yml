@@ -26,7 +26,7 @@ jobs:
         working-directory: ./self-shield-android
         run: |
           if [ ! -f gradlew ]; then
-            gradle wrapper
+            gradle wrapper --gradle-version 8.4
           fi
           chmod +x gradlew
 
