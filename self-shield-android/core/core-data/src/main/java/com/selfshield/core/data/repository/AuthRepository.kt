@@ -70,7 +70,7 @@ class AuthRepository @Inject constructor(
     suspend fun resetPassword(email: String): Result<Unit> = runCatching {
         supabase.auth.resetPasswordForEmail(
             email = email,
-            redirectTo = "https://self-shield-web.vercel.app/reset-password" // Replace with actual web URL if known, or use a placeholder
+            redirectUrl = "https://self-shield.botbhai.net/reset-password" // Replace with actual web URL if known, or use a placeholder
         )
     }
 

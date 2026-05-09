@@ -5,7 +5,7 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 872 nodes · 1769 edges · 39 communities detected
+- 872 nodes · 1769 edges · 41 communities detected
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 173 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -48,7 +48,9 @@
 - [[_COMMUNITY_Community 43|Community 43]]
 - [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 54|Community 54]]
+- [[_COMMUNITY_Community 48|Community 48]]
+- [[_COMMUNITY_Community 49|Community 49]]
+- [[_COMMUNITY_Community 56|Community 56]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Pt()` - 73 edges
@@ -101,12 +103,12 @@ Cohesion: 0.08
 Nodes (33): _binaryDecode(), binaryEncode(), _binaryEncodeUserBroadcastPush(), decode(), decodeBroadcast(), decodePush(), decodeReply(), _decodeUserBroadcast() (+25 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.08
-Nodes (30): clone(), cloneRequestState(), containedBy(), contains(), delete(), _getUrlForProvider(), _handleProviderSignIn(), ilikeAllOf() (+22 more)
+Cohesion: 0.09
+Nodes (27): clone(), cloneRequestState(), containedBy(), contains(), delete(), _getUrlForProvider(), _handleProviderSignIn(), ilikeAllOf() (+19 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.09
-Nodes (29): Ce(), copy(), createBucket(), createIndex(), createSignedUploadUrl(), createSignedUrl(), createSignedUrls(), deleteBucket() (+21 more)
+Cohesion: 0.1
+Nodes (26): copy(), createBucket(), createIndex(), createSignedUploadUrl(), createSignedUrl(), createSignedUrls(), deleteBucket(), deleteIndex() (+18 more)
 
 ### Community 8 - "Community 8"
 Cohesion: 0.13
@@ -125,12 +127,12 @@ Cohesion: 0.17
 Nodes (13): ajax(), appendParams(), batchSend(), endpointURL(), match(), poll(), processResponse(), protocol() (+5 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.21
-Nodes (12): applyTransformOptsToQuery(), de(), download(), exists(), _getFinalPath(), getPublicUrl(), info(), onJoinPayload() (+4 more)
-
-### Community 13 - "Community 13"
 Cohesion: 0.18
 Nodes (12): _cancelPendingDisconnect(), channel(), disconnect(), explain(), filter(), getChannels(), matchReceive(), remove() (+4 more)
+
+### Community 13 - "Community 13"
+Cohesion: 0.21
+Nodes (12): applyTransformOptsToQuery(), de(), download(), exists(), _getFinalPath(), getPublicUrl(), info(), onJoinPayload() (+4 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.2
@@ -225,10 +227,18 @@ Cohesion: 0.67
 Nodes (1): SyncWorker
 
 ### Community 47 - "Community 47"
+Cohesion: 0.67
+Nodes (3): Ce(), $e(), Ie()
+
+### Community 48 - "Community 48"
+Cohesion: 0.67
+Nodes (3): update(), upload(), uploadOrUpdate()
+
+### Community 49 - "Community 49"
 Cohesion: 1.0
 Nodes (2): handleSignup(), validateForm()
 
-### Community 54 - "Community 54"
+### Community 56 - "Community 56"
 Cohesion: 1.0
 Nodes (1): SelfShieldApplication
 
@@ -269,9 +279,9 @@ Nodes (1): SelfShieldApplication
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 46`** (3 nodes): `SyncWorker.kt`, `SyncWorker`, `.doWork()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (3 nodes): `page.tsx`, `handleSignup()`, `validateForm()`
+- **Thin community `Community 49`** (3 nodes): `page.tsx`, `handleSignup()`, `validateForm()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (2 nodes): `SelfShieldApplication.kt`, `SelfShieldApplication`
+- **Thin community `Community 56`** (2 nodes): `SelfShieldApplication.kt`, `SelfShieldApplication`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
