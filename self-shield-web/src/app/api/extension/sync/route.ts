@@ -79,11 +79,13 @@ export async function GET(req: NextRequest) {
     }
 
     // 2. Fetch device settings
-    let { data: settings, error: settingsError } = await supabaseAdmin
+    const { data: initialSettings, error: settingsError } = await supabaseAdmin
       .from('device_settings')
       .select('*')
       .eq('device_id', deviceId)
       .single();
+
+    let settings = initialSettings;
 
     if (settingsError || !settings) {
       const { data: newSettings, error: createError } = await supabaseAdmin
@@ -107,14 +109,14 @@ export async function GET(req: NextRequest) {
     }
 
     // 3. Fetch subscribed blocklists
-    const { data: subs, error: subsError } = await supabaseAdmin
+    const { data: subs } = await supabaseAdmin
       .from('device_block_list_subscriptions')
       .select('block_list_id')
       .eq('device_id', deviceId)
       .eq('is_enabled', true);
 
-    let blocked_urls: string[] = [];
-    let blocked_keywords: string[] = [];
+    const blocked_urls: string[] = [];
+    const blocked_keywords: string[] = [];
 
     const activeListIds = (subs || []).map(s => s.block_list_id);
 

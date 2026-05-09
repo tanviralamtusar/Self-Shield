@@ -6,7 +6,7 @@ import { Providers } from '@/components/providers/Providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Self-Shield Dashboard',
+  title: 'Self Shield Dashboard',
   description: 'Digital discipline and accountability platform.',
 };
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
-import { AlertTriangle, ShieldAlert } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import React from 'react';
 
 export function TamperAlertListener() {

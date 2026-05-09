@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useOverrideRequests, useResolveOverride } from '@/hooks/useOverrideRequests';
-import { Clock, CheckCircle2, XCircle, AlertCircle, Smartphone } from 'lucide-react';
+import { Clock, CheckCircle2, XCircle, Smartphone } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -17,8 +17,8 @@ export default function OverridesPage() {
       // In a real app, we'd get the admin ID from the session
       await resolveOverride.mutateAsync({ id, status, adminId: 'current-admin' });
       toast.success(`Request ${status}`);
-    } catch (error: any) {
-      toast.error(`Failed to ${status} request`, { description: error.message });
+    } catch (error: unknown) {
+      toast.error(`Failed to ${status} request`, { description: (error as Error).message });
     }
   };
 
@@ -73,7 +73,7 @@ export default function OverridesPage() {
                   <CardContent className="space-y-4">
                     <div className="p-3 bg-background rounded-lg border text-sm">
                       <p className="text-muted-foreground mb-1 uppercase text-[10px] font-bold tracking-wider">Reason</p>
-                      <p className="italic">"{req.reason || 'No reason provided'}"</p>
+                      <p className="italic">&quot;{req.reason || 'No reason provided'}&quot;</p>
                     </div>
                     <div className="flex gap-2">
                       <Button 

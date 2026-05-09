@@ -9,7 +9,10 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
-  React.useEffect(() => setMounted(true), []);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (!mounted) return <div className="h-9 w-24 bg-muted/20 rounded-full animate-pulse" />;
 

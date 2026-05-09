@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Smartphone, Lock, ShieldCheck, FileDown, Zap } from 'lucide-react';
+import { Lock, ShieldCheck, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 export function QuickActions() {

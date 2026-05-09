@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Save, AlertCircle, Loader2, Plus, Trash2, Shield, Layout, Clock, Globe } from 'lucide-react';
+import { Loader2, Plus, Shield, Layout, Clock, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 import { useDeviceSettings, useUpdateDeviceSettings } from '@/hooks/useDeviceSettings';
 import { useAppRules, useUpdateAppRule } from '@/hooks/useAppRules';

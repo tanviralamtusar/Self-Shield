@@ -74,17 +74,29 @@ body {
   gap: 8px;
 }
 
-.app-bar-logo span {
-  color: #6366f1; /* indigo-500 */
+.app-bar-logo h1 {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 700;
+  color: #4F8EF7;
+  letter-spacing: -0.015em;
+  line-height: 1;
 }
 
-.app-bar-logo h1 {
-  font-size: 18px;
-  font-weight: 800;
-  color: #6366f1;
+.app-bar-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-bar-subtitle {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  color: #9B9A97;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-family: var(--font-headline);
+  letter-spacing: 0.1em;
+  line-height: 1;
+  margin-top: 4px;
 }
 
 .app-bar-profile {

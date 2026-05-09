@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
-import { Clock, CheckCircle2, XCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Clock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 

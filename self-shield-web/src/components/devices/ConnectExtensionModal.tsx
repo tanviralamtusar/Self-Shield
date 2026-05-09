@@ -1,18 +1,19 @@
 'use client';
 
+
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Globe, Copy, Check, Loader2, ShieldCheck, Plus } from 'lucide-react';
 import { toast } from 'sonner';
-import { useQueryClient } from '@tanstack/react-query';
+
 
 export function ConnectExtensionModal() {
   const [open, setOpen] = useState(false);
   const [deviceId, setDeviceId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-  const queryClient = useQueryClient();
+
 
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -41,9 +42,9 @@ export function ConnectExtensionModal() {
 
       setDeviceId(data.deviceId);
       toast.success('Device ID Generated!');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Registration error:', err);
-      toast.error(err.message || 'Failed to connect extension');
+      toast.error((err as Error).message || 'Failed to connect extension');
     } finally {
       setLoading(false);
     }
@@ -117,7 +118,7 @@ export function ConnectExtensionModal() {
               <div className="p-4 rounded-xl bg-primary/5 border border-primary/20 space-y-3">
                 <p className="text-sm font-medium text-primary">3. Paste in Extension</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Open the Self-Shield extension in your browser, click <strong>"Pair Device"</strong>, and paste the ID above.
+                  Open the Self-Shield extension in your browser, click <strong>&quot;Pair Device&quot;</strong>, and paste the ID above.
                 </p>
               </div>
 

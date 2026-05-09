@@ -88,8 +88,8 @@ function QuickActions({ deviceId }: { deviceId: string }) {
       toast.success(`${label} requested`, {
         description: 'The command has been queued for the device.'
       });
-    } catch (error: any) {
-      toast.error(`Failed to request ${label}`, { description: error.message });
+    } catch (error: unknown) {
+      toast.error(`Failed to request ${label}`, { description: (error as Error).message });
     }
   };
 
@@ -155,7 +155,7 @@ export default function DeviceDetailPage() {
       if (error) throw error;
       toast.success(`Safe Search ${checked ? 'enabled' : 'disabled'}`);
       queryClient.invalidateQueries({ queryKey: ['devices'] });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating safe search:', error);
       toast.error('Failed to update safe search');
     } finally {

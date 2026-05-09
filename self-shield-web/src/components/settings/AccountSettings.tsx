@@ -94,7 +94,7 @@ export function AccountSettings() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Button variant="outline" className="w-full justify-start">
-            <Key className="w-4 h-4 mr-2" />
+            <Mail className="w-4 h-4 mr-2" />
             Change Admin Password
           </Button>
           <Button variant="outline" className="w-full justify-start text-destructive hover:bg-destructive/10">
@@ -107,6 +107,3 @@ export function AccountSettings() {
   );
 }
 
-function Key({ className, ...props }: any) {
-  return <Mail className={className} {...props} />
-}

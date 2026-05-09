@@ -5,7 +5,7 @@ export type AuditLogEntry = {
   id: string;
   device_id: string;
   event_type: string;
-  details: any;
+  details: Record<string, unknown>;
   screenshot_url: string | null;
   occurred_at: string;
   synced_at: string;

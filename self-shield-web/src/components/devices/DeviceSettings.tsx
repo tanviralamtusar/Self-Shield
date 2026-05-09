@@ -4,14 +4,13 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Shield, Search, Type, Globe, Save } from 'lucide-react';
+import { Shield, Search, Type, Globe } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 interface DeviceSettingsProps {
-  device: any;
+  device: { id: string; device_type: string | null; settings?: Record<string, boolean> };
 }
 
 export function DeviceSettings({ device }: DeviceSettingsProps) {
@@ -41,9 +40,9 @@ export function DeviceSettings({ device }: DeviceSettingsProps) {
       });
       
       queryClient.invalidateQueries({ queryKey: ['devices'] });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating setting:', error);
-      toast.error('Failed to update setting', { description: error.message });
+      toast.error('Failed to update setting', { description: (error as Error).message });
     } finally {
       setIsUpdating(false);
     }

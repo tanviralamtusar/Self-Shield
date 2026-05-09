@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Clock, Plus, Trash2, Calendar } from 'lucide-react';
+import { Clock, Plus, Trash2 } from 'lucide-react';
 import { useAppSchedules, useUpsertAppSchedule, useDeleteAppSchedule } from '@/hooks/useAppSchedules';
 import { ScheduleGrid } from './ScheduleGrid';
 import { toast } from 'sonner';

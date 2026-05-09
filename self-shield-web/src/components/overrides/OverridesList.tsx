@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Check, X, Clock, ExternalLink } from 'lucide-react';
@@ -62,7 +62,7 @@ export function OverridesList() {
                 <div className="md:col-span-2">
                   <p className="text-muted-foreground">Reason</p>
                   <p className="italic bg-muted/50 p-2 rounded mt-1 border">
-                    "{request.reason}"
+                    &quot;{request.reason}&quot;
                   </p>
                 </div>
               </div>
