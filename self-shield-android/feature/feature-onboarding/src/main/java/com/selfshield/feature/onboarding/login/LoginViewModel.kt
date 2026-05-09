@@ -40,6 +40,8 @@ class LoginViewModel @Inject constructor(
                 LoginUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
             }
         }
+    }
+
     fun resetPassword(email: String) {
         viewModelScope.launch {
             _uiState.value = LoginUiState.Loading
