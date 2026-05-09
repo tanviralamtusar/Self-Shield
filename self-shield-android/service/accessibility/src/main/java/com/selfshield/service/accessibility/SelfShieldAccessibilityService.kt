@@ -140,14 +140,45 @@ class SelfShieldAccessibilityService : AccessibilityService() {
     }
 
     /**
-     * BACK first, then HOME after 50ms.
-     * This ensures the user is quickly moved away from channels.
+     * Navigate user back to WhatsApp Chats tab.
+     * Tries to click the "Chats" tab directly. Falls back to BACK if not found.
      */
     private fun performBlockAction() {
+        val root = rootInActiveWindow ?: run {
+            performGlobalAction(GLOBAL_ACTION_BACK)
+            return
+        }
+
+        val chatsKeywords = arrayOf(
+            "Chats", "চ্যাট", "চ্যাটস", "चैट्स", "Chats",
+            "Conversaciones", "المحادثات", "Conversas",
+            "Discussions", "Obrolan", "Чаты"
+        )
+
+        for (keyword in chatsKeywords) {
+            val nodes = root.findAccessibilityNodeInfosByText(keyword)
+            if (nodes != null && nodes.isNotEmpty()) {
+                for (node in nodes) {
+                    // Try clicking the node directly
+                    if (node.isClickable) {
+                        node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                        return
+                    }
+                    // Try clicking a clickable parent
+                    var parent = node.parent
+                    while (parent != null) {
+                        if (parent.isClickable) {
+                            parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                            return
+                        }
+                        parent = parent.parent
+                    }
+                }
+            }
+        }
+
+        // Fallback: just press BACK once (stays in WhatsApp)
         performGlobalAction(GLOBAL_ACTION_BACK)
-        mainHandler.postDelayed({
-            performGlobalAction(GLOBAL_ACTION_HOME)
-        }, 50)
     }
 
     override fun onInterrupt() {
