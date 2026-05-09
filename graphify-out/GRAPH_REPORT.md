@@ -1,7 +1,7 @@
 # Graph Report - self-shield  (2026-05-09)
 
 ## Corpus Check
-- 146 files · ~90,597 words
+- 146 files · ~90,657 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
