@@ -25,24 +25,37 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         val text = node.text?.toString()?.trim()
         val contentDesc = node.contentDescription?.toString()?.trim()
 
-        // Tab is typically selected
-        val isUpdatesTabSelected = node.isSelected && (
-                text.equals("Updates", ignoreCase = true) || 
-                text.equals("আপডেট", ignoreCase = true) ||
-                contentDesc.equals("Updates", ignoreCase = true) || 
-                contentDesc.equals("আপডেট", ignoreCase = true)
+        // Universal Keywords for "Updates"
+        val updatesKeywords = hashSetOf(
+            "Updates", "আপডেট", "अपडेट", "Novedades", "Actualizaciones", 
+            "المستجدات", "Atualizações", "Actus", "Aktuelles", "Pembaruan", 
+            "Обновления", "Status", "স্ট্যাটাস"
         )
 
-        // Presence of channels section
-        val hasChannelsHeader = text.equals("Channels", ignoreCase = true) || text.equals("চ্যানেল", ignoreCase = true)
-        val hasFindChannels = text.equals("Find channels", ignoreCase = true) || text.equals("চ্যানেল খুঁজুন", ignoreCase = true)
+        // Universal Keywords for "Channels"
+        val channelsKeywords = hashSetOf(
+            "Channels", "চ্যানেল", "चैनल", "Canales", "القنوات", 
+            "Canais", "Chaînes", "Kanäle", "Saluran", "Каналы", 
+            "Find channels", "চ্যানেল খুঁজুন", "Explore more"
+        )
 
-        if (isUpdatesTabSelected || hasChannelsHeader || hasFindChannels) {
+        val nodeText = text ?: contentDesc ?: ""
+        
+        // Check if current node text matches any keyword (Case Insensitive)
+        val matchesUpdates = updatesKeywords.any { it.equals(nodeText.toString(), ignoreCase = true) }
+        val matchesChannels = channelsKeywords.any { it.equals(nodeText.toString(), ignoreCase = true) }
+
+        // If the node is a selected tab and matches "Updates"
+        val isSelectedUpdatesTab = node.isSelected && matchesUpdates
+        
+        // Or if the screen contains clear "Channels" indicators
+        if (isSelectedUpdatesTab || matchesChannels) {
             return true
         }
 
         for (i in 0 until node.childCount) {
-            if (isWhatsAppUpdatesTabVisible(node.getChild(i))) {
+            val child = node.getChild(i)
+            if (isWhatsAppUpdatesTabVisible(child)) {
                 return true
             }
         }
