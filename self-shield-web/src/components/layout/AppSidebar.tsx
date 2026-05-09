@@ -50,7 +50,7 @@ export function AppSidebar() {
       <OverrideNotificationListener />
       <Sidebar>
         <SidebarHeader className="h-16 border-b px-6 flex flex-col justify-center shrink-0 bg-gradient-to-b from-primary/5 to-transparent">
-          <div className="flex items-center gap-3 font-bold text-primary">
+          <Link href="/" className="flex items-center gap-3 font-bold text-primary">
             <div className="flex items-center justify-center h-10 w-10 overflow-hidden">
               <img src="/logo.png" alt="Self-Shield Logo" className="w-full h-full object-contain" suppressHydrationWarning />
             </div>
@@ -58,7 +58,7 @@ export function AppSidebar() {
               <span className="text-lg leading-none tracking-tight">Self Shield</span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Admin Authority</span>
             </div>
-          </div>
+          </Link>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
