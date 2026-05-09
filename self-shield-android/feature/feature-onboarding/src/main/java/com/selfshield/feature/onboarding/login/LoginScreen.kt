@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -77,7 +78,7 @@ fun LoginScreen(
                 onValueChange = { email = it },
                 label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true
             )
