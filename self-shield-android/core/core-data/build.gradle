@@ -46,6 +46,12 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.kotlinx.serialization.json)
     
+    implementation(platform(libs.firebase.bom)) // reuse BOM pattern for version management
+    // Supabase — needed directly since core-network doesn't expose these transitively
+    implementation(libs.supabase.postgrest)
+    // Retrofit — needed for Response<T> used in repository
+    implementation(libs.retrofit)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
