@@ -102,7 +102,7 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarRail />
+
         <div className="mt-auto p-4 border-t">
           <SidebarMenu>
             <SidebarMenuItem>

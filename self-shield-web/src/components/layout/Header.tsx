@@ -11,7 +11,7 @@ export function Header() {
   return (
     <header className="sticky top-0 h-16 border-b flex items-center justify-between px-6 bg-background/80 backdrop-blur-md z-20 shrink-0">
       <div className="flex items-center gap-4">
-        <SidebarTrigger />
+        <SidebarTrigger className="md:hidden" />
         <div className="flex items-center gap-2">
           {pathname !== '/' && <BackButton />}
           <h1 className="font-semibold text-sm">

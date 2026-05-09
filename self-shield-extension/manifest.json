@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Self-Shield",
+  "name": "Self Shield",
   "version": "1.0.0",
-  "description": "Powerful protection for your browser. Syncs with your Self-Shield Admin Panel.",
+  "description": "Powerful protection for your browser. Syncs with your Self Shield Admin Panel.",
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestFeedback",
