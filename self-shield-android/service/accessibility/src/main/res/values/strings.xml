@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="accessibility_description">Used by Self-Shield to detect app usage and block prohibited content.</string>
+    <string name="accessibility_service_label">Self Shield Accessibility</string>
+    <string name="accessibility_description">Self Shield uses this service to monitor app activity and protect you from restricted content.</string>
 </resources>
