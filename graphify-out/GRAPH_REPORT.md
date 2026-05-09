@@ -5,7 +5,7 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 872 nodes · 1769 edges · 39 communities detected
+- 872 nodes · 1769 edges · 40 communities detected
 - Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 173 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -48,7 +48,8 @@
 - [[_COMMUNITY_Community 43|Community 43]]
 - [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 54|Community 54]]
+- [[_COMMUNITY_Community 48|Community 48]]
+- [[_COMMUNITY_Community 55|Community 55]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Pt()` - 73 edges
@@ -105,8 +106,8 @@ Cohesion: 0.08
 Nodes (30): clone(), cloneRequestState(), containedBy(), contains(), delete(), _getUrlForProvider(), _handleProviderSignIn(), ilikeAllOf() (+22 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.09
-Nodes (29): Ce(), copy(), createBucket(), createIndex(), createSignedUploadUrl(), createSignedUrl(), createSignedUrls(), deleteBucket() (+21 more)
+Cohesion: 0.1
+Nodes (26): copy(), createBucket(), createIndex(), createSignedUploadUrl(), createSignedUrl(), createSignedUrls(), deleteBucket(), deleteIndex() (+18 more)
 
 ### Community 8 - "Community 8"
 Cohesion: 0.13
@@ -121,32 +122,32 @@ Cohesion: 0.24
 Nodes (14): clearAllRules(), endCurrentSession(), flushEventBatch(), getBrowserInfo(), initSupabase(), logEvent(), performUnpair(), setupRealtimeListener() (+6 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.14
-Nodes (15): _cancelPendingDisconnect(), channel(), disconnect(), explain(), filter(), getChannels(), k(), matchReceive() (+7 more)
-
-### Community 12 - "Community 12"
 Cohesion: 0.17
 Nodes (13): ajax(), appendParams(), batchSend(), endpointURL(), match(), poll(), processResponse(), protocol() (+5 more)
+
+### Community 12 - "Community 12"
+Cohesion: 0.18
+Nodes (12): _cancelPendingDisconnect(), channel(), disconnect(), explain(), filter(), getChannels(), matchReceive(), remove() (+4 more)
 
 ### Community 13 - "Community 13"
 Cohesion: 0.21
 Nodes (12): applyTransformOptsToQuery(), de(), download(), exists(), _getFinalPath(), getPublicUrl(), info(), onJoinPayload() (+4 more)
 
 ### Community 14 - "Community 14"
+Cohesion: 0.2
+Nodes (11): _(), B(), d(), I(), k(), L(), S(), U() (+3 more)
+
+### Community 15 - "Community 15"
 Cohesion: 0.22
 Nodes (6): Idle, Loading, LoginUiState, LoginViewModel, PasswordResetSent, Success
 
-### Community 15 - "Community 15"
+### Community 16 - "Community 16"
 Cohesion: 0.25
 Nodes (1): MainActivity
 
-### Community 16 - "Community 16"
+### Community 17 - "Community 17"
 Cohesion: 0.25
 Nodes (1): DeviceManager
-
-### Community 17 - "Community 17"
-Cohesion: 0.29
-Nodes (8): _(), B(), d(), I(), L(), U(), w(), x()
 
 ### Community 19 - "Community 19"
 Cohesion: 0.29
@@ -225,19 +226,23 @@ Cohesion: 0.67
 Nodes (1): SyncWorker
 
 ### Community 47 - "Community 47"
+Cohesion: 0.67
+Nodes (3): Ce(), $e(), Ie()
+
+### Community 48 - "Community 48"
 Cohesion: 1.0
 Nodes (2): handleSignup(), validateForm()
 
-### Community 54 - "Community 54"
+### Community 55 - "Community 55"
 Cohesion: 1.0
 Nodes (1): SelfShieldApplication
 
 ## Knowledge Gaps
 - **15 isolated node(s):** `MainViewModel`, `AuthState`, `Authenticated`, `Unauthenticated`, `SelfShieldApplication` (+10 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 15`** (8 nodes): `MainActivity.kt`, `checkAccessibility()`, `checkDeviceAdmin()`, `MainActivity`, `.onCreate()`, `MainScreen()`, `PermissionItem()`, `requestDeviceAdmin()`
+- **Thin community `Community 16`** (8 nodes): `MainActivity.kt`, `checkAccessibility()`, `checkDeviceAdmin()`, `MainActivity`, `.onCreate()`, `MainScreen()`, `PermissionItem()`, `requestDeviceAdmin()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 16`** (8 nodes): `DeviceManager`, `.getAdminId()`, `.getDeviceId()`, `.getFcmToken()`, `.isPaired()`, `.setFcmToken()`, `.setPaired()`, `DeviceManager.kt`
+- **Thin community `Community 17`** (8 nodes): `DeviceManager`, `.getAdminId()`, `.getDeviceId()`, `.getFcmToken()`, `.isPaired()`, `.setFcmToken()`, `.setPaired()`, `DeviceManager.kt`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 19`** (7 nodes): `AuthRepository`, `.isUserLoggedIn()`, `.resetPassword()`, `.signIn()`, `.signOut()`, `.signUp()`, `AuthRepository.kt`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -269,15 +274,15 @@ Nodes (1): SelfShieldApplication
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 46`** (3 nodes): `SyncWorker.kt`, `SyncWorker`, `.doWork()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (3 nodes): `page.tsx`, `handleSignup()`, `validateForm()`
+- **Thin community `Community 48`** (3 nodes): `page.tsx`, `handleSignup()`, `validateForm()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (2 nodes): `SelfShieldApplication.kt`, `SelfShieldApplication`
+- **Thin community `Community 55`** (2 nodes): `SelfShieldApplication.kt`, `SelfShieldApplication`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Error` connect `Community 0` to `Community 1`, `Community 2`, `Community 5`, `Community 6`, `Community 7`, `Community 8`, `Community 9`, `Community 14`, `Community 22`?**
+- **Why does `Error` connect `Community 0` to `Community 1`, `Community 2`, `Community 5`, `Community 6`, `Community 7`, `Community 8`, `Community 9`, `Community 15`, `Community 22`?**
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **Why does `createClient()` connect `Community 4` to `Community 10`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._

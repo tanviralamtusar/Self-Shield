@@ -24,11 +24,19 @@ import com.selfshield.admin.SelfShieldDeviceAdminReceiver
 import com.selfshield.core.ui.theme.SelfShieldTheme
 import com.selfshield.feature.onboarding.login.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.handleDeeplinks
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    
+    @Inject
+    lateinit var supabaseClient: SupabaseClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleIntent(intent)
         setContent {
             SelfShieldTheme {
                 val navController = rememberNavController()
@@ -56,6 +64,17 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.let {
+            supabaseClient.handleDeeplinks(it)
         }
     }
 }
