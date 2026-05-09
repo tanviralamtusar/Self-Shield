@@ -7,13 +7,13 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class SelfShieldApplication : Application(), Configuration.Provider {
+class SelfShieldApplication : Application(), androidx.work.Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
-    override val workManagerConfiguration: Configuration
-        get() = Configuration.Builder()
+    override val workManagerConfiguration: androidx.work.Configuration
+        get() = androidx.work.Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
 }

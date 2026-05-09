@@ -11,17 +11,18 @@ import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.selfshield.admin.SelfShieldDeviceAdminReceiver
 import com.selfshield.core.ui.theme.SelfShieldTheme
+import com.selfshield.feature.onboarding.login.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,11 +31,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SelfShieldTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                val navController = rememberNavController()
+                val mainViewModel: MainViewModel = viewModel()
+                val authState by mainViewModel.authState.collectAsState()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = if (authState == AuthState.Authenticated) "main" else "login"
                 ) {
-                    MainScreen(this)
+                    composable("login") {
+                        LoginScreen(onLoginSuccess = {
+                            navController.navigate("main") {
+                                popUpTo("login") { inclusive = true }
+                            }
+                        })
+                    }
+                    composable("main") {
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            MainScreen(this@MainActivity)
+                        }
+                    }
                 }
             }
         }
