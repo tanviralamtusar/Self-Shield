@@ -105,29 +105,35 @@ class SelfShieldAccessibilityService : AccessibilityService() {
     }
 
     private fun performBlockAction() {
-        val root = rootInActiveWindow ?: run {
-            performGlobalAction(GLOBAL_ACTION_BACK)
-            return
-        }
+        val root = rootInActiveWindow ?: return
 
-        // Lightning fast Chats tab click
-        for (keyword in CHATS_TAB_KEYWORDS) {
+        // 1. Try to find and click "Chats" tab (Priority)
+        val chatsKeywords = arrayOf(
+            "Chats", "চ্যাট", "চ্যাটস", "चैट्स", "Conversaciones", 
+            "المحادثات", "Conversas", "Discussions", "Obrolan", "Чаты",
+            "Conversations"
+        )
+
+        for (keyword in chatsKeywords) {
             val nodes = root.findAccessibilityNodeInfosByText(keyword)
             if (!nodes.isNullOrEmpty()) {
-                val node = nodes[0]
-                if (node.isClickable && node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
-                
-                var parent = node.parent
-                var depth = 0
-                while (parent != null && depth < 5) {
-                    if (parent.isClickable && parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
-                    parent = parent.parent
-                    depth++
+                for (node in nodes) {
+                    // Check if it's likely a bottom tab (not a message containing "Chats")
+                    if (node.isClickable && node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
+                    
+                    var parent = node.parent
+                    var depth = 0
+                    while (parent != null && depth < 3) {
+                        if (parent.isClickable && parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
+                        parent = parent.parent
+                        depth++
+                    }
                 }
             }
         }
 
-        // Instant fallback
+        // 2. If we are in an individual channel (indicated by the activity name), BACK is safe
+        // This will bring the user back to the Updates list, where the next cycle will try to click Chats
         performGlobalAction(GLOBAL_ACTION_BACK)
     }
 
