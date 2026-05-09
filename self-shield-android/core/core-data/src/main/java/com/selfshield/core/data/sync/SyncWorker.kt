@@ -7,8 +7,6 @@ import androidx.work.WorkerParameters
 import com.selfshield.core.data.identity.DeviceManager
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.filter.FilterOperation
-import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.Instant
@@ -34,7 +32,9 @@ class SyncWorker @AssistedInject constructor(
                     "status" to "online"
                 )
             ) {
-                filter(FilterOperation("id", FilterOperator.EQ, deviceId))
+                filter {
+                    eq("id", deviceId)
+                }
             }
 
             Result.success()

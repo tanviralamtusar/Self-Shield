@@ -3,8 +3,7 @@ package com.selfshield.core.data.repository
 import com.selfshield.core.data.identity.DeviceManager
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.filter.FilterOperation
-import io.github.jan.supabase.postgrest.query.filter.FilterOperator
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -68,8 +67,10 @@ class DeviceRepository @Inject constructor(
         try {
             val deviceId = deviceManager.getDeviceId()
             val response = supabase.postgrest.from("devices")
-                .select("admin_id, status") {
-                    filter(FilterOperation("id", FilterOperator.EQ, deviceId))
+                .select(columns = Columns.raw("admin_id, status")) {
+                    filter {
+                        eq("id", deviceId)
+                    }
                 }.decodeSingle<DeviceStatus>()
 
             if (response.admin_id != null) {
