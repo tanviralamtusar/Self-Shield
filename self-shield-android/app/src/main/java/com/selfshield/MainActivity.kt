@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.selfshield.admin.SelfShieldDeviceAdminReceiver
 import com.selfshield.core.ui.theme.SelfShieldTheme
 import com.selfshield.feature.onboarding.login.LoginScreen
+import com.selfshield.feature.onboarding.signup.SignupScreen
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.gotrue.auth
@@ -49,11 +50,28 @@ class MainActivity : ComponentActivity() {
                     startDestination = if (authState == AuthState.Authenticated) "main" else "login"
                 ) {
                     composable("login") {
-                        LoginScreen(onLoginSuccess = {
-                            navController.navigate("main") {
-                                popUpTo("login") { inclusive = true }
+                        LoginScreen(
+                            onLoginSuccess = {
+                                navController.navigate("main") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            },
+                            onNavigateToSignup = {
+                                navController.navigate("signup")
                             }
-                        })
+                        )
+                    }
+                    composable("signup") {
+                        SignupScreen(
+                            onBackToLogin = {
+                                navController.popBackStack()
+                            },
+                            onSignupSuccess = {
+                                navController.navigate("main") {
+                                    popUpTo("signup") { inclusive = true }
+                                }
+                            }
+                        )
                     }
                     composable("main") {
                         Surface(
