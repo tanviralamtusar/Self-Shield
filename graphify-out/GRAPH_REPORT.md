@@ -55,14 +55,14 @@
 ## Surprising Connections (you probably didn't know these)
 - `initSupabase()` --calls--> `createClient()`  [INFERRED]
   self-shield-extension\background\service-worker.js → self-shield-web\src\lib\supabase\client.ts
-- `stripNulls()` --calls--> `Error`  [INFERRED]
-  self-shield-extension\supabase.js → self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt
-- `from()` --calls--> `Error`  [INFERRED]
-  self-shield-extension\supabase.js → self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt
-- `_encodeUserBroadcastPush()` --calls--> `Error`  [INFERRED]
-  self-shield-extension\supabase.js → self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt
-- `join()` --calls--> `Error`  [INFERRED]
-  self-shield-extension\supabase.js → self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt
+- `Error` --calls--> `stripNulls()`  [INFERRED]
+  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
+- `Error` --calls--> `from()`  [INFERRED]
+  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
+- `Error` --calls--> `_encodeUserBroadcastPush()`  [INFERRED]
+  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
+- `Error` --calls--> `join()`  [INFERRED]
+  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
 
 ## Communities
 
