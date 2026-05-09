@@ -28,6 +28,7 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var isSignupMode by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState) {
         if (uiState is LoginUiState.Success) {
@@ -47,7 +48,7 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Welcome to Self-Shield",
+                text = if (isSignupMode) "Create Account" else "Welcome Back",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -55,7 +56,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = "Sign in to your admin account",
+                text = if (isSignupMode) "Join Self-Shield to protect your device" else "Sign in to your account",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -103,7 +104,13 @@ fun LoginScreen(
             }
 
             Button(
-                onClick = { viewModel.signIn(email, password) },
+                onClick = { 
+                    if (isSignupMode) {
+                        viewModel.signUp(email, password)
+                    } else {
+                        viewModel.signIn(email, password)
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = uiState !is LoginUiState.Loading && email.isNotBlank() && password.isNotBlank(),
                 shape = MaterialTheme.shapes.medium
@@ -115,17 +122,20 @@ fun LoginScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text("Sign In")
+                    Text(if (isSignupMode) "Sign Up" else "Sign In")
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(
-                onClick = { viewModel.signUp(email, password) },
-                enabled = uiState !is LoginUiState.Loading && email.isNotBlank() && password.isNotBlank()
+                onClick = { isSignupMode = !isSignupMode },
+                enabled = uiState !is LoginUiState.Loading
             ) {
-                Text("Don't have an account? Sign Up")
+                Text(
+                    if (isSignupMode) "Already have an account? Sign In" 
+                    else "Don't have an account? Sign Up"
+                )
             }
         }
     }
