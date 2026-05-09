@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,6 +45,11 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(context: ComponentActivity) {
     var isDeviceAdminEnabled by remember { mutableStateOf(checkDeviceAdmin(context)) }
     var isAccessibilityEnabled by remember { mutableStateOf(checkAccessibility(context)) }
+
+    val prefs = context.getSharedPreferences("self_shield_prefs", Context.MODE_PRIVATE)
+    var isChannelBlockEnabled by remember {
+        mutableStateOf(prefs.getBoolean("channel_block_enabled", false))
+    }
 
     // Automatically prompt user if permissions are missing
     LaunchedEffect(Unit) {
@@ -96,7 +102,43 @@ fun MainScreen(context: ComponentActivity) {
                 context.startActivity(intent)
             }
         )
-        
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // ========== WhatsApp Channel Block Toggle ==========
+        Text(
+            text = "Features",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Block WhatsApp Channels",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = if (isChannelBlockEnabled) "Channels are blocked" else "Channels are allowed",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (isChannelBlockEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Switch(
+                checked = isChannelBlockEnabled,
+                onCheckedChange = { enabled ->
+                    isChannelBlockEnabled = enabled
+                    prefs.edit().putBoolean("channel_block_enabled", enabled).apply()
+                }
+            )
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
         
         Button(
@@ -110,6 +152,7 @@ fun MainScreen(context: ComponentActivity) {
         }
     }
 }
+
 
 @Composable
 fun PermissionItem(label: String, isEnabled: Boolean, onClick: () -> Unit) {
