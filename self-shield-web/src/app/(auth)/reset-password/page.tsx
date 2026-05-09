@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,32 +10,42 @@ import { Label } from '@/components/ui/label';
 import { Shield } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('');
+export default function ResetPasswordPage() {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters long');
+      return;
+    }
+
+    setLoading(true);
+
+    const { error } = await supabase.auth.updateUser({
+      password: password,
     });
 
     if (error) {
       toast.error(error.message);
       setLoading(false);
     } else {
-      router.push('/');
-      router.refresh();
+      toast.success('Password updated successfully!');
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
     }
   };
-
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/40 p-4">
@@ -47,55 +56,40 @@ export default function LoginPage() {
               <Shield className="w-8 h-8 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight">Welcome to Self-Shield</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">Set New Password</CardTitle>
           <CardDescription>
-            Enter your email and password to access the dashboard.
+            Please enter your new password below.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleUpdatePassword} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                placeholder="m@example.com" 
-                required 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link 
-                  href="/forgot-password" 
-                  className="text-sm text-primary hover:underline font-medium"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <Label htmlFor="password">New Password</Label>
               <Input 
                 id="password" 
                 type="password" 
+                placeholder="Minimum 8 characters" 
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Input 
+                id="confirmPassword" 
+                type="password" 
+                placeholder="Repeat your password" 
+                required 
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Updating password...' : 'Update Password'}
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4 text-center">
-          <div className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-primary hover:underline font-medium">
-              Sign up
-            </Link>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );

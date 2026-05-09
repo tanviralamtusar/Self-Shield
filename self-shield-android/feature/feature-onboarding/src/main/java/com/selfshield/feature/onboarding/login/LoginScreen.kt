@@ -29,6 +29,7 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var isSignupMode by remember { mutableStateOf(false) }
+    var isResetMode by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState) {
         if (uiState is LoginUiState.Success) {
@@ -48,7 +49,11 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = if (isSignupMode) "Create Account" else "Welcome Back",
+                text = when {
+                    isResetMode -> "Reset Password"
+                    isSignupMode -> "Create Account"
+                    else -> "Welcome Back"
+                },
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -56,7 +61,11 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = if (isSignupMode) "Join Self-Shield to protect your device" else "Sign in to your account",
+                text = when {
+                    isResetMode -> "Enter your email to receive a reset link"
+                    isSignupMode -> "Join Self-Shield to protect your device"
+                    else -> "Sign in to your account"
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -73,24 +82,37 @@ fun LoginScreen(
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            if (!isResetMode) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
-                trailingIcon = {
-                    val image = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(image, contentDescription = null)
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Password") },
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                    trailingIcon = {
+                        val image = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(image, contentDescription = null)
+                        }
+                    },
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    singleLine = true
+                )
+            }
+
+            if (!isSignupMode && !isResetMode) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    TextButton(onClick = { isResetMode = true }) {
+                        Text("Forgot password?")
                     }
-                },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true
-            )
+                }
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -103,16 +125,25 @@ fun LoginScreen(
                 )
             }
 
+            if (uiState is LoginUiState.PasswordResetSent) {
+                Text(
+                    text = "Reset link sent! Please check your email.",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+
             Button(
                 onClick = { 
-                    if (isSignupMode) {
-                        viewModel.signUp(email, password)
-                    } else {
-                        viewModel.signIn(email, password)
+                    when {
+                        isResetMode -> viewModel.resetPassword(email)
+                        isSignupMode -> viewModel.signUp(email, password)
+                        else -> viewModel.signIn(email, password)
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = uiState !is LoginUiState.Loading && email.isNotBlank() && password.isNotBlank(),
+                enabled = uiState !is LoginUiState.Loading && email.isNotBlank() && (isResetMode || password.isNotBlank()),
                 shape = MaterialTheme.shapes.medium
             ) {
                 if (uiState is LoginUiState.Loading) {
@@ -122,19 +153,34 @@ fun LoginScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text(if (isSignupMode) "Sign Up" else "Sign In")
+                    Text(
+                        when {
+                            isResetMode -> "Send Reset Link"
+                            isSignupMode -> "Sign Up"
+                            else -> "Sign In"
+                        }
+                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(
-                onClick = { isSignupMode = !isSignupMode },
+                onClick = { 
+                    if (isResetMode) {
+                        isResetMode = false
+                    } else {
+                        isSignupMode = !isSignupMode 
+                    }
+                },
                 enabled = uiState !is LoginUiState.Loading
             ) {
                 Text(
-                    if (isSignupMode) "Already have an account? Sign In" 
-                    else "Don't have an account? Sign Up"
+                    when {
+                        isResetMode -> "Back to Sign In"
+                        isSignupMode -> "Already have an account? Sign In" 
+                        else -> "Don't have an account? Sign Up"
+                    }
                 )
             }
         }
