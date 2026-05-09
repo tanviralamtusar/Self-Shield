@@ -38,17 +38,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.0-debug
-          name: Self-Shield Debug Release
+          tag_name: v1.1.0-beta
+          name: Self Shield - Universal Release
           body: |
-            This is an automated debug release for testing the WhatsApp Updates/Channels blocking feature.
+            This is a major update for Self Shield with universal language support and branding improvements.
             
-            **Features:**
-            - Fast WhatsApp Updates tab blocking (0.1s)
-            - Device Admin protection
-            - Accessibility Service implementation
+            **What's New:**
+            - **Universal Language Support:** WhatsApp Updates/Channels blocking now works in English, Bengali, Hindi, Spanish, Arabic, and more.
+            - **New Branding:** Updated app icon and renamed to "Self Shield".
+            - **Improved Visibility:** Fixed issues where the app was not appearing in Accessibility settings on some devices.
+            - **Device Admin Protection:** Enhanced anti-tamper layers.
           draft: false
-          prerelease: true
+          prerelease: false
           files: self-shield-android/app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
