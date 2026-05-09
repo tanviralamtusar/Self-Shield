@@ -2,126 +2,100 @@ package com.selfshield.service.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 
+/**
+ * Self Shield Accessibility Service
+ * Blocks WhatsApp Channels using the same proven approach as FocusGuard.
+ * Uses findAccessibilityNodeInfosByText() + selected/focused check.
+ */
 class SelfShieldAccessibilityService : AccessibilityService() {
 
     companion object {
         const val PREF_NAME = "self_shield_prefs"
         const val KEY_CHANNEL_BLOCK_ENABLED = "channel_block_enabled"
 
-        // Keywords that ONLY appear when viewing channel content
-        // NOT the bottom tab "Updates" label
-        val CHANNEL_CONTENT_KEYWORDS = hashSetOf(
-            // "Channels" header inside Updates tab
-            "Channels", "চ্যানেল", "चैनल", "Canales", "القنوات",
-            "Canais", "Chaînes", "Kanäle", "Saluran", "Каналы",
-            // "Find channels" button
-            "Find channels", "চ্যানেল খুঁজুন", "Explore more",
-            "Buscar canales", "Найти каналы", "Kanal temukan",
-            "Kanäle finden", "Trouver des chaînes", "Encontrar canais",
-            // "See all" for channels
-            "See all", "সব দেখুন", "सभी देखें", "Ver todos", "عرض الكل",
-            "Voir tout", "Alle ansehen", "Lihat semua", "Посмотреть все",
-            // "Follow" button inside a single channel
-            "Follow", "ফলো", "फ़ॉलो करें", "Seguir", "متابعة",
-            "Suivre", "Folgen", "Ikuti", "Подписаться",
-            // "Followers" count label inside a channel
-            "followers", "ফলোয়ার", "seguidores", "abonnés", "Follower", "pengikut"
-        )
-
-        // Chats tab label in various languages — to click and navigate
-        val CHATS_TAB_KEYWORDS = hashSetOf(
-            "Chats", "চ্যাট", "चैट्स", "Conversaciones", "المحادثات",
-            "Conversas", "Discussions", "Kanäle", "Obrolan", "Чаты"
-        )
+        private const val PKG_WHATSAPP = "com.whatsapp"
+        private const val PKG_WHATSAPP_B = "com.whatsapp.w4b"
     }
 
+    private val mainHandler = Handler(Looper.getMainLooper())
+
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        val packageName = event.packageName?.toString() ?: return
-        if (packageName != "com.whatsapp" && packageName != "com.whatsapp.w4b") return
+        val pkg = event.packageName?.toString() ?: return
+        if (pkg != PKG_WHATSAPP && pkg != PKG_WHATSAPP_B) return
 
         // Check if channel blocking is enabled
         val prefs = applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         if (!prefs.getBoolean(KEY_CHANNEL_BLOCK_ENABLED, false)) return
 
-        val rootNode = rootInActiveWindow ?: return
-
-        if (isViewingChannelContent(rootNode)) {
-            // Try to click "Chats" tab to stay in WhatsApp
-            if (!clickChatsTab(rootNode)) {
-                // Fallback: press BACK only if Chats tab not found
-                performGlobalAction(GLOBAL_ACTION_BACK)
-            }
-        }
+        handleWhatsApp()
     }
 
-    /**
-     * Detects if the user is currently viewing channel-related content.
-     * This does NOT trigger on the normal Chats, Calls, or Communities tabs.
-     */
-    private fun isViewingChannelContent(node: AccessibilityNodeInfo?): Boolean {
-        if (node == null) return false
+    private fun handleWhatsApp() {
+        val root = rootInActiveWindow ?: return
 
-        val text = node.text?.toString()?.trim() ?: ""
-        val contentDesc = node.contentDescription?.toString()?.trim() ?: ""
-        val nodeText = text.ifEmpty { contentDesc }
+        try {
+            // Step 1: Check if "Updates"/"Channels" tab is SELECTED or FOCUSED
+            val restrictedKeywords = arrayOf(
+                "Updates", "আপডেট", "अपडेट", "Novedades", "Actualizaciones",
+                "المستجدات", "Atualizações", "Actus", "Aktuelles", "Pembaruan",
+                "Обновления",
+                "Channels", "চ্যানেল", "चैनल", "Canales", "القنوات",
+                "Canais", "Chaînes", "Kanäle", "Saluran", "Каналы"
+            )
 
-        if (nodeText.isNotEmpty()) {
-            val matchesChannel = CHANNEL_CONTENT_KEYWORDS.any {
-                it.equals(nodeText, ignoreCase = true)
-            }
-            if (matchesChannel) return true
-        }
-
-        for (i in 0 until node.childCount) {
-            val child = node.getChild(i) ?: continue
-            if (isViewingChannelContent(child)) return true
-        }
-        return false
-    }
-
-    /**
-     * Finds the "Chats" tab in the bottom navigation and clicks it.
-     * Returns true if successfully clicked.
-     */
-    private fun clickChatsTab(node: AccessibilityNodeInfo?): Boolean {
-        if (node == null) return false
-
-        val text = node.text?.toString()?.trim() ?: ""
-        val contentDesc = node.contentDescription?.toString()?.trim() ?: ""
-        val nodeText = text.ifEmpty { contentDesc }
-
-        if (nodeText.isNotEmpty()) {
-            val isChatsTab = CHATS_TAB_KEYWORDS.any {
-                it.equals(nodeText, ignoreCase = true)
-            }
-            if (isChatsTab && node.isClickable) {
-                node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-                return true
-            }
-            // Try clicking the parent if the text node itself isn't clickable
-            if (isChatsTab) {
-                var parent = node.parent
-                while (parent != null) {
-                    if (parent.isClickable) {
-                        parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-                        return true
+            for (keyword in restrictedKeywords) {
+                val nodes = root.findAccessibilityNodeInfosByText(keyword)
+                if (nodes != null && nodes.isNotEmpty()) {
+                    for (node in nodes) {
+                        val isActive = node.isSelected ||
+                            node.isFocused ||
+                            (node.contentDescription?.toString()?.lowercase()?.contains("selected") == true)
+                        if (isActive) {
+                            performBlockAction()
+                            return
+                        }
                     }
-                    parent = parent.parent
                 }
             }
-        }
 
-        for (i in 0 until node.childCount) {
-            val child = node.getChild(i) ?: continue
-            if (clickChatsTab(child)) return true
+            // Step 2: Check for channel-specific UI elements
+            // These only appear when actually inside channel views
+            val channelIndicators = arrayOf(
+                "Find channels", "চ্যানেল খুঁজুন",
+                "Channels to follow", "Explore more",
+                "See all", "সব দেখুন"
+            )
+
+            for (indicator in channelIndicators) {
+                val nodes = root.findAccessibilityNodeInfosByText(indicator)
+                if (nodes != null && nodes.isNotEmpty()) {
+                    performBlockAction()
+                    return
+                }
+            }
+        } finally {
+            root.recycle()
         }
-        return false
+    }
+
+    /**
+     * BACK first (to exit the current view), then HOME after 50ms
+     * This ensures the user is quickly moved away from channels.
+     */
+    private fun performBlockAction() {
+        performGlobalAction(GLOBAL_ACTION_BACK)
+        mainHandler.postDelayed({
+            performGlobalAction(GLOBAL_ACTION_HOME)
+        }, 50)
     }
 
     override fun onInterrupt() {
         // Handle interruption
     }
 }
+
