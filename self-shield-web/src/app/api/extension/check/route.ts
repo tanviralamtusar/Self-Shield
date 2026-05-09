@@ -83,9 +83,15 @@ export async function GET(req: NextRequest) {
         .limit(1);
 
       if (matches && matches.length > 0) {
+        // block_lists is returned as an array in the joined query
+        const blockLists = matches[0].block_lists;
+        const blockListName = Array.isArray(blockLists) 
+          ? blockLists[0]?.name 
+          : (blockLists as any)?.name;
+
         const res = NextResponse.json({ 
           blocked: true, 
-          reason: `Matched blocklist: ${matches[0].block_lists?.name || 'Restricted Site'}` 
+          reason: `Matched blocklist: ${blockListName || 'Restricted Site'}` 
         });
         res.headers.set('Access-Control-Allow-Origin', '*');
         return res;
