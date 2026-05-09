@@ -9,7 +9,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L1",
       "id": "self_shield_android_app_src_main_java_com_selfshield_mainactivity_kt",
-      "community": 16,
+      "community": 15,
       "norm_label": "mainactivity.kt"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L28",
       "id": "selfshield_mainactivity_mainactivity",
-      "community": 16,
+      "community": 15,
       "norm_label": "mainactivity"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L30",
       "id": "selfshield_mainactivity_mainactivity_oncreate",
-      "community": 16,
+      "community": 15,
       "norm_label": ".oncreate()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L63",
       "id": "selfshield_mainactivity_mainscreen",
-      "community": 16,
+      "community": 15,
       "norm_label": "mainscreen()"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L169",
       "id": "selfshield_mainactivity_permissionitem",
-      "community": 16,
+      "community": 15,
       "norm_label": "permissionitem()"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L186",
       "id": "selfshield_mainactivity_requestdeviceadmin",
-      "community": 16,
+      "community": 15,
       "norm_label": "requestdeviceadmin()"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L195",
       "id": "selfshield_mainactivity_checkdeviceadmin",
-      "community": 16,
+      "community": 15,
       "norm_label": "checkdeviceadmin()"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\MainActivity.kt",
       "source_location": "L201",
       "id": "selfshield_mainactivity_checkaccessibility",
-      "community": 16,
+      "community": 15,
       "norm_label": "checkaccessibility()"
     },
     {
@@ -126,7 +126,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\SelfShieldApplication.kt",
       "source_location": "L1",
       "id": "self_shield_android_app_src_main_java_com_selfshield_selfshieldapplication_kt",
-      "community": 56,
+      "community": 54,
       "norm_label": "selfshieldapplication.kt"
     },
     {
@@ -135,7 +135,7 @@
       "source_file": "self-shield-android\\app\\src\\main\\java\\com\\selfshield\\SelfShieldApplication.kt",
       "source_location": "L9",
       "id": "selfshield_selfshieldapplication_selfshieldapplication",
-      "community": 56,
+      "community": 54,
       "norm_label": "selfshieldapplication"
     },
     {
@@ -189,7 +189,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L1",
       "id": "self_shield_android_core_core_data_src_main_java_com_selfshield_core_data_identity_devicemanager_kt",
-      "community": 17,
+      "community": 16,
       "norm_label": "devicemanager.kt"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L11",
       "id": "identity_devicemanager_devicemanager",
-      "community": 17,
+      "community": 16,
       "norm_label": "devicemanager"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L32",
       "id": "identity_devicemanager_devicemanager_getfcmtoken",
-      "community": 17,
+      "community": 16,
       "norm_label": ".getfcmtoken()"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L34",
       "id": "identity_devicemanager_devicemanager_setfcmtoken",
-      "community": 17,
+      "community": 16,
       "norm_label": ".setfcmtoken()"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L41",
       "id": "identity_devicemanager_devicemanager_getdeviceid",
-      "community": 17,
+      "community": 16,
       "norm_label": ".getdeviceid()"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L53",
       "id": "identity_devicemanager_devicemanager_setpaired",
-      "community": 17,
+      "community": 16,
       "norm_label": ".setpaired()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L60",
       "id": "identity_devicemanager_devicemanager_ispaired",
-      "community": 17,
+      "community": 16,
       "norm_label": ".ispaired()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\identity\\DeviceManager.kt",
       "source_location": "L62",
       "id": "identity_devicemanager_devicemanager_getadminid",
-      "community": 17,
+      "community": 16,
       "norm_label": ".getadminid()"
     },
     {
@@ -268,7 +268,7 @@
       "label": "AuthRepository",
       "file_type": "code",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L18",
+      "source_location": "L17",
       "id": "repository_authrepository_authrepository",
       "community": 19,
       "norm_label": "authrepository"
@@ -277,7 +277,7 @@
       "label": ".signIn()",
       "file_type": "code",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L35",
+      "source_location": "L34",
       "id": "repository_authrepository_authrepository_signin",
       "community": 19,
       "norm_label": ".signin()"
@@ -286,7 +286,7 @@
       "label": ".signUp()",
       "file_type": "code",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L47",
+      "source_location": "L46",
       "id": "repository_authrepository_authrepository_signup",
       "community": 19,
       "norm_label": ".signup()"
@@ -295,7 +295,7 @@
       "label": ".signOut()",
       "file_type": "code",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L62",
+      "source_location": "L61",
       "id": "repository_authrepository_authrepository_signout",
       "community": 19,
       "norm_label": ".signout()"
@@ -304,7 +304,7 @@
       "label": ".resetPassword()",
       "file_type": "code",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L71",
+      "source_location": "L70",
       "id": "repository_authrepository_authrepository_resetpassword",
       "community": 19,
       "norm_label": ".resetpassword()"
@@ -313,7 +313,7 @@
       "label": ".isUserLoggedIn()",
       "file_type": "code",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L78",
+      "source_location": "L77",
       "id": "repository_authrepository_authrepository_isuserloggedin",
       "community": 19,
       "norm_label": ".isuserloggedin()"
@@ -531,7 +531,7 @@
       "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Color.kt",
       "source_location": "L1",
       "id": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_color_kt",
-      "community": 93,
+      "community": 91,
       "norm_label": "color.kt"
     },
     {
@@ -540,7 +540,7 @@
       "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Theme.kt",
       "source_location": "L1",
       "id": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_theme_kt",
-      "community": 57,
+      "community": 55,
       "norm_label": "theme.kt"
     },
     {
@@ -549,7 +549,7 @@
       "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Theme.kt",
       "source_location": "L37",
       "id": "theme_theme_selfshieldtheme",
-      "community": 57,
+      "community": 55,
       "norm_label": "selfshieldtheme()"
     },
     {
@@ -558,7 +558,7 @@
       "source_file": "self-shield-android\\core\\core-ui\\src\\main\\java\\com\\selfshield\\core\\ui\\theme\\Type.kt",
       "source_location": "L1",
       "id": "self_shield_android_core_core_ui_src_main_java_com_selfshield_core_ui_theme_type_kt",
-      "community": 94,
+      "community": 92,
       "norm_label": "type.kt"
     },
     {
@@ -567,16 +567,16 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginScreen.kt",
       "source_location": "L1",
       "id": "self_shield_android_feature_feature_onboarding_src_main_java_com_selfshield_feature_onboarding_login_loginscreen_kt",
-      "community": 58,
+      "community": 56,
       "norm_label": "loginscreen.kt"
     },
     {
       "label": "LoginScreen()",
       "file_type": "code",
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginScreen.kt",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "login_loginscreen_loginscreen",
-      "community": 58,
+      "community": 56,
       "norm_label": "loginscreen()"
     },
     {
@@ -585,7 +585,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L1",
       "id": "self_shield_android_feature_feature_onboarding_src_main_java_com_selfshield_feature_onboarding_login_loginviewmodel_kt",
-      "community": 15,
+      "community": 14,
       "norm_label": "loginviewmodel.kt"
     },
     {
@@ -594,7 +594,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L13",
       "id": "login_loginviewmodel_loginviewmodel",
-      "community": 15,
+      "community": 14,
       "norm_label": "loginviewmodel"
     },
     {
@@ -603,7 +603,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L21",
       "id": "login_loginviewmodel_loginviewmodel_signin",
-      "community": 15,
+      "community": 14,
       "norm_label": ".signin()"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L33",
       "id": "login_loginviewmodel_loginviewmodel_signup",
-      "community": 15,
+      "community": 14,
       "norm_label": ".signup()"
     },
     {
@@ -621,7 +621,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L56",
       "id": "login_loginviewmodel_loginuistate",
-      "community": 15,
+      "community": 14,
       "norm_label": "loginuistate"
     },
     {
@@ -630,7 +630,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L57",
       "id": "login_loginviewmodel_idle",
-      "community": 15,
+      "community": 14,
       "norm_label": "idle"
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L58",
       "id": "login_loginviewmodel_loading",
-      "community": 15,
+      "community": 14,
       "norm_label": "loading"
     },
     {
@@ -648,7 +648,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L59",
       "id": "login_loginviewmodel_success",
-      "community": 15,
+      "community": 14,
       "norm_label": "success"
     },
     {
@@ -657,7 +657,7 @@
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginViewModel.kt",
       "source_location": "L60",
       "id": "login_loginviewmodel_passwordresetsent",
-      "community": 15,
+      "community": 14,
       "norm_label": "passwordresetsent"
     },
     {
@@ -891,7 +891,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_tojson",
-      "community": 11,
+      "community": 12,
       "norm_label": "tojson()"
     },
     {
@@ -927,7 +927,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_d",
-      "community": 14,
+      "community": 17,
       "norm_label": "d()"
     },
     {
@@ -990,7 +990,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_processresponse",
-      "community": 11,
+      "community": 12,
       "norm_label": "processresponse()"
     },
     {
@@ -1098,7 +1098,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_explain",
-      "community": 12,
+      "community": 11,
       "norm_label": "explain()"
     },
     {
@@ -1368,7 +1368,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_match",
-      "community": 11,
+      "community": 12,
       "norm_label": "match()"
     },
     {
@@ -1395,7 +1395,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_filter",
-      "community": 12,
+      "community": 11,
       "norm_label": "filter()"
     },
     {
@@ -1431,7 +1431,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_update",
-      "community": 48,
+      "community": 6,
       "norm_label": "update()"
     },
     {
@@ -1449,7 +1449,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_w",
-      "community": 14,
+      "community": 17,
       "norm_label": "w()"
     },
     {
@@ -1458,7 +1458,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase",
-      "community": 14,
+      "community": 17,
       "norm_label": "_()"
     },
     {
@@ -1467,7 +1467,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_k",
-      "community": 14,
+      "community": 11,
       "norm_label": "k()"
     },
     {
@@ -1476,7 +1476,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_v",
-      "community": 14,
+      "community": 11,
       "norm_label": "v()"
     },
     {
@@ -1485,7 +1485,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_s",
-      "community": 14,
+      "community": 11,
       "norm_label": "s()"
     },
     {
@@ -1512,7 +1512,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_rpc",
-      "community": 12,
+      "community": 11,
       "norm_label": "rpc()"
     },
     {
@@ -1647,7 +1647,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_i",
-      "community": 14,
+      "community": 17,
       "norm_label": "i()"
     },
     {
@@ -1656,7 +1656,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_x",
-      "community": 14,
+      "community": 17,
       "norm_label": "x()"
     },
     {
@@ -1674,7 +1674,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_l",
-      "community": 14,
+      "community": 17,
       "norm_label": "l()"
     },
     {
@@ -1683,7 +1683,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_u",
-      "community": 14,
+      "community": 17,
       "norm_label": "u()"
     },
     {
@@ -1692,7 +1692,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_b",
-      "community": 14,
+      "community": 17,
       "norm_label": "b()"
     },
     {
@@ -1755,7 +1755,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_matchreceive",
-      "community": 12,
+      "community": 11,
       "norm_label": "matchreceive()"
     },
     {
@@ -2043,7 +2043,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_serialize",
-      "community": 11,
+      "community": 12,
       "norm_label": "serialize()"
     },
     {
@@ -2052,7 +2052,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_appendparams",
-      "community": 11,
+      "community": 12,
       "norm_label": "appendparams()"
     },
     {
@@ -2070,7 +2070,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_endpointurl",
-      "community": 11,
+      "community": 12,
       "norm_label": "endpointurl()"
     },
     {
@@ -2106,7 +2106,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_poll",
-      "community": 11,
+      "community": 12,
       "norm_label": "poll()"
     },
     {
@@ -2115,7 +2115,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_batchsend",
-      "community": 11,
+      "community": 12,
       "norm_label": "batchsend()"
     },
     {
@@ -2133,7 +2133,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ajax",
-      "community": 11,
+      "community": 12,
       "norm_label": "ajax()"
     },
     {
@@ -2277,7 +2277,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_protocol",
-      "community": 11,
+      "community": 12,
       "norm_label": "protocol()"
     },
     {
@@ -2286,7 +2286,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_disconnect",
-      "community": 12,
+      "community": 11,
       "norm_label": "disconnect()"
     },
     {
@@ -2358,7 +2358,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_transportconnect",
-      "community": 11,
+      "community": 12,
       "norm_label": "transportconnect()"
     },
     {
@@ -2493,7 +2493,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_remove",
-      "community": 12,
+      "community": 11,
       "norm_label": "remove()"
     },
     {
@@ -2502,7 +2502,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_channel",
-      "community": 12,
+      "community": 11,
       "norm_label": "channel()"
     },
     {
@@ -2943,7 +2943,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_getchannels",
-      "community": 12,
+      "community": 11,
       "norm_label": "getchannels()"
     },
     {
@@ -2961,7 +2961,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_removeallchannels",
-      "community": 12,
+      "community": 11,
       "norm_label": "removeallchannels()"
     },
     {
@@ -2979,7 +2979,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_schedulependingdisconnect",
-      "community": 12,
+      "community": 11,
       "norm_label": "_schedulependingdisconnect()"
     },
     {
@@ -2988,7 +2988,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_cancelpendingdisconnect",
-      "community": 12,
+      "community": 11,
       "norm_label": "_cancelpendingdisconnect()"
     },
     {
@@ -3267,7 +3267,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ce",
-      "community": 47,
+      "community": 7,
       "norm_label": "ce()"
     },
     {
@@ -3276,7 +3276,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_e",
-      "community": 47,
+      "community": 7,
       "norm_label": "$e()"
     },
     {
@@ -3285,7 +3285,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_ie",
-      "community": 47,
+      "community": 7,
       "norm_label": "ie()"
     },
     {
@@ -3294,7 +3294,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_xe",
-      "community": 12,
+      "community": 11,
       "norm_label": "xe()"
     },
     {
@@ -3420,7 +3420,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_uploadorupdate",
-      "community": 48,
+      "community": 6,
       "norm_label": "uploadorupdate()"
     },
     {
@@ -3429,7 +3429,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_upload",
-      "community": 48,
+      "community": 6,
       "norm_label": "upload()"
     },
     {
@@ -3969,7 +3969,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_r",
-      "community": 11,
+      "community": 12,
       "norm_label": "_r()"
     },
     {
@@ -3978,7 +3978,7 @@
       "source_file": "self-shield-extension\\supabase.js",
       "source_location": "L7",
       "id": "self_shield_extension_supabase_vr",
-      "community": 11,
+      "community": 12,
       "norm_label": "vr()"
     },
     {
@@ -5175,7 +5175,7 @@
       "source_file": "self-shield-extension\\blocked-page\\blocked.js",
       "source_location": "L1",
       "id": "self_shield_extension_blocked_page_blocked_js",
-      "community": 95,
+      "community": 93,
       "norm_label": "blocked.js"
     },
     {
@@ -5229,7 +5229,7 @@
       "source_file": "self-shield-extension\\content\\search_filter.js",
       "source_location": "L1",
       "id": "self_shield_extension_content_search_filter_js",
-      "community": 59,
+      "community": 57,
       "norm_label": "search_filter.js"
     },
     {
@@ -5238,7 +5238,7 @@
       "source_file": "self-shield-extension\\content\\search_filter.js",
       "source_location": "L15",
       "id": "content_search_filter_scrubsearch",
-      "community": 59,
+      "community": 57,
       "norm_label": "scrubsearch()"
     },
     {
@@ -5283,7 +5283,7 @@
       "source_file": "self-shield-web\\eslint.config.mjs",
       "source_location": "L1",
       "id": "self_shield_web_eslint_config_mjs",
-      "community": 96,
+      "community": 94,
       "norm_label": "eslint.config.mjs"
     },
     {
@@ -5292,7 +5292,7 @@
       "source_file": "self-shield-web\\next-env.d.ts",
       "source_location": "L1",
       "id": "self_shield_web_next_env_d_ts",
-      "community": 97,
+      "community": 95,
       "norm_label": "next-env.d.ts"
     },
     {
@@ -5301,7 +5301,7 @@
       "source_file": "self-shield-web\\next.config.ts",
       "source_location": "L1",
       "id": "self_shield_web_next_config_ts",
-      "community": 98,
+      "community": 96,
       "norm_label": "next.config.ts"
     },
     {
@@ -5310,7 +5310,7 @@
       "source_file": "self-shield-web\\postcss.config.mjs",
       "source_location": "L1",
       "id": "self_shield_web_postcss_config_mjs",
-      "community": 99,
+      "community": 97,
       "norm_label": "postcss.config.mjs"
     },
     {
@@ -5319,7 +5319,7 @@
       "source_file": "self-shield-web\\scratch\\activate-user-device.ts",
       "source_location": "L1",
       "id": "self_shield_web_scratch_activate_user_device_ts",
-      "community": 60,
+      "community": 58,
       "norm_label": "activate-user-device.ts"
     },
     {
@@ -5328,7 +5328,7 @@
       "source_file": "self-shield-web\\scratch\\activate-user-device.ts",
       "source_location": "L6",
       "id": "scratch_activate_user_device_activatedevice",
-      "community": 60,
+      "community": 58,
       "norm_label": "activatedevice()"
     },
     {
@@ -5337,7 +5337,7 @@
       "source_file": "self-shield-web\\scratch\\check-device-state.ts",
       "source_location": "L1",
       "id": "self_shield_web_scratch_check_device_state_ts",
-      "community": 61,
+      "community": 59,
       "norm_label": "check-device-state.ts"
     },
     {
@@ -5346,7 +5346,7 @@
       "source_file": "self-shield-web\\scratch\\check-device-state.ts",
       "source_location": "L17",
       "id": "scratch_check_device_state_checkdevice",
-      "community": 61,
+      "community": 59,
       "norm_label": "checkdevice()"
     },
     {
@@ -5355,7 +5355,7 @@
       "source_file": "self-shield-web\\scripts\\check-users.ts",
       "source_location": "L1",
       "id": "self_shield_web_scripts_check_users_ts",
-      "community": 62,
+      "community": 60,
       "norm_label": "check-users.ts"
     },
     {
@@ -5364,7 +5364,7 @@
       "source_file": "self-shield-web\\scripts\\check-users.ts",
       "source_location": "L10",
       "id": "scripts_check_users_checkusers",
-      "community": 62,
+      "community": 60,
       "norm_label": "checkusers()"
     },
     {
@@ -5373,7 +5373,7 @@
       "source_file": "self-shield-web\\scripts\\seed-blocklists.ts",
       "source_location": "L1",
       "id": "self_shield_web_scripts_seed_blocklists_ts",
-      "community": 63,
+      "community": 61,
       "norm_label": "seed-blocklists.ts"
     },
     {
@@ -5382,7 +5382,7 @@
       "source_file": "self-shield-web\\scripts\\seed-blocklists.ts",
       "source_location": "L21",
       "id": "scripts_seed_blocklists_seed",
-      "community": 63,
+      "community": 61,
       "norm_label": "seed()"
     },
     {
@@ -5391,7 +5391,7 @@
       "source_file": "self-shield-web\\scripts\\sync-users.ts",
       "source_location": "L1",
       "id": "self_shield_web_scripts_sync_users_ts",
-      "community": 64,
+      "community": 62,
       "norm_label": "sync-users.ts"
     },
     {
@@ -5400,7 +5400,7 @@
       "source_file": "self-shield-web\\scripts\\sync-users.ts",
       "source_location": "L10",
       "id": "scripts_sync_users_syncusers",
-      "community": 64,
+      "community": 62,
       "norm_label": "syncusers()"
     },
     {
@@ -5427,7 +5427,7 @@
       "source_file": "self-shield-web\\src\\app\\layout.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_layout_tsx",
-      "community": 65,
+      "community": 63,
       "norm_label": "layout.tsx"
     },
     {
@@ -5436,7 +5436,7 @@
       "source_file": "self-shield-web\\src\\app\\layout.tsx",
       "source_location": "L13",
       "id": "app_layout_rootlayout",
-      "community": 65,
+      "community": 63,
       "norm_label": "rootlayout()"
     },
     {
@@ -5463,7 +5463,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\login\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_auth_login_page_tsx",
-      "community": 66,
+      "community": 64,
       "norm_label": "page.tsx"
     },
     {
@@ -5472,7 +5472,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\login\\page.tsx",
       "source_location": "L21",
       "id": "login_page_handlelogin",
-      "community": 66,
+      "community": 64,
       "norm_label": "handlelogin()"
     },
     {
@@ -5499,7 +5499,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_auth_signup_page_tsx",
-      "community": 49,
+      "community": 47,
       "norm_label": "page.tsx"
     },
     {
@@ -5508,7 +5508,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L23",
       "id": "signup_page_validateform",
-      "community": 49,
+      "community": 47,
       "norm_label": "validateform()"
     },
     {
@@ -5517,7 +5517,7 @@
       "source_file": "self-shield-web\\src\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L48",
       "id": "signup_page_handlesignup",
-      "community": 49,
+      "community": 47,
       "norm_label": "handlesignup()"
     },
     {
@@ -5544,7 +5544,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_page_tsx",
-      "community": 67,
+      "community": 65,
       "norm_label": "page.tsx"
     },
     {
@@ -5553,7 +5553,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\page.tsx",
       "source_location": "L8",
       "id": "dashboard_page_dashboardoverview",
-      "community": 67,
+      "community": 65,
       "norm_label": "dashboardoverview()"
     },
     {
@@ -5580,7 +5580,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\blocklists\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_blocklists_page_tsx",
-      "community": 68,
+      "community": 66,
       "norm_label": "page.tsx"
     },
     {
@@ -5589,7 +5589,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\blocklists\\page.tsx",
       "source_location": "L6",
       "id": "blocklists_page_blocklistspage",
-      "community": 68,
+      "community": 66,
       "norm_label": "blocklistspage()"
     },
     {
@@ -5598,7 +5598,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\devices\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_devices_page_tsx",
-      "community": 69,
+      "community": 67,
       "norm_label": "page.tsx"
     },
     {
@@ -5607,7 +5607,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\devices\\page.tsx",
       "source_location": "L69",
       "id": "devices_page_rendersectionheader",
-      "community": 69,
+      "community": 67,
       "norm_label": "rendersectionheader()"
     },
     {
@@ -5634,7 +5634,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\dns\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_dns_page_tsx",
-      "community": 70,
+      "community": 68,
       "norm_label": "page.tsx"
     },
     {
@@ -5643,7 +5643,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\dns\\page.tsx",
       "source_location": "L9",
       "id": "dns_page_dnspage",
-      "community": 70,
+      "community": 68,
       "norm_label": "dnspage()"
     },
     {
@@ -5652,7 +5652,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\overrides\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_overrides_page_tsx",
-      "community": 71,
+      "community": 69,
       "norm_label": "page.tsx"
     },
     {
@@ -5661,7 +5661,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\overrides\\page.tsx",
       "source_location": "L15",
       "id": "overrides_page_handleresolve",
-      "community": 71,
+      "community": 69,
       "norm_label": "handleresolve()"
     },
     {
@@ -5670,7 +5670,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\protection\\page.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_app_dashboard_protection_page_tsx",
-      "community": 72,
+      "community": 70,
       "norm_label": "page.tsx"
     },
     {
@@ -5679,7 +5679,7 @@
       "source_file": "self-shield-web\\src\\app\\(dashboard)\\protection\\page.tsx",
       "source_location": "L9",
       "id": "protection_page_protectionpage",
-      "community": 72,
+      "community": 70,
       "norm_label": "protectionpage()"
     },
     {
@@ -6030,7 +6030,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\extension\\check\\route.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_app_api_extension_check_route_ts",
-      "community": 50,
+      "community": 48,
       "norm_label": "route.ts"
     },
     {
@@ -6039,7 +6039,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\extension\\check\\route.ts",
       "source_location": "L4",
       "id": "check_route_options",
-      "community": 50,
+      "community": 48,
       "norm_label": "options()"
     },
     {
@@ -6048,7 +6048,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\extension\\check\\route.ts",
       "source_location": "L12",
       "id": "check_route_get",
-      "community": 50,
+      "community": 48,
       "norm_label": "get()"
     },
     {
@@ -6120,7 +6120,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\health\\route.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_app_api_health_route_ts",
-      "community": 73,
+      "community": 71,
       "norm_label": "route.ts"
     },
     {
@@ -6129,7 +6129,7 @@
       "source_file": "self-shield-web\\src\\app\\api\\health\\route.ts",
       "source_location": "L3",
       "id": "health_route_get",
-      "community": 73,
+      "community": 71,
       "norm_label": "get()"
     },
     {
@@ -6228,7 +6228,7 @@
       "source_file": "self-shield-web\\src\\components\\ThemeToggle.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_themetoggle_tsx",
-      "community": 100,
+      "community": 98,
       "norm_label": "themetoggle.tsx"
     },
     {
@@ -6273,7 +6273,7 @@
       "source_file": "self-shield-web\\src\\components\\blocklists\\BlocklistTable.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_blocklists_blocklisttable_tsx",
-      "community": 101,
+      "community": 99,
       "norm_label": "blocklisttable.tsx"
     },
     {
@@ -6282,7 +6282,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\CategoryDistribution.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_categorydistribution_tsx",
-      "community": 102,
+      "community": 100,
       "norm_label": "categorydistribution.tsx"
     },
     {
@@ -6291,7 +6291,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceHealthGrid.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_devicehealthgrid_tsx",
-      "community": 51,
+      "community": 49,
       "norm_label": "devicehealthgrid.tsx"
     },
     {
@@ -6300,7 +6300,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceHealthGrid.tsx",
       "source_location": "L14",
       "id": "dashboard_devicehealthgrid_getdeviceicon",
-      "community": 51,
+      "community": 49,
       "norm_label": "getdeviceicon()"
     },
     {
@@ -6309,7 +6309,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceHealthGrid.tsx",
       "source_location": "L25",
       "id": "dashboard_devicehealthgrid_getstatus",
-      "community": 51,
+      "community": 49,
       "norm_label": "getstatus()"
     },
     {
@@ -6318,7 +6318,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceStatusTable.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_devicestatustable_tsx",
-      "community": 52,
+      "community": 50,
       "norm_label": "devicestatustable.tsx"
     },
     {
@@ -6327,7 +6327,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceStatusTable.tsx",
       "source_location": "L12",
       "id": "dashboard_devicestatustable_getdeviceicon",
-      "community": 52,
+      "community": 50,
       "norm_label": "getdeviceicon()"
     },
     {
@@ -6336,7 +6336,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\DeviceStatusTable.tsx",
       "source_location": "L26",
       "id": "dashboard_devicestatustable_getstatus",
-      "community": 52,
+      "community": 50,
       "norm_label": "getstatus()"
     },
     {
@@ -6345,7 +6345,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\QuickActions.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_quickactions_tsx",
-      "community": 74,
+      "community": 72,
       "norm_label": "quickactions.tsx"
     },
     {
@@ -6354,7 +6354,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\QuickActions.tsx",
       "source_location": "L5",
       "id": "dashboard_quickactions_quickactions",
-      "community": 74,
+      "community": 72,
       "norm_label": "quickactions()"
     },
     {
@@ -6363,7 +6363,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\RecentAuditFeed.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_recentauditfeed_tsx",
-      "community": 103,
+      "community": 101,
       "norm_label": "recentauditfeed.tsx"
     },
     {
@@ -6372,7 +6372,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\StatCards.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_statcards_tsx",
-      "community": 104,
+      "community": 102,
       "norm_label": "statcards.tsx"
     },
     {
@@ -6381,7 +6381,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\SystemHealth.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_systemhealth_tsx",
-      "community": 75,
+      "community": 73,
       "norm_label": "systemhealth.tsx"
     },
     {
@@ -6390,7 +6390,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\SystemHealth.tsx",
       "source_location": "L8",
       "id": "dashboard_systemhealth_systemhealth",
-      "community": 75,
+      "community": 73,
       "norm_label": "systemhealth()"
     },
     {
@@ -6399,7 +6399,7 @@
       "source_file": "self-shield-web\\src\\components\\dashboard\\ThreatAnalysis.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dashboard_threatanalysis_tsx",
-      "community": 105,
+      "community": 103,
       "norm_label": "threatanalysis.tsx"
     },
     {
@@ -6462,7 +6462,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceCard.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_devicecard_tsx",
-      "community": 53,
+      "community": 51,
       "norm_label": "devicecard.tsx"
     },
     {
@@ -6471,7 +6471,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceCard.tsx",
       "source_location": "L13",
       "id": "devices_devicecard_getdeviceicon",
-      "community": 53,
+      "community": 51,
       "norm_label": "getdeviceicon()"
     },
     {
@@ -6480,7 +6480,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\DeviceCard.tsx",
       "source_location": "L34",
       "id": "devices_devicecard_handleaction",
-      "community": 53,
+      "community": 51,
       "norm_label": "handleaction()"
     },
     {
@@ -6651,7 +6651,7 @@
       "source_file": "self-shield-web\\src\\components\\devices\\ScheduleGrid.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_devices_schedulegrid_tsx",
-      "community": 106,
+      "community": 104,
       "norm_label": "schedulegrid.tsx"
     },
     {
@@ -6660,7 +6660,7 @@
       "source_file": "self-shield-web\\src\\components\\dns\\DNSFilteringTools.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_dns_dnsfilteringtools_tsx",
-      "community": 107,
+      "community": 105,
       "norm_label": "dnsfilteringtools.tsx"
     },
     {
@@ -6669,7 +6669,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\AppSidebar.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_layout_appsidebar_tsx",
-      "community": 76,
+      "community": 74,
       "norm_label": "appsidebar.tsx"
     },
     {
@@ -6678,7 +6678,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\AppSidebar.tsx",
       "source_location": "L40",
       "id": "layout_appsidebar_handlelogout",
-      "community": 76,
+      "community": 74,
       "norm_label": "handlelogout()"
     },
     {
@@ -6687,7 +6687,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\Header.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_layout_header_tsx",
-      "community": 77,
+      "community": 75,
       "norm_label": "header.tsx"
     },
     {
@@ -6696,7 +6696,7 @@
       "source_file": "self-shield-web\\src\\components\\layout\\Header.tsx",
       "source_location": "L8",
       "id": "layout_header_header",
-      "community": 77,
+      "community": 75,
       "norm_label": "header()"
     },
     {
@@ -6741,7 +6741,7 @@
       "source_file": "self-shield-web\\src\\components\\overrides\\OverridesList.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_overrides_overrideslist_tsx",
-      "community": 78,
+      "community": 76,
       "norm_label": "overrideslist.tsx"
     },
     {
@@ -6750,7 +6750,7 @@
       "source_file": "self-shield-web\\src\\components\\overrides\\OverridesList.tsx",
       "source_location": "L32",
       "id": "overrides_overrideslist_handleaction",
-      "community": 78,
+      "community": 76,
       "norm_label": "handleaction()"
     },
     {
@@ -6795,7 +6795,7 @@
       "source_file": "self-shield-web\\src\\components\\providers\\Providers.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_providers_providers_tsx",
-      "community": 79,
+      "community": 77,
       "norm_label": "providers.tsx"
     },
     {
@@ -6804,7 +6804,7 @@
       "source_file": "self-shield-web\\src\\components\\providers\\Providers.tsx",
       "source_location": "L9",
       "id": "providers_providers_providers",
-      "community": 79,
+      "community": 77,
       "norm_label": "providers()"
     },
     {
@@ -6813,7 +6813,7 @@
       "source_file": "self-shield-web\\src\\components\\reports\\UsageChart.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_reports_usagechart_tsx",
-      "community": 108,
+      "community": 106,
       "norm_label": "usagechart.tsx"
     },
     {
@@ -6822,7 +6822,7 @@
       "source_file": "self-shield-web\\src\\components\\reports\\WeeklyReportPreview.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_reports_weeklyreportpreview_tsx",
-      "community": 80,
+      "community": 78,
       "norm_label": "weeklyreportpreview.tsx"
     },
     {
@@ -6831,7 +6831,7 @@
       "source_file": "self-shield-web\\src\\components\\reports\\WeeklyReportPreview.tsx",
       "source_location": "L5",
       "id": "reports_weeklyreportpreview_weeklyreportpreview",
-      "community": 80,
+      "community": 78,
       "norm_label": "weeklyreportpreview()"
     },
     {
@@ -6840,7 +6840,7 @@
       "source_file": "self-shield-web\\src\\components\\settings\\AccountSettings.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_settings_accountsettings_tsx",
-      "community": 81,
+      "community": 79,
       "norm_label": "accountsettings.tsx"
     },
     {
@@ -6849,7 +6849,7 @@
       "source_file": "self-shield-web\\src\\components\\settings\\AccountSettings.tsx",
       "source_location": "L12",
       "id": "settings_accountsettings_accountsettings",
-      "community": 81,
+      "community": 79,
       "norm_label": "accountsettings()"
     },
     {
@@ -6858,7 +6858,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\avatar.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_avatar_tsx",
-      "community": 54,
+      "community": 52,
       "norm_label": "avatar.tsx"
     },
     {
@@ -6867,7 +6867,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\avatar.tsx",
       "source_location": "L32",
       "id": "ui_avatar_cn",
-      "community": 54,
+      "community": 52,
       "norm_label": "cn()"
     },
     {
@@ -6876,7 +6876,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\avatar.tsx",
       "source_location": "L57",
       "id": "ui_avatar_avatarbadge",
-      "community": 54,
+      "community": 52,
       "norm_label": "avatarbadge()"
     },
     {
@@ -6885,7 +6885,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\BackButton.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_backbutton_tsx",
-      "community": 82,
+      "community": 80,
       "norm_label": "backbutton.tsx"
     },
     {
@@ -6894,7 +6894,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\BackButton.tsx",
       "source_location": "L7",
       "id": "ui_backbutton_backbutton",
-      "community": 82,
+      "community": 80,
       "norm_label": "backbutton()"
     },
     {
@@ -6903,7 +6903,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\badge.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_badge_tsx",
-      "community": 83,
+      "community": 81,
       "norm_label": "badge.tsx"
     },
     {
@@ -6912,7 +6912,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\badge.tsx",
       "source_location": "L30",
       "id": "ui_badge_badge",
-      "community": 83,
+      "community": 81,
       "norm_label": "badge()"
     },
     {
@@ -6921,7 +6921,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\button.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_button_tsx",
-      "community": 84,
+      "community": 82,
       "norm_label": "button.tsx"
     },
     {
@@ -6930,7 +6930,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\button.tsx",
       "source_location": "L52",
       "id": "ui_button_cn",
-      "community": 84,
+      "community": 82,
       "norm_label": "cn()"
     },
     {
@@ -6939,7 +6939,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\card.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_card_tsx",
-      "community": 55,
+      "community": 53,
       "norm_label": "card.tsx"
     },
     {
@@ -6948,7 +6948,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\card.tsx",
       "source_location": "L14",
       "id": "ui_card_cn",
-      "community": 55,
+      "community": 53,
       "norm_label": "cn()"
     },
     {
@@ -6957,7 +6957,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\card.tsx",
       "source_location": "L59",
       "id": "ui_card_cardaction",
-      "community": 55,
+      "community": 53,
       "norm_label": "cardaction()"
     },
     {
@@ -7074,7 +7074,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\input.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_input_tsx",
-      "community": 85,
+      "community": 83,
       "norm_label": "input.tsx"
     },
     {
@@ -7083,7 +7083,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\input.tsx",
       "source_location": "L6",
       "id": "ui_input_input",
-      "community": 85,
+      "community": 83,
       "norm_label": "input()"
     },
     {
@@ -7092,7 +7092,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\label.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_label_tsx",
-      "community": 86,
+      "community": 84,
       "norm_label": "label.tsx"
     },
     {
@@ -7101,7 +7101,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\label.tsx",
       "source_location": "L11",
       "id": "ui_label_cn",
-      "community": 86,
+      "community": 84,
       "norm_label": "cn()"
     },
     {
@@ -7110,7 +7110,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\progress.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_progress_tsx",
-      "community": 109,
+      "community": 107,
       "norm_label": "progress.tsx"
     },
     {
@@ -7119,7 +7119,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\separator.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_separator_tsx",
-      "community": 87,
+      "community": 85,
       "norm_label": "separator.tsx"
     },
     {
@@ -7128,7 +7128,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\separator.tsx",
       "source_location": "L16",
       "id": "ui_separator_cn",
-      "community": 87,
+      "community": 85,
       "norm_label": "cn()"
     },
     {
@@ -7254,7 +7254,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\skeleton.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_skeleton_tsx",
-      "community": 88,
+      "community": 86,
       "norm_label": "skeleton.tsx"
     },
     {
@@ -7263,7 +7263,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\skeleton.tsx",
       "source_location": "L3",
       "id": "ui_skeleton_skeleton",
-      "community": 88,
+      "community": 86,
       "norm_label": "skeleton()"
     },
     {
@@ -7272,7 +7272,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\sonner.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_sonner_tsx",
-      "community": 110,
+      "community": 108,
       "norm_label": "sonner.tsx"
     },
     {
@@ -7281,7 +7281,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\switch.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_switch_tsx",
-      "community": 111,
+      "community": 109,
       "norm_label": "switch.tsx"
     },
     {
@@ -7335,7 +7335,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\tabs.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_tabs_tsx",
-      "community": 112,
+      "community": 110,
       "norm_label": "tabs.tsx"
     },
     {
@@ -7344,7 +7344,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\tooltip.tsx",
       "source_location": "L1",
       "id": "self_shield_web_src_components_ui_tooltip_tsx",
-      "community": 89,
+      "community": 87,
       "norm_label": "tooltip.tsx"
     },
     {
@@ -7353,7 +7353,7 @@
       "source_file": "self-shield-web\\src\\components\\ui\\tooltip.tsx",
       "source_location": "L28",
       "id": "ui_tooltip_tooltipcontent",
-      "community": 89,
+      "community": 87,
       "norm_label": "tooltipcontent()"
     },
     {
@@ -7362,7 +7362,7 @@
       "source_file": "self-shield-web\\src\\hooks\\use-mobile.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_hooks_use_mobile_ts",
-      "community": 90,
+      "community": 88,
       "norm_label": "use-mobile.ts"
     },
     {
@@ -7371,7 +7371,7 @@
       "source_file": "self-shield-web\\src\\hooks\\use-mobile.ts",
       "source_location": "L5",
       "id": "hooks_use_mobile_useismobile",
-      "community": 90,
+      "community": 88,
       "norm_label": "useismobile()"
     },
     {
@@ -7731,7 +7731,7 @@
       "source_file": "self-shield-web\\src\\lib\\csv-export.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_csv_export_ts",
-      "community": 91,
+      "community": 89,
       "norm_label": "csv-export.ts"
     },
     {
@@ -7740,7 +7740,7 @@
       "source_file": "self-shield-web\\src\\lib\\csv-export.ts",
       "source_location": "L1",
       "id": "lib_csv_export_downloadcsv",
-      "community": 91,
+      "community": 89,
       "norm_label": "downloadcsv()"
     },
     {
@@ -7776,7 +7776,7 @@
       "source_file": "self-shield-web\\src\\lib\\utils.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_utils_ts",
-      "community": 92,
+      "community": 90,
       "norm_label": "utils.ts"
     },
     {
@@ -7785,7 +7785,7 @@
       "source_file": "self-shield-web\\src\\lib\\utils.ts",
       "source_location": "L4",
       "id": "lib_utils_cn",
-      "community": 92,
+      "community": 90,
       "norm_label": "cn()"
     },
     {
@@ -7794,7 +7794,7 @@
       "source_file": "self-shield-web\\src\\lib\\supabase\\admin.ts",
       "source_location": "L1",
       "id": "self_shield_web_src_lib_supabase_admin_ts",
-      "community": 113,
+      "community": 111,
       "norm_label": "admin.ts"
     },
     {
@@ -8133,7 +8133,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "_src": "self_shield_android_core_core_data_src_main_java_com_selfshield_core_data_repository_authrepository_kt",
       "_tgt": "repository_authrepository_authrepository",
@@ -8145,7 +8145,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L35",
+      "source_location": "L34",
       "weight": 1.0,
       "_src": "repository_authrepository_authrepository",
       "_tgt": "repository_authrepository_authrepository_signin",
@@ -8157,7 +8157,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L47",
+      "source_location": "L46",
       "weight": 1.0,
       "_src": "repository_authrepository_authrepository",
       "_tgt": "repository_authrepository_authrepository_signup",
@@ -8169,7 +8169,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L62",
+      "source_location": "L61",
       "weight": 1.0,
       "_src": "repository_authrepository_authrepository",
       "_tgt": "repository_authrepository_authrepository_signout",
@@ -8181,7 +8181,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L71",
+      "source_location": "L70",
       "weight": 1.0,
       "_src": "repository_authrepository_authrepository",
       "_tgt": "repository_authrepository_authrepository_resetpassword",
@@ -8193,7 +8193,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-android\\core\\core-data\\src\\main\\java\\com\\selfshield\\core\\data\\repository\\AuthRepository.kt",
-      "source_location": "L78",
+      "source_location": "L77",
       "weight": 1.0,
       "_src": "repository_authrepository_authrepository",
       "_tgt": "repository_authrepository_authrepository_isuserloggedin",
@@ -8433,7 +8433,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "self-shield-android\\feature\\feature-onboarding\\src\\main\\java\\com\\selfshield\\feature\\onboarding\\login\\LoginScreen.kt",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0,
       "_src": "self_shield_android_feature_feature_onboarding_src_main_java_com_selfshield_feature_onboarding_login_loginscreen_kt",
       "_tgt": "login_loginscreen_loginscreen",
