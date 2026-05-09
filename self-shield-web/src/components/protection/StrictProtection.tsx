@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { ShieldCheck, ShieldAlert, Zap, Globe, Search, Lock, Smartphone } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Zap, Globe, Search, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function StrictProtection() {

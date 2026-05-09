@@ -1,13 +1,12 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Smartphone, Globe, Monitor, Laptop, Tablet, LayoutGrid } from 'lucide-react';
+import { Smartphone, Globe, Monitor, LayoutGrid } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useDevices, Device } from '@/hooks/useDevices';
 import { DeviceCard } from '@/components/devices/DeviceCard';
 import { PairDeviceModal } from '@/components/devices/PairDeviceModal';
 import { ConnectExtensionModal } from '@/components/devices/ConnectExtensionModal';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useMemo } from 'react';
 
 export default function DevicesPage() {
@@ -67,7 +66,7 @@ export default function DevicesPage() {
     return groups;
   }, [devices]);
 
-  const renderSectionHeader = (title: string, Icon: any, count: number) => (
+  const renderSectionHeader = (title: string, Icon: LucideIcon, count: number) => (
     <div className="flex items-center gap-2 mb-4 mt-8 first:mt-0">
       <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
         <Icon className="w-4 h-4" />
@@ -131,11 +130,11 @@ export default function DevicesPage() {
       ) : (
         <div className="space-y-12">
           {/* Extensions Section */}
-          {categorizedDevices?.extensions.length! > 0 && (
+          {categorizedDevices && categorizedDevices.extensions.length > 0 && (
             <div>
-              {renderSectionHeader('Browser Extensions', Globe, categorizedDevices!.extensions.length)}
+              {renderSectionHeader('Browser Extensions', Globe, categorizedDevices.extensions.length)}
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {categorizedDevices!.extensions.map(device => (
+                {categorizedDevices.extensions.map(device => (
                   <DeviceCard key={device.id} device={device} index={device.globalIndex} />
                 ))}
               </div>

@@ -40,7 +40,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     if (error || !data) return apiError('NOT_FOUND', 'Override not found', 404);
 
     // Send FCM command
-    const fcmToken = (data as any).devices?.fcm_token;
+    const fcmToken = (data as { devices?: { fcm_token?: string } })?.devices?.fcm_token;
     if (fcmToken) {
       const { data: cmd } = await supabaseAdmin.from('remote_commands').insert({
         device_id: data.device_id, command_type: 'approve_override',

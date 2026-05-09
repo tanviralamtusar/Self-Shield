@@ -55,7 +55,7 @@ async function seed() {
         // Clear existing entries for this list first to avoid duplicates
         await supabaseAdmin.from('block_list_entries').delete().eq('block_list_id', list.id);
 
-        const entryRows = data.entries.map((entry: any) => {
+        const entryRows = data.entries.map((entry: string | { value: string; is_regex?: boolean }) => {
           if (typeof entry === 'string') {
             return {
               block_list_id: list.id,

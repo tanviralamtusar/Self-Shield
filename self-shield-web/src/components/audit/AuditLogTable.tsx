@@ -83,14 +83,14 @@ export function AuditLogTable({ deviceId }: { deviceId?: string }) {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={getSeverityColor(severity) as any}>
+                  <Badge variant={getSeverityColor(severity) as "default" | "destructive" | "secondary" | "outline"}>
                     {label}
                   </Badge>
                 </TableCell>
                 <TableCell className="font-medium">{log.devices.device_name}</TableCell>
                 <TableCell className="max-w-[400px] truncate">
                   <div className="flex items-center gap-2">
-                    {log.details?.message || log.event_type.replace(/_/g, ' ')}
+                    {(log.details?.message as string) || log.event_type.replace(/_/g, ' ')}
                     {log.screenshot_url && (
                       <a 
                         href={log.screenshot_url} 

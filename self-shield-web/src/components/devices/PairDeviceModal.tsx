@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Plus, Copy, Check } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
-import { useQueryClient } from '@tanstack/react-query';
+
 
 export function PairDeviceModal() {
   const [open, setOpen] = useState(false);
@@ -14,7 +14,7 @@ export function PairDeviceModal() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const supabase = createClient();
-  const queryClient = useQueryClient();
+
 
   const generateCode = async () => {
     setLoading(true);
@@ -32,8 +32,8 @@ export function PairDeviceModal() {
       await new Promise(resolve => setTimeout(resolve, 800));
       
       setPairingCode(code);
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to generate code');
+    } catch (err: unknown) {
+      toast.error((err as Error).message || 'Failed to generate code');
     } finally {
       setLoading(false);
     }

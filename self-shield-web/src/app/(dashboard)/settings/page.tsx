@@ -4,13 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useDevices } from '@/hooks/useDevices';
-import { useMasterLockdown } from '@/hooks/useMasterLockdown';
-import { Settings, Shield, User, Bell, Mail, Loader2 } from 'lucide-react';
+import { Shield, User, Bell, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { useMasterLockdown } from '@/hooks/useRemoteCommands';
+
 export default function SettingsPage() {
-  const { data: devices } = useDevices();
   const masterLockdown = useMasterLockdown();
 
   const handleMasterLockdown = async () => {
@@ -19,8 +18,8 @@ export default function SettingsPage() {
     try {
       await masterLockdown.mutateAsync();
       toast.success('Lockdown commands sent to all devices');
-    } catch (error: any) {
-      toast.error('Failed to trigger lockdown', { description: error.message });
+    } catch (error: unknown) {
+      toast.error('Failed to trigger lockdown', { description: (error as Error).message });
     }
   };
 

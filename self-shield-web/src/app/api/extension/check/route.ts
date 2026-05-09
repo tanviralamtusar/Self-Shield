@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
       } else {
         hostname = new URL(`http://${urlToCheck}`).hostname;
       }
-    } catch (e) {
+    } catch {
       // Use original if URL parsing fails
     }
     hostname = hostname.toLowerCase().replace(/^www\./, '');
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
     if (activeListIds.length > 0) {
       // Check if hostname matches any entry in these lists
       // We check for both exact match and subdomain matches
-      const { data: matches, error } = await supabaseAdmin
+      const { data: matches } = await supabaseAdmin
         .from('block_list_entries')
         .select('value, block_lists(name)')
         .in('block_list_id', activeListIds)
@@ -87,7 +87,7 @@ export async function GET(req: NextRequest) {
         const blockLists = matches[0].block_lists;
         const blockListName = Array.isArray(blockLists) 
           ? blockLists[0]?.name 
-          : (blockLists as any)?.name;
+          : (blockLists as { name?: string })?.name;
 
         const res = NextResponse.json({ 
           blocked: true, 

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Globe, ShieldAlert, Search, Loader2, RefreshCw, Clock } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useActivityLog } from '@/hooks/useActivityLog';
-import { formatDistanceToNow, format } from 'date-fns';
+import { format } from 'date-fns';
 
 const EVENT_CONFIG: Record<string, { label: string; color: string; icon: typeof Globe }> = {
   site_visit: { label: 'Visit', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', icon: Globe },

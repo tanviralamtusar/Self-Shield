@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
-import { ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+import { ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAppRules } from '@/hooks/useAppRules';
 import { useDevices } from '@/hooks/useDevices';
@@ -9,10 +9,11 @@ import { useDevices } from '@/hooks/useDevices';
 export function CategoryDistribution() {
   const [mounted, setMounted] = useState(false);
   const { data: devices } = useDevices();
-  const { data: appRules } = useAppRules(devices?.[0]?.id || '');
+  useAppRules(devices?.[0]?.id || '');
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const data = useMemo(() => {

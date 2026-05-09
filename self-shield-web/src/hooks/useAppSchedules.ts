@@ -60,7 +60,7 @@ export function useDeleteAppSchedule() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, appRuleId }: { id: string; appRuleId: string }) => {
+    mutationFn: async ({ id }: { id: string; appRuleId: string }) => {
       const { error } = await supabase
         .from('app_schedules')
         .delete()

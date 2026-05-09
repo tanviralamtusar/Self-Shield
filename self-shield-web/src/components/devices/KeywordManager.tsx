@@ -46,7 +46,7 @@ export function KeywordManager({ deviceId }: KeywordManagerProps) {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user || !isMounted) return;
 
-        let myList = allLists.find(l => 
+        const myList = allLists.find(l => 
           l.name === 'My Custom Keywords' && 
           l.owner_id === user.id && 
           l.is_default === false
@@ -85,8 +85,8 @@ export function KeywordManager({ deviceId }: KeywordManagerProps) {
             await toggleSubscription.mutateAsync({ deviceId, blockListId: newList.id, enabled: true });
           }
         }
-      } catch (error: any) {
-        if (isMounted && error.message !== 'Lock stolen') {
+      } catch (error: unknown) {
+        if (isMounted && (error as Error).message !== 'Lock stolen') {
           console.error('Error initializing keyword list:', error);
           toast.error('Failed to initialize custom keywords');
         }
@@ -100,6 +100,7 @@ export function KeywordManager({ deviceId }: KeywordManagerProps) {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceId, allLists?.length, subscriptions?.length, personalListId]);
 
   const handleAddKeyword = async (e: React.FormEvent) => {
@@ -113,8 +114,8 @@ export function KeywordManager({ deviceId }: KeywordManagerProps) {
       });
       setNewKeyword('');
       toast.success('Keyword added');
-    } catch (error: any) {
-      toast.error('Failed to add keyword', { description: error.message });
+    } catch (error: unknown) {
+      toast.error('Failed to add keyword', { description: (error as Error).message });
     }
   };
 
@@ -123,7 +124,7 @@ export function KeywordManager({ deviceId }: KeywordManagerProps) {
     try {
       await deleteEntry.mutateAsync({ id: entryId, blockListId: personalListId });
       toast.success('Keyword removed');
-    } catch (error: any) {
+    } catch {
       toast.error('Failed to remove keyword');
     }
   };

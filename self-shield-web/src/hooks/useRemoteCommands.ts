@@ -26,7 +26,7 @@ export function useSendCommand() {
         .insert({
           device_id: deviceId,
           command_type: commandType,
-          payload: (payload as any) || {},
+          payload: (payload as Record<string, unknown>) || {},
           status: 'pending'
         })
         .select()
@@ -64,3 +64,29 @@ export function useSendCommand() {
   });
 }
 
+export function useMasterLockdown() {
+  const supabase = createClient();
+  
+  return useMutation({
+    mutationFn: async () => {
+      const { data: devices, error: fetchError } = await supabase.from('devices').select('id');
+      if (fetchError) throw new Error(fetchError.message);
+      
+      if (!devices || devices.length === 0) return [];
+      
+      const commands = devices.map(d => ({
+        device_id: d.id,
+        command_type: 'lock_device',
+        payload: {},
+        status: 'pending'
+      }));
+      
+      const { data, error } = await supabase.from('remote_commands').insert(commands).select();
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Master lockdown initiated');
+    }
+  });
+}

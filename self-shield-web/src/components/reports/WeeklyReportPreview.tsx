@@ -60,7 +60,7 @@ export function WeeklyReportPreview() {
 
           <div className="pt-4 border-t">
             <p className="text-xs text-muted-foreground italic mb-4">
-              "Focus is the art of saying no to distractions."
+              &quot;Focus is the art of saying no to distractions.&quot;
             </p>
             <Button className="w-full text-xs h-8">
               View Full Dashboard <ArrowRight className="ml-2 w-3 h-3" />

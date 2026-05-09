@@ -1,7 +1,7 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import * as React from 'react';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Smartphone, Shield, ShieldAlert, Clock, Trash2, Loader2, Copy, Globe, Monitor } from 'lucide-react';
+import { Smartphone, Shield, ShieldAlert, Trash2, Loader2, Copy, Globe, Monitor } from 'lucide-react';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import type { Device } from '@/hooks/useDevices';
@@ -54,15 +54,16 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
 
       toast.success(isDelete ? 'Device deleted' : 'Device unpaired');
       queryClient.invalidateQueries({ queryKey: ['devices'] });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`Error ${actionType} device:`, error);
-      toast.error(error.message || `Failed to ${actionType} device`);
+      toast.error((error as Error).message || `Failed to ${actionType} device`);
     } finally {
       setIsDeleting(false);
     }
   };
   
-  const DeviceIcon = getDeviceIcon(device.device_name || '');
+  // To avoid react-hooks/static-components warning, we get the component reference and render it
+  const IconComponent = getDeviceIcon(device.device_name || '');
 
   return (
     <Card className="group relative border border-border/80 bg-card/30 backdrop-blur-md shadow-lg hover:shadow-primary/5 overflow-hidden transform-gpu translate-z-0">
@@ -87,7 +88,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
         <div className="flex items-center gap-4 min-w-0">
           {/* Icon container */}
           <div className="p-3 rounded-xl bg-card/60 border border-border/40 shrink-0 group-hover:border-primary/30 group-hover:bg-primary/5 transition-colors duration-300">
-            <DeviceIcon className="w-6 h-6 text-muted-foreground/80 group-hover:text-primary transition-colors duration-300" />
+            {React.createElement(IconComponent, { className: "w-6 h-6 text-muted-foreground/80 group-hover:text-primary transition-colors duration-300" })}
           </div>
 
           {/* Name + status */}

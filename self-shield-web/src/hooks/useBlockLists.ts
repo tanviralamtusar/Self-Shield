@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { createClient } from '@/lib/supabase/client';
 
 export type BlockList = {
@@ -143,7 +144,7 @@ export function useDeleteEntry() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, blockListId }: { id: string, blockListId: string }) => {
+    mutationFn: async ({ id }: { id: string, blockListId: string }) => {
       const { error } = await supabase
         .from('block_list_entries')
         .delete()

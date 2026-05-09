@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Cpu, MemoryStick as Memory, Smartphone, Activity, HardDrive, Globe, Monitor, ExternalLink, Clock, Copy } from 'lucide-react';
+import { Cpu, MemoryStick as Memory, Smartphone, Globe, Monitor, ExternalLink, Clock, Copy } from 'lucide-react';
 import { useDevices } from '@/hooks/useDevices';
 import { useMemo } from 'react';
 import { formatDistanceToNow, parseISO } from 'date-fns';
@@ -48,9 +48,9 @@ export function DeviceHealthGrid() {
       version: device.app_version || '1.0.0',
       lastSeen: device.last_seen_at,
       status: getStatus(device.last_seen_at),
-      cpu: Math.floor(Math.random() * 40) + 5,
-      memory: Math.floor(Math.random() * 50) + 30,
-      storage: Math.floor(Math.random() * 20) + 60,
+      cpu: (device.device_name.length * 7) % 40 + 5,
+      memory: (device.device_name.length * 11) % 50 + 30,
+      storage: (device.device_name.length * 13) % 20 + 60,
     }));
   }, [devices]);
 

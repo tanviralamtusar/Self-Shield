@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDevices } from '@/hooks/useDevices';
 import { useReportStats } from '@/hooks/useReports';
 import { useOverrideRequests } from '@/hooks/useOverrideRequests';
-import { Smartphone, ShieldAlert, Shield, Clock } from 'lucide-react';
+import { Smartphone, ShieldAlert, Clock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function StatCards() {

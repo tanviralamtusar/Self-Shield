@@ -16,7 +16,7 @@ export function Header() {
           {pathname !== '/' && <BackButton />}
           <h1 className="font-semibold text-sm">
             {pathname === '/' ? 'Dashboard' : 
-             pathname.split('/').pop()?.charAt(0).toUpperCase()! + pathname.split('/').pop()?.slice(1)}
+             (pathname.split('/').pop()?.charAt(0).toUpperCase() || '') + (pathname.split('/').pop()?.slice(1) || '')}
           </h1>
         </div>
       </div>

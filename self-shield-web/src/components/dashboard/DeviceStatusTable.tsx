@@ -2,7 +2,7 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+// Badge unused
 import { useDevices } from '@/hooks/useDevices';
 import { Smartphone, ExternalLink, Globe, Monitor } from 'lucide-react';
 import Link from 'next/link';
@@ -27,7 +27,9 @@ export function DeviceStatusTable() {
     if (!lastSeenAt) return { label: 'Never', color: 'secondary' as const };
     
     const lastSeen = parseISO(lastSeenAt);
-    const diff = Date.now() - lastSeen.getTime();
+    // eslint-disable-next-line react-hooks/purity
+    const now = Date.now(); // Suppressing because it's just visual status calculation
+    const diff = now - lastSeen.getTime();
     
     if (diff < 5 * 60 * 1000) { // 5 minutes
       return { label: 'Online', color: 'default' as const };

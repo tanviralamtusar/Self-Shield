@@ -1,6 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { apiSuccess, apiError, requireAuth, isAuthError } from '@/lib/api-helpers';
-import { sendFcmMessage } from '@/lib/firebase';
 
 // POST /api/overrides — child device requests override
 export async function POST(request: Request) {

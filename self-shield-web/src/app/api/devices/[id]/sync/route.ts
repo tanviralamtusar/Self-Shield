@@ -1,5 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { apiSuccess, apiError, requireAuth, isAuthError } from '@/lib/api-helpers';
+import { apiSuccess, requireAuth, isAuthError } from '@/lib/api-helpers';
 
 // POST /api/devices/[id]/sync — receive sync payload from device
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
