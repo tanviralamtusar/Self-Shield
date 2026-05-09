@@ -45,13 +45,12 @@ class AuthRepository @Inject constructor(
 
     suspend fun signUp(email: String, password: String): Result<Boolean> {
         return try {
-            supabase.auth.signUpWith(Email) {
+            supabase.auth.signUpWith(Email, redirectUrl = "selfshield://auth") {
                 this.email = email
                 this.password = password
                 data = buildJsonObject {
                     put("role", "child")
                 }
-                redirectUrl = "selfshield://auth"
             }
             Result.success(true)
         } catch (e: Exception) {

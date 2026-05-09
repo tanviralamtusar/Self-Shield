@@ -25,6 +25,7 @@ import com.selfshield.core.ui.theme.SelfShieldTheme
 import com.selfshield.feature.onboarding.login.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.handleDeeplinks
 import javax.inject.Inject
 
