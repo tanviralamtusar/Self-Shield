@@ -1,8 +1,10 @@
 package com.selfshield.core.data.repository
 
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,10 +16,14 @@ import javax.inject.Singleton
 class AuthRepository @Inject constructor(
     private val supabase: SupabaseClient
 ) {
-    val currentUser: Flow<io.github.jan.supabase.gotrue.user.UserInfo?> = flow {
+    val currentUser: Flow<UserInfo?> = flow {
         emit(supabase.auth.currentUserOrNull())
-        supabase.auth.sessionFlow().collect { session ->
-            emit(session?.user)
+        supabase.auth.sessionStatus.collect { status ->
+            when (status) {
+                is SessionStatus.Authenticated -> emit(status.session.user)
+                is SessionStatus.NotAuthenticated -> emit(null)
+                else -> {} // Ignore Loading/Refreshing for the flow
+            }
         }
     }.flowOn(Dispatchers.IO)
 
