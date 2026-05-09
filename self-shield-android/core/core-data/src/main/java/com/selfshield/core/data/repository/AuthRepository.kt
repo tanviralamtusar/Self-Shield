@@ -9,6 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -46,6 +48,9 @@ class AuthRepository @Inject constructor(
             supabase.auth.signUpWith(Email) {
                 this.email = email
                 this.password = password
+                data = buildJsonObject {
+                    put("role", "child")
+                }
             }
             Result.success(true)
         } catch (e: Exception) {
@@ -60,6 +65,13 @@ class AuthRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun resetPassword(email: String): Result<Unit> = runCatching {
+        supabase.auth.resetPasswordForEmail(
+            email = email,
+            redirectTo = "https://self-shield-web.vercel.app/reset-password" // Replace with actual web URL if known, or use a placeholder
+        )
     }
 
     fun isUserLoggedIn(): Boolean {
