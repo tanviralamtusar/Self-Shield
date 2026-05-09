@@ -18,8 +18,6 @@ export function PairDeviceModal() {
 
   const generateCode = async () => {
     setLoading(true);
-    // In a real app, this would call a backend endpoint to securely generate
-    // and store the pairing code. For now, we'll simulate it.
     
     try {
       const { data: userData } = await supabase.auth.getUser();
@@ -28,8 +26,19 @@ export function PairDeviceModal() {
       // Generate random 6 digit code
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Create a pending device entry
+      const { error: insertErr } = await supabase
+        .from('devices')
+        .insert({
+          admin_id: userData.user.id,
+          owner_id: userData.user.id, // In a real app, this might be a separate child user
+          pairing_code: code,
+          device_name: 'Pending Android Device',
+          status: 'pending',
+          device_type: 'android'
+        });
+
+      if (insertErr) throw insertErr;
       
       setPairingCode(code);
     } catch (err: unknown) {

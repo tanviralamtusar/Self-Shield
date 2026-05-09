@@ -33,6 +33,7 @@ include ':core:core-security'
 include ':service:vpn'
 include ':service:accessibility'
 include ':service:watchdog'
+include ':service:messaging'
 
 // Feature Modules
 include ':feature:feature-dashboard'
