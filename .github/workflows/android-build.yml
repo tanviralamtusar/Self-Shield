@@ -31,6 +31,25 @@ jobs:
         working-directory: ./self-shield-android
         run: gradle assembleDebug
 
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0-debug
+          name: Self-Shield Debug Release
+          body: |
+            This is an automated debug release for testing the WhatsApp Updates/Channels blocking feature.
+            
+            **Features:**
+            - Fast WhatsApp Updates tab blocking (0.1s)
+            - Device Admin protection
+            - Accessibility Service implementation
+          draft: false
+          prerelease: true
+          files: self-shield-android/app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
         with:
