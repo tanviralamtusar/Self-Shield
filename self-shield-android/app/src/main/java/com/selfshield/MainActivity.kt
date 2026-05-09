@@ -45,56 +45,96 @@ fun MainScreen(context: ComponentActivity) {
     var isDeviceAdminEnabled by remember { mutableStateOf(checkDeviceAdmin(context)) }
     var isAccessibilityEnabled by remember { mutableStateOf(checkAccessibility(context)) }
 
+    // Automatically prompt user if permissions are missing
+    LaunchedEffect(Unit) {
+        if (!isAccessibilityEnabled) {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            context.startActivity(intent)
+        } else if (!isDeviceAdminEnabled) {
+            requestDeviceAdmin(context)
+        }
+    }
+
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Self Shield Protection", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = "Self Shield Protection", 
+            style = MaterialTheme.typography.headlineMedium,
+            color = if (isAccessibilityEnabled && isDeviceAdminEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+        )
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        if (!isAccessibilityEnabled || !isDeviceAdminEnabled) {
+            Text(
+                text = "Action Required: Please enable all permissions for full protection.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(text = "Device Admin: ${if (isDeviceAdminEnabled) "Enabled" else "Disabled"}")
-        Button(
-            onClick = {
-                if (!isDeviceAdminEnabled) {
-                    val componentName = ComponentName(context, SelfShieldDeviceAdminReceiver::class.java)
-                    val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-                        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-                        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Required for Self Shield protection.")
-                    }
-                    context.startActivity(intent)
-                }
-            },
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text(if (isDeviceAdminEnabled) "Device Admin Active" else "Enable Device Admin")
-        }
+        PermissionItem(
+            label = "Device Admin",
+            isEnabled = isDeviceAdminEnabled,
+            onClick = { requestDeviceAdmin(context) }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Accessibility: ${if (isAccessibilityEnabled) "Enabled" else "Disabled"}")
-        Button(
+        PermissionItem(
+            label = "Accessibility Service",
+            isEnabled = isAccessibilityEnabled,
             onClick = {
-                if (!isAccessibilityEnabled) {
-                    val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                    context.startActivity(intent)
-                }
-            },
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text(if (isAccessibilityEnabled) "Accessibility Active" else "Enable Accessibility")
-        }
+                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                context.startActivity(intent)
+            }
+        )
         
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+        
         Button(
             onClick = {
                 isDeviceAdminEnabled = checkDeviceAdmin(context)
                 isAccessibilityEnabled = checkAccessibility(context)
-            }
+            },
+            modifier = Modifier.fillMaxWidth(0.7f)
         ) {
             Text("Refresh Status")
         }
     }
+}
+
+@Composable
+fun PermissionItem(label: String, isEnabled: Boolean, onClick: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "$label: ${if (isEnabled) "✅ Active" else "❌ Disabled"}",
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Button(
+            onClick = onClick,
+            modifier = Modifier.padding(top = 8.dp).fillMaxWidth(0.8f),
+            enabled = !isEnabled
+        ) {
+            Text(if (isEnabled) "$label is Active" else "Enable $label")
+        }
+    }
+}
+
+fun requestDeviceAdmin(context: Context) {
+    val componentName = ComponentName(context, SelfShieldDeviceAdminReceiver::class.java)
+    val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
+        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Required for Self Shield protection.")
+    }
+    context.startActivity(intent)
 }
 
 fun checkDeviceAdmin(context: Context): Boolean {
