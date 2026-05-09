@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "350951861176",
+    "project_id": "self-shield",
+    "storage_bucket": "self-shield.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350951861176:android:d1a2458d5e4c2795c7bd4d",
+        "android_client_info": {
+          "package_name": "com.selfshield"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7R0A0Xz29ziRFWbWShEp5U7y6wVLRGWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
