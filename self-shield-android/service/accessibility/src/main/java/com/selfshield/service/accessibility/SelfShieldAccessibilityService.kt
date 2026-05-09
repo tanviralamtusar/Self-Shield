@@ -7,7 +7,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 
 /**
  * Self Shield Accessibility Service
- * Optimized for ultra-fast (0.01s) detection and blocking.
+ * Optimized for surgical WhatsApp channel blocking.
  */
 class SelfShieldAccessibilityService : AccessibilityService() {
 
@@ -18,15 +18,25 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         private const val PKG_WHATSAPP = "com.whatsapp"
         private const val PKG_WHATSAPP_B = "com.whatsapp.w4b"
 
-        private val CHANNEL_ACTIVITY_KEYWORDS = arrayOf("channel", "newsletter")
+        private val CHANNEL_ACTIVITY_KEYWORDS = arrayOf("channel", "newsletter", "StatusPartView", "ChannelView")
         
-        // Grouped keywords for faster searching
-        private val TAB_KEYWORDS = arrayOf("Updates", "আপডেট", "अपडेट", "Novedades")
-        private val LIST_INDICATORS = arrayOf("Find channels", "চ্যানেল খুঁজুন", "Explore more", "See all")
-        private val INSIDE_INDICATORS = arrayOf("Follow", "Following", "followers", "Mute")
+        // Keywords for buttons that lead to channel lists
+        private val CHANNEL_EXPLORE_KEYWORDS = arrayOf(
+            "Find channels", "চ্যানেল খুঁজুন", "Explore more", "See all", 
+            "সব দেখুন", "চ্যানেল দেখুন", "Explore channels"
+        )
         
-        private val CHATS_TAB_KEYWORDS = arrayOf("Chats", "চ্যাট", "চ্যাটস", "चैट्स", "Conversaciones")
+        // Indicators that we are INSIDE an individual channel
+        private val INSIDE_INDICATORS = arrayOf("Follow", "Following", "followers", "Mute", "অনুসরণ করুন", "ফলো")
+        
+        private val CHATS_TAB_KEYWORDS = arrayOf(
+            "Chats", "চ্যাট", "চ্যাটস", "চ্যাট", "Conversaciones", 
+            "المحادثات", "Conversas", "Discussions", "Obrolan", "Чаты",
+            "Conversations"
+        )
     }
+
+    private var lastActivityName: String? = null
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         val pkg = event.packageName?.toString() ?: return
@@ -35,9 +45,12 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         val prefs = applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         if (!prefs.getBoolean(KEY_CHANNEL_BLOCK_ENABLED, false)) return
 
-        // FAST PATH 1: Instant detection on Window State Change (Activity change)
+        // Track activity changes
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            val className = event.className?.toString() ?: ""
+            lastActivityName = event.className?.toString()
+            
+            // FAST PATH 1: Instant detection on Activity change (Individual channel or explorer)
+            val className = lastActivityName ?: ""
             for (keyword in CHANNEL_ACTIVITY_KEYWORDS) {
                 if (className.contains(keyword, ignoreCase = true)) {
                     performBlockAction()
@@ -46,10 +59,10 @@ class SelfShieldAccessibilityService : AccessibilityService() {
             }
         }
 
-        // FAST PATH 2: Instant detection on Tab Click
+        // FAST PATH 2: Instant detection on Clicking channel-related items
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED) {
             val text = event.text?.toString() ?: ""
-            for (keyword in TAB_KEYWORDS) {
+            for (keyword in CHANNEL_EXPLORE_KEYWORDS) {
                 if (text.contains(keyword, ignoreCase = true)) {
                     performBlockAction()
                     return
@@ -65,29 +78,8 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         val root = rootInActiveWindow ?: return
 
         try {
-            // Check most unique indicators first for early exit
-            for (indicator in LIST_INDICATORS) {
-                val nodes = root.findAccessibilityNodeInfosByText(indicator)
-                if (!nodes.isNullOrEmpty()) {
-                    performBlockAction()
-                    return
-                }
-            }
-
-            // Check if Updates tab is active
-            for (keyword in TAB_KEYWORDS) {
-                val nodes = root.findAccessibilityNodeInfosByText(keyword)
-                if (!nodes.isNullOrEmpty()) {
-                    for (node in nodes) {
-                        if (node.isSelected || node.isFocused) {
-                            performBlockAction()
-                            return
-                        }
-                    }
-                }
-            }
-
-            // Check if inside channel (requires 2 indicators for accuracy)
+            // Check if inside an individual channel (requires 2 indicators for accuracy)
+            // This prevents false positives on the Status screen
             var count = 0
             for (indicator in INSIDE_INDICATORS) {
                 val nodes = root.findAccessibilityNodeInfosByText(indicator)
@@ -108,33 +100,34 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         val root = rootInActiveWindow ?: return
 
         // 1. Try to find and click "Chats" tab (Priority)
-        val chatsKeywords = arrayOf(
-            "Chats", "চ্যাট", "চ্যাটস", "चैट्स", "Conversaciones", 
-            "المحادثات", "Conversas", "Discussions", "Obrolan", "Чаты",
-            "Conversations"
-        )
-
-        for (keyword in chatsKeywords) {
+        for (keyword in CHATS_TAB_KEYWORDS) {
             val nodes = root.findAccessibilityNodeInfosByText(keyword)
             if (!nodes.isNullOrEmpty()) {
                 for (node in nodes) {
-                    // Check if it's likely a bottom tab (not a message containing "Chats")
-                    if (node.isClickable && node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
-                    
-                    var parent = node.parent
-                    var depth = 0
-                    while (parent != null && depth < 3) {
-                        if (parent.isClickable && parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return
-                        parent = parent.parent
-                        depth++
-                    }
+                    if (tryClick(node)) return
                 }
             }
         }
 
-        // 2. If we are in an individual channel (indicated by the activity name), BACK is safe
-        // This will bring the user back to the Updates list, where the next cycle will try to click Chats
-        performGlobalAction(GLOBAL_ACTION_BACK)
+        // 2. Fallback: If we are in a sub-activity (channel screen), BACK is safe and brings us to Status list.
+        // If we are already on HomeActivity (main screen), don't call BACK as it will exit WhatsApp.
+        val activity = lastActivityName ?: ""
+        if (!activity.contains("HomeActivity", ignoreCase = true)) {
+            performGlobalAction(GLOBAL_ACTION_BACK)
+        }
+    }
+
+    private fun tryClick(node: AccessibilityNodeInfo?): Boolean {
+        var current = node
+        var depth = 0
+        while (current != null && depth < 5) {
+            if (current.isClickable) {
+                if (current.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return true
+            }
+            current = current.parent
+            depth++
+        }
+        return false
     }
 
     override fun onInterrupt() {}
