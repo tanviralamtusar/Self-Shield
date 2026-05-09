@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Self-Shield</string>
-    <string name="device_admin_description">Self-Shield requires Device Admin access to prevent unauthorized uninstallation or tampering with the protection layers.</string>
-    <string name="accessibility_description">Self-Shield uses Accessibility Services to monitor the screen for restricted content and quickly redirect you to safety.</string>
+    <string name="app_name">Self Shield</string>
+    <string name="device_admin_description">Self Shield requires Device Admin access to prevent unauthorized uninstallation or tampering with the protection layers.</string>
+    <string name="accessibility_description">Self Shield uses Accessibility Services to monitor the screen for restricted content and quickly redirect you to safety.</string>
 </resources>

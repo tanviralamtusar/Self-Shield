@@ -7,7 +7,7 @@
             android:name=".SelfShieldAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="false"
-            android:label="Self-Shield Accessibility">
+            android:label="Self Shield Accessibility">
             <intent-filter>
                 <action android:name="android.view.accessibility.AccessibilityService" />
             </intent-filter>

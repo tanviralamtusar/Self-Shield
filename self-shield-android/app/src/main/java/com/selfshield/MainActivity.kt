@@ -50,7 +50,7 @@ fun MainScreen(context: ComponentActivity) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Self-Shield Protection", style = MaterialTheme.typography.headlineMedium)
+        Text(text = "Self Shield Protection", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(32.dp))
 
         Text(text = "Device Admin: ${if (isDeviceAdminEnabled) "Enabled" else "Disabled"}")
@@ -60,7 +60,7 @@ fun MainScreen(context: ComponentActivity) {
                     val componentName = ComponentName(context, SelfShieldDeviceAdminReceiver::class.java)
                     val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
                         putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-                        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Required for Self-Shield protection.")
+                        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Required for Self Shield protection.")
                     }
                     context.startActivity(intent)
                 }
