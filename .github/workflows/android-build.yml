@@ -38,16 +38,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.1.0-beta
-          name: Self Shield - Universal Release
+          tag_name: v1.2.0
+          name: Self Shield v1.2.0 - Channel Blocker
           body: |
-            This is a major update for Self Shield with universal language support and branding improvements.
+            **Self Shield v1.2.0**
             
             **What's New:**
-            - **Universal Language Support:** WhatsApp Updates/Channels blocking now works in English, Bengali, Hindi, Spanish, Arabic, and more.
-            - **New Branding:** Updated app icon and renamed to "Self Shield".
-            - **Improved Visibility:** Fixed issues where the app was not appearing in Accessibility settings on some devices.
-            - **Device Admin Protection:** Enhanced anti-tamper layers.
+            - **WhatsApp Channel Blocking:** Blocks Channels tab, individual channels, and channel explore pages
+            - **3-Layer Detection:** Activity class name + tab detection + in-channel UI detection
+            - **Toggle Switch:** Enable/disable channel blocking from the app
+            - **Universal Language:** Works in English, Bengali, Hindi, Spanish, Arabic, and more
+            - **New App Icon:** Updated branding with custom logo
+            - **Accessibility Fix:** App now properly appears in Accessibility settings
           draft: false
           prerelease: false
           files: self-shield-android/app/build/outputs/apk/debug/app-debug.apk
