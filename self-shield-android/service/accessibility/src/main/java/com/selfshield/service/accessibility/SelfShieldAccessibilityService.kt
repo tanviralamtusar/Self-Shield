@@ -38,6 +38,12 @@ class SelfShieldAccessibilityService : AccessibilityService() {
             "المحادثات", "Conversas", "Discussions", "Obrolan", "Чаты",
             "Conversations"
         )
+
+        // Internal back button indicators
+        private val WHATSAPP_BACK_KEYWORDS = arrayOf(
+            "Back", "Navigate up", "পিছনে যান", "ফিরে যান", 
+            "Back button", "Navigate back"
+        )
     }
 
     private var lastActivityName: String? = null
@@ -107,15 +113,9 @@ class SelfShieldAccessibilityService : AccessibilityService() {
     }
 
     private fun performBlockAction() {
-        // 1. Immediate Back Action (Faster than searching nodes)
-        val activity = lastActivityName ?: ""
-        if (!activity.contains("HomeActivity", ignoreCase = true)) {
-            performGlobalAction(GLOBAL_ACTION_BACK)
-        }
-
-        // 2. Redirection to Chats tab
         val root = rootInActiveWindow ?: return
         try {
+            // 1. Try to click the "Chats" tab directly (Immediate redirection to WhatsApp Home)
             for (keyword in CHATS_TAB_KEYWORDS) {
                 val nodes = root.findAccessibilityNodeInfosByText(keyword)
                 if (!nodes.isNullOrEmpty()) {
@@ -123,6 +123,22 @@ class SelfShieldAccessibilityService : AccessibilityService() {
                         if (tryClick(node)) return
                     }
                 }
+            }
+
+            // 2. Fallback: Try to click WhatsApp's internal back button
+            for (keyword in WHATSAPP_BACK_KEYWORDS) {
+                val nodes = root.findAccessibilityNodeInfosByText(keyword)
+                if (!nodes.isNullOrEmpty()) {
+                    for (node in nodes) {
+                        if (tryClick(node)) return
+                    }
+                }
+            }
+
+            // 3. Final resort: Use surgical BACK action only if we're not on the main screen
+            val activity = lastActivityName ?: ""
+            if (!activity.contains("HomeActivity", ignoreCase = true)) {
+                performGlobalAction(GLOBAL_ACTION_BACK)
             }
         } finally {
             root.recycle()
