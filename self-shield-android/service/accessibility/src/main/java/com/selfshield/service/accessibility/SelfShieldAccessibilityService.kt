@@ -9,8 +9,8 @@ import android.view.accessibility.AccessibilityNodeInfo
 
 /**
  * Self Shield Accessibility Service
- * Blocks WhatsApp Channels using the same proven approach as FocusGuard.
- * Uses findAccessibilityNodeInfosByText() + selected/focused check.
+ * Blocks WhatsApp Channels — both the channel listing AND inside individual channels.
+ * Uses FocusGuard's proven approach.
  */
 class SelfShieldAccessibilityService : AccessibilityService() {
 
@@ -20,6 +20,12 @@ class SelfShieldAccessibilityService : AccessibilityService() {
 
         private const val PKG_WHATSAPP = "com.whatsapp"
         private const val PKG_WHATSAPP_B = "com.whatsapp.w4b"
+
+        // WhatsApp activity class names that indicate channel views
+        private val CHANNEL_ACTIVITY_KEYWORDS = arrayOf(
+            "channel", "Channel", "CHANNEL",
+            "newsletter", "Newsletter"
+        )
     }
 
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -32,6 +38,19 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         val prefs = applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         if (!prefs.getBoolean(KEY_CHANNEL_BLOCK_ENABLED, false)) return
 
+        // Step 0: Check if the Activity class name contains "channel" or "newsletter"
+        // This catches when user taps into any individual channel
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            val className = event.className?.toString() ?: ""
+            for (keyword in CHANNEL_ACTIVITY_KEYWORDS) {
+                if (className.contains(keyword, ignoreCase = true)) {
+                    performBlockAction()
+                    return
+                }
+            }
+        }
+
+        // For all other events, check the screen content
         handleWhatsApp()
     }
 
@@ -39,23 +58,18 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         val root = rootInActiveWindow ?: return
 
         try {
-            // Step 1: Check if "Updates"/"Channels" tab is SELECTED or FOCUSED
-            val restrictedKeywords = arrayOf(
+            // Step 1: Check if "Updates" tab is SELECTED (the tab, not just visible)
+            val updatesTabKeywords = arrayOf(
                 "Updates", "আপডেট", "अपडेट", "Novedades", "Actualizaciones",
                 "المستجدات", "Atualizações", "Actus", "Aktuelles", "Pembaruan",
-                "Обновления",
-                "Channels", "চ্যানেল", "चैनल", "Canales", "القنوات",
-                "Canais", "Chaînes", "Kanäle", "Saluran", "Каналы"
+                "Обновления"
             )
 
-            for (keyword in restrictedKeywords) {
+            for (keyword in updatesTabKeywords) {
                 val nodes = root.findAccessibilityNodeInfosByText(keyword)
-                if (nodes != null && nodes.isNotEmpty()) {
+                if (nodes != null) {
                     for (node in nodes) {
-                        val isActive = node.isSelected ||
-                            node.isFocused ||
-                            (node.contentDescription?.toString()?.lowercase()?.contains("selected") == true)
-                        if (isActive) {
+                        if (node.isSelected || node.isFocused) {
                             performBlockAction()
                             return
                         }
@@ -63,28 +77,70 @@ class SelfShieldAccessibilityService : AccessibilityService() {
                 }
             }
 
-            // Step 2: Check for channel-specific UI elements
-            // These only appear when actually inside channel views
-            val channelIndicators = arrayOf(
+            // Step 2: Channel listing indicators (Updates tab showing channels)
+            val channelListIndicators = arrayOf(
                 "Find channels", "চ্যানেল খুঁজুন",
                 "Channels to follow", "Explore more",
-                "See all", "সব দেখুন"
+                "See all", "সব দেখুন",
+                "Channels", "চ্যানেল"
             )
 
-            for (indicator in channelIndicators) {
+            for (indicator in channelListIndicators) {
                 val nodes = root.findAccessibilityNodeInfosByText(indicator)
                 if (nodes != null && nodes.isNotEmpty()) {
-                    performBlockAction()
-                    return
+                    // Make sure it's not just the bottom tab text "Channels"
+                    // by checking that the text node is NOT in the bottom nav
+                    for (node in nodes) {
+                        // If it's a header or content (not a small tab label), block
+                        val text = node.text?.toString() ?: ""
+                        if (text.equals("Channels", ignoreCase = true) ||
+                            text.equals("চ্যানেল", ignoreCase = true)) {
+                            // Only block if this node is selected or if there are multiple
+                            if (node.isSelected || nodes.size > 1) {
+                                performBlockAction()
+                                return
+                            }
+                        } else {
+                            // "Find channels", "See all", etc. — always block
+                            performBlockAction()
+                            return
+                        }
+                    }
                 }
             }
+
+            // Step 3: INSIDE a single channel view — detect Follow/Mute buttons
+            val insideChannelIndicators = arrayOf(
+                "Follow", "ফলো করুন", "ফলো", "फ़ॉलो करें", "Seguir",
+                "متابعة", "Suivre", "Folgen", "Ikuti", "Подписаться",
+                "Following", "ফলো করা হচ্ছে", "Siguiendo",
+                "Mute", "Unmute",
+                "followers", "ফলোয়ার", "seguidores"
+            )
+
+            // Count how many channel-specific indicators we find
+            var channelIndicatorCount = 0
+            for (indicator in insideChannelIndicators) {
+                val nodes = root.findAccessibilityNodeInfosByText(indicator)
+                if (nodes != null && nodes.isNotEmpty()) {
+                    channelIndicatorCount++
+                }
+            }
+
+            // If we find 2 or more indicators, we're definitely inside a channel
+            // (e.g., "Follow" + "followers", or "Mute" + "Follow")
+            if (channelIndicatorCount >= 2) {
+                performBlockAction()
+                return
+            }
+
         } finally {
             root.recycle()
         }
     }
 
     /**
-     * BACK first (to exit the current view), then HOME after 50ms
+     * BACK first, then HOME after 50ms.
      * This ensures the user is quickly moved away from channels.
      */
     private fun performBlockAction() {
@@ -98,4 +154,3 @@ class SelfShieldAccessibilityService : AccessibilityService() {
         // Handle interruption
     }
 }
-
