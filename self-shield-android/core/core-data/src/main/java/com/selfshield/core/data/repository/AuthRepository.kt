@@ -4,11 +4,12 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,16 +17,18 @@ import javax.inject.Singleton
 class AuthRepository @Inject constructor(
     private val supabase: SupabaseClient
 ) {
-    val currentUser: Flow<UserInfo?> = flow {
-        emit(supabase.auth.currentUserOrNull())
-        supabase.auth.sessionStatus.collect { status ->
+    val currentUser: Flow<UserInfo?> = supabase.auth.sessionStatus
+        .map { status ->
             when (status) {
-                is SessionStatus.Authenticated -> emit(status.session.user)
-                is SessionStatus.NotAuthenticated -> emit(null)
-                else -> {} // Ignore Loading/Refreshing for the flow
+                is SessionStatus.Authenticated -> status.session.user
+                is SessionStatus.NotAuthenticated -> null
+                else -> null
             }
         }
-    }.flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.IO)
+
+    /** Simple boolean flow that doesn't leak Supabase types to consumer modules. */
+    val isAuthenticated: Flow<Boolean> = currentUser.map { it != null }
 
     suspend fun signIn(email: String, password: String): Result<Boolean> {
         return try {

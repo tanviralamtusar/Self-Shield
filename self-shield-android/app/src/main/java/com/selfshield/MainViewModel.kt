@@ -15,8 +15,8 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    val authState: StateFlow<AuthState> = authRepository.currentUser.map { user ->
-        if (user != null) AuthState.Authenticated else AuthState.Unauthenticated
+    val authState: StateFlow<AuthState> = authRepository.isAuthenticated.map { loggedIn ->
+        if (loggedIn) AuthState.Authenticated else AuthState.Unauthenticated
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
