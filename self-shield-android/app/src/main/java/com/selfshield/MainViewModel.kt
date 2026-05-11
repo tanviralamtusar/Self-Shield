@@ -12,19 +12,29 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val deviceManager: com.selfshield.core.data.identity.DeviceManager
 ) : ViewModel() {
 
     val authState: StateFlow<AuthState> = authRepository.isAuthenticated.map { loggedIn ->
-        if (loggedIn) AuthState.Authenticated else AuthState.Unauthenticated
+        when {
+            !loggedIn -> AuthState.Unauthenticated
+            deviceManager.isPaired() -> AuthState.Authenticated
+            else -> AuthState.NeedsConnection
+        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = if (authRepository.isUserLoggedIn()) AuthState.Authenticated else AuthState.Unauthenticated
+        initialValue = if (authRepository.isUserLoggedIn()) {
+            if (deviceManager.isPaired()) AuthState.Authenticated else AuthState.NeedsConnection
+        } else {
+            AuthState.Unauthenticated
+        }
     )
 }
 
 sealed class AuthState {
     object Authenticated : AuthState()
     object Unauthenticated : AuthState()
+    object NeedsConnection : AuthState()
 }
