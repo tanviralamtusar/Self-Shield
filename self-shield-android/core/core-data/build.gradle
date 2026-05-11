@@ -33,7 +33,7 @@ android {
 
 dependencies {
     implementation(project(':core:core-database'))
-    implementation(project(':core:core-network'))
+    api(project(':core:core-network'))
     implementation(project(':core:core-security'))
 
     implementation(libs.androidx.core.ktx)
@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
     
     implementation(platform(libs.firebase.bom)) // reuse BOM pattern for version management
     // Supabase — needed directly since core-network doesn't expose these transitively

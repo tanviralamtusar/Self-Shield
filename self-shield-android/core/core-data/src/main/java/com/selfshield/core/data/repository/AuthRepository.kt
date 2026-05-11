@@ -4,12 +4,13 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
-import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,9 +45,12 @@ class AuthRepository @Inject constructor(
 
     suspend fun signUp(email: String, password: String): Result<Boolean> {
         return try {
-            supabase.auth.signUpWith(Email) {
+            supabase.auth.signUpWith(Email, redirectUrl = "selfshield://auth") {
                 this.email = email
                 this.password = password
+                data = buildJsonObject {
+                    put("role", "child")
+                }
             }
             Result.success(true)
         } catch (e: Exception) {
@@ -61,6 +65,13 @@ class AuthRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun resetPassword(email: String): Result<Unit> = runCatching {
+        supabase.auth.resetPasswordForEmail(
+            email = email,
+            redirectUrl = "https://self-shield.botbhai.net/reset-password"
+        )
     }
 
     fun isUserLoggedIn(): Boolean {

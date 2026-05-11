@@ -41,11 +41,24 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun resetPassword(email: String) {
+        viewModelScope.launch {
+            _uiState.value = LoginUiState.Loading
+            val result = authRepository.resetPassword(email)
+            _uiState.value = if (result.isSuccess) {
+                LoginUiState.PasswordResetSent
+            } else {
+                LoginUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
+            }
+        }
+    }
 }
 
 sealed class LoginUiState {
     object Idle : LoginUiState()
     object Loading : LoginUiState()
     object Success : LoginUiState()
+    object PasswordResetSent : LoginUiState()
     data class Error(val message: String) : LoginUiState()
 }
