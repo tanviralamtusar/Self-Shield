@@ -1,11 +1,11 @@
 # Graph Report - self-shield  (2026-05-12)
 
 ## Corpus Check
-- 152 files · ~93,581 words
+- 152 files · ~93,787 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 903 nodes · 1833 edges · 32 communities detected
+- 905 nodes · 1835 edges · 32 communities detected
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 210 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -24,7 +24,7 @@
 - [[_COMMUNITY_Community 11|Community 11]]
 - [[_COMMUNITY_Community 12|Community 12]]
 - [[_COMMUNITY_Community 13|Community 13]]
-- [[_COMMUNITY_Community 15|Community 15]]
+- [[_COMMUNITY_Community 14|Community 14]]
 - [[_COMMUNITY_Community 16|Community 16]]
 - [[_COMMUNITY_Community 17|Community 17]]
 - [[_COMMUNITY_Community 20|Community 20]]
@@ -37,8 +37,8 @@
 - [[_COMMUNITY_Community 28|Community 28]]
 - [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
-- [[_COMMUNITY_Community 35|Community 35]]
-- [[_COMMUNITY_Community 38|Community 38]]
+- [[_COMMUNITY_Community 31|Community 31]]
+- [[_COMMUNITY_Community 36|Community 36]]
 - [[_COMMUNITY_Community 39|Community 39]]
 - [[_COMMUNITY_Community 40|Community 40]]
 - [[_COMMUNITY_Community 47|Community 47]]
@@ -58,44 +58,44 @@
 ## Surprising Connections (you probably didn't know these)
 - `initSupabase()` --calls--> `createClient()`  [INFERRED]
   self-shield-extension\background\service-worker.js → self-shield-web\src\lib\supabase\client.ts
+- `Error` --calls--> `from()`  [INFERRED]
+  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
+- `Error` --calls--> `join()`  [INFERRED]
+  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
 - `Error` --calls--> `push()`  [INFERRED]
   self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
 - `Error` --calls--> `trigger()`  [INFERRED]
-  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
-- `Error` --calls--> `request()`  [INFERRED]
-  self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
-- `Error` --calls--> `heartbeatTimeout()`  [INFERRED]
   self-shield-android\feature\feature-onboarding\src\main\java\com\selfshield\feature\onboarding\login\LoginViewModel.kt → self-shield-extension\supabase.js
 
 ## Communities
 
 ### Community 0 - "Community 0"
 Cohesion: 0.02
-Nodes (106): _(), applyTransformOptsToQuery(), B(), C(), _cancelPendingDisconnect(), cancelRefEvent(), catch(), Ce() (+98 more)
+Nodes (137): _(), ajax(), appendParams(), applyTransformOptsToQuery(), ar(), B(), batchSend(), binaryEncode() (+129 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.05
-Nodes (114): _acquireLock(), _adminDeletePasskey(), _adminListPasskeys(), _approveAuthorization(), _authenticate(), _autoRefreshTokenTick(), Bt(), _callRefreshToken() (+106 more)
+Cohesion: 0.06
+Nodes (99): _acquireLock(), _adminDeletePasskey(), _adminListPasskeys(), _approveAuthorization(), _authenticate(), _autoRefreshTokenTick(), Bt(), _callRefreshToken() (+91 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.04
-Nodes (84): appendParams(), ar(), cancelTimeout(), canPush(), clearHeartbeats(), connect(), connectionState(), connectWithFallback() (+76 more)
+Cohesion: 0.05
+Nodes (78): _cancelPendingDisconnect(), cancelRefEvent(), cancelTimeout(), canPush(), channel(), clearHeartbeats(), close(), closeAndRetry() (+70 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.06
-Nodes (69): Error, _binaryDecode(), binaryEncode(), _binaryEncodeUserBroadcastPush(), br(), clone(), cloneRequestState(), containedBy() (+61 more)
-
-### Community 4 - "Community 4"
 Cohesion: 0.08
 Nodes (33): GET(), POST(), GET(), POST(), POST(), POST(), GET(), POST() (+25 more)
 
-### Community 5 - "Community 5"
+### Community 4 - "Community 4"
 Cohesion: 0.05
 Nodes (34): AuditPage(), formatDuration(), DeviceSettings(), ForgotPasswordPage(), useActivityLog(), useAppRules(), useUpdateAppRule(), useAppSchedules() (+26 more)
 
+### Community 5 - "Community 5"
+Cohesion: 0.08
+Nodes (50): Error, _binaryDecode(), _binaryEncodeUserBroadcastPush(), br(), _challenge(), copyBindings(), cr(), decode() (+42 more)
+
 ### Community 6 - "Community 6"
-Cohesion: 0.16
-Nodes (19): ajax(), batchSend(), createNamespace(), createNamespaceIfNotExists(), createTable(), createTableIfNotExists(), dropNamespace(), dropTable() (+11 more)
+Cohesion: 0.11
+Nodes (28): catch(), createNamespace(), createNamespaceIfNotExists(), createTable(), createTableIfNotExists(), dropNamespace(), dropTable(), execute() (+20 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.24
@@ -115,23 +115,23 @@ Nodes (6): Idle, Loading, LoginUiState, LoginViewModel, PasswordResetSent, Succe
 
 ### Community 11 - "Community 11"
 Cohesion: 0.22
-Nodes (1): DeviceManager
+Nodes (5): Authenticated, AuthState, MainViewModel, NeedsConnection, Unauthenticated
 
 ### Community 12 - "Community 12"
-Cohesion: 0.25
-Nodes (5): Authenticated, AuthState, MainViewModel, NeedsConnection, Unauthenticated
+Cohesion: 0.22
+Nodes (1): DeviceManager
 
 ### Community 13 - "Community 13"
 Cohesion: 0.25
-Nodes (5): Idle, Loading, SignupUiState, SignupViewModel, Success
+Nodes (4): DeviceRepository, DeviceStatus, DeviceUpsert, PlaceholderDevice
 
-### Community 15 - "Community 15"
-Cohesion: 0.29
-Nodes (1): AuthRepository
+### Community 14 - "Community 14"
+Cohesion: 0.25
+Nodes (5): Idle, Loading, SignupUiState, SignupViewModel, Success
 
 ### Community 16 - "Community 16"
 Cohesion: 0.29
-Nodes (4): DeviceRepository, DeviceStatus, DeviceUpsert, PlaceholderDevice
+Nodes (1): AuthRepository
 
 ### Community 17 - "Community 17"
 Cohesion: 0.29
@@ -177,13 +177,13 @@ Nodes (1): WatchdogService
 Cohesion: 0.67
 Nodes (2): updateStatusUI(), updateUI()
 
-### Community 35 - "Community 35"
-Cohesion: 0.67
-Nodes (2): generateCode(), handleOpenChange()
-
-### Community 38 - "Community 38"
+### Community 31 - "Community 31"
 Cohesion: 0.5
 Nodes (2): proxy(), updateSession()
+
+### Community 36 - "Community 36"
+Cohesion: 0.67
+Nodes (2): generateCode(), handleOpenChange()
 
 ### Community 39 - "Community 39"
 Cohesion: 0.67
@@ -202,9 +202,9 @@ Nodes (1): SelfShieldApplication
   These have ≤1 connection - possible missing edges or undocumented components.
 - **Thin community `Community 8`** (10 nodes): `MainActivity.kt`, `checkAccessibility()`, `checkDeviceAdmin()`, `MainActivity`, `.handleIntent()`, `.onCreate()`, `.onNewIntent()`, `MainScreen()`, `PermissionItem()`, `requestDeviceAdmin()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 11`** (9 nodes): `DeviceManager`, `.clearPairing()`, `.getAdminId()`, `.getDeviceId()`, `.getFcmToken()`, `.isPaired()`, `.setFcmToken()`, `.setPaired()`, `DeviceManager.kt`
+- **Thin community `Community 12`** (9 nodes): `DeviceManager`, `.clearPairing()`, `.getAdminId()`, `.getDeviceId()`, `.getFcmToken()`, `.isPaired()`, `.setFcmToken()`, `.setPaired()`, `DeviceManager.kt`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 15`** (7 nodes): `AuthRepository`, `.isUserLoggedIn()`, `.resetPassword()`, `.signIn()`, `.signOut()`, `.signUp()`, `AuthRepository.kt`
+- **Thin community `Community 16`** (7 nodes): `AuthRepository`, `.isUserLoggedIn()`, `.resetPassword()`, `.signIn()`, `.signOut()`, `.signUp()`, `AuthRepository.kt`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 17`** (7 nodes): `SelfShieldAccessibilityService`, `.handleWhatsApp()`, `.onAccessibilityEvent()`, `.onInterrupt()`, `.performBlockAction()`, `.tryClick()`, `SelfShieldAccessibilityService.kt`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -226,9 +226,9 @@ Nodes (1): SelfShieldApplication
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 30`** (4 nodes): `updateStatusUI()`, `updateUI()`, `updateUIForCurrentTab()`, `popup.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (4 nodes): `copyToClipboard()`, `generateCode()`, `handleOpenChange()`, `PairDeviceModal.tsx`
+- **Thin community `Community 31`** (4 nodes): `middleware.ts`, `proxy.ts`, `proxy()`, `updateSession()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (4 nodes): `middleware.ts`, `proxy.ts`, `proxy()`, `updateSession()`
+- **Thin community `Community 36`** (4 nodes): `copyToClipboard()`, `generateCode()`, `handleOpenChange()`, `PairDeviceModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 39`** (3 nodes): `SyncWorker.kt`, `SyncWorker`, `.doWork()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -240,11 +240,11 @@ Nodes (1): SelfShieldApplication
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Error` connect `Community 3` to `Community 0`, `Community 1`, `Community 2`, `Community 6`, `Community 10`?**
+- **Why does `Error` connect `Community 5` to `Community 0`, `Community 1`, `Community 2`, `Community 6`, `Community 10`?**
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
-- **Why does `Error` connect `Community 3` to `Community 0`, `Community 1`, `Community 2`, `Community 6`, `Community 13`?**
+- **Why does `Error` connect `Community 5` to `Community 0`, `Community 1`, `Community 2`, `Community 6`, `Community 14`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
-- **Why does `createClient()` connect `Community 5` to `Community 7`?**
+- **Why does `createClient()` connect `Community 4` to `Community 7`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Are the 35 inferred relationships involving `Error` (e.g. with `stripNulls()` and `from()`) actually correct?**
   _`Error` has 35 INFERRED edges - model-reasoned connections that need verification._
