@@ -1,12 +1,12 @@
 # Graph Report - self-shield  (2026-05-12)
 
 ## Corpus Check
-- 152 files · ~93,070 words
+- 152 files · ~93,146 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 899 nodes · 1827 edges · 33 communities detected
-- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 208 edges (avg confidence: 0.8)
+- 899 nodes · 1829 edges · 33 communities detected
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 210 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -87,7 +87,7 @@ Cohesion: 0.06
 Nodes (63): Error, binaryEncode(), _binaryEncodeUserBroadcastPush(), br(), clone(), cloneRequestState(), containedBy(), contains() (+55 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.07
+Cohesion: 0.08
 Nodes (33): GET(), POST(), GET(), POST(), POST(), POST(), GET(), POST() (+25 more)
 
 ### Community 5 - "Community 5"
