@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun ConnectScreen(
     onConnectSuccess: () -> Unit,
+    onSignOut: () -> Unit,
     viewModel: ConnectViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -74,7 +75,7 @@ fun ConnectScreen(
             )
 
             Text(
-                text = "Enter the pairing code from your dashboard to connect this device",
+                text = "Enter the pairing code from your Admin Dashboard to connect this device to your parent/admin account",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray,
                 textAlign = TextAlign.Center,
@@ -158,7 +159,24 @@ fun ConnectScreen(
             Spacer(modifier = Modifier.height(24.dp))
             
             TextButton(
-                onClick = { /* Could add logout here if needed */ },
+                onClick = { 
+                    viewModel.signOut()
+                    onSignOut()
+                },
+                enabled = uiState !is ConnectUiState.Loading
+            ) {
+                Text(
+                    text = "Sign Out",
+                    color = Color(0xFF4A80F0),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            TextButton(
+                onClick = { /* Help link */ },
                 enabled = uiState !is ConnectUiState.Loading
             ) {
                 Text(

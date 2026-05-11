@@ -85,6 +85,11 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate("main") {
                                     popUpTo("connect") { inclusive = true }
                                 }
+                            },
+                            onSignOut = {
+                                navController.navigate("login") {
+                                    popUpTo(0) { inclusive = true }
+                                }
                             }
                         )
                     }

@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConnectViewModel @Inject constructor(
-    private val deviceRepository: DeviceRepository
+    private val deviceRepository: DeviceRepository,
+    private val authRepository: com.selfshield.core.data.repository.AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ConnectUiState>(ConnectUiState.Idle)
@@ -40,6 +41,12 @@ class ConnectViewModel @Inject constructor(
             } else {
                 ConnectUiState.Error(result.exceptionOrNull()?.message ?: "Failed to connect device")
             }
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            authRepository.signOut()
         }
     }
 
