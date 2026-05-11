@@ -31,7 +31,6 @@ export function PairDeviceModal() {
         .from('devices')
         .insert({
           admin_id: userData.user.id,
-          owner_id: userData.user.id, // In a real app, this might be a separate child user
           pairing_code: code,
           device_name: 'Pending Android Device',
           status: 'pending',

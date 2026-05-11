@@ -2,6 +2,7 @@ package com.selfshield.core.data.repository
 
 import com.selfshield.core.data.identity.DeviceManager
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
@@ -13,53 +14,69 @@ import kotlinx.serialization.Serializable
 @Singleton
 class DeviceRepository @Inject constructor(
     private val supabase: SupabaseClient,
-    private val supabaseApi: com.selfshield.core.network.api.SupabaseApi,
     private val deviceManager: DeviceManager
 ) {
-    suspend fun registerDevice(deviceName: String, model: String, osVersion: String): Result<String> = withContext(Dispatchers.IO) {
-        try {
-            val deviceId = deviceManager.getDeviceId()
-            val request = com.selfshield.core.network.model.RegisterRequest(
-                device_id = deviceId,
-                device_name = deviceName,
-                os_version = osVersion,
-                model = model
-            )
-            
-            val response = supabaseApi.registerDevice(request)
-            if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!.pairing_code)
-            } else {
-                Result.failure(Exception("Failed to register: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 
-    suspend fun claimDevice(pairingCode: String, deviceName: String, model: String, osVersion: String): Result<Boolean> = withContext(Dispatchers.IO) {
+    /**
+     * Claim a device by pairing code — uses Supabase Postgrest directly.
+     *
+     * Flow:
+     * 1. Find the pending placeholder row matching the pairing code.
+     * 2. Upsert the real device row with admin_id from that placeholder.
+     * 3. Clean up the placeholder if it differs from the real device.
+     * 4. Save pairing state locally.
+     */
+    suspend fun claimDevice(
+        pairingCode: String,
+        deviceName: String,
+        model: String,
+        osVersion: String
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val deviceId = deviceManager.getDeviceId()
             val fcmToken = deviceManager.getFcmToken()
-            val request = com.selfshield.core.network.model.ClaimRequest(
-                pairing_code = pairingCode,
-                device_id = deviceId,
-                fcm_token = fcmToken,
-                device_name = deviceName,
-                os_version = osVersion,
-                model = model
-            )
-            
-            val response = supabaseApi.claimDevice(request)
-            if (response.isSuccessful && response.body() != null) {
-                val body = response.body()!!
-                // Note: In our claim flow, the backend might return a NEW id if it wants
-                // But usually we just use the one already in the placeholder
-                deviceManager.setPaired(body.admin_id)
-                Result.success(true)
-            } else {
-                Result.failure(Exception("Failed to claim: ${response.code()}"))
+            val currentUser = supabase.auth.currentUserOrNull()
+                ?: return@withContext Result.failure(Exception("Not authenticated"))
+
+            // 1. Find the pending placeholder with this pairing code
+            val placeholder = supabase.postgrest.from("devices")
+                .select(columns = Columns.raw("id, admin_id")) {
+                    filter {
+                        eq("pairing_code", pairingCode)
+                        eq("status", "pending")
+                    }
+                }.decodeSingle<PlaceholderDevice>()
+
+            val nowIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").apply {
+                timeZone = java.util.TimeZone.getTimeZone("UTC")
+            }.format(java.util.Date())
+
+            // 2. Upsert the real device row, linking it to the admin
+            supabase.postgrest.from("devices")
+                .upsert(DeviceUpsert(
+                    id = deviceId,
+                    admin_id = placeholder.admin_id,
+                    owner_id = currentUser.id,
+                    fcm_token = fcmToken,
+                    device_name = deviceName,
+                    os_version = osVersion,
+                    device_type = "android",
+                    status = "online",
+                    pairing_code = null,
+                    last_seen_at = nowIso
+                ))
+
+            // 3. Clean up the placeholder if it's a different row
+            if (placeholder.id != deviceId) {
+                supabase.postgrest.from("devices")
+                    .delete {
+                        filter { eq("id", placeholder.id) }
+                    }
             }
+
+            // 4. Save locally
+            deviceManager.setPaired(placeholder.admin_id)
+            Result.success(true)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -86,6 +103,26 @@ class DeviceRepository @Inject constructor(
         }
     }
 }
+
+@Serializable
+data class PlaceholderDevice(
+    val id: String,
+    val admin_id: String
+)
+
+@Serializable
+data class DeviceUpsert(
+    val id: String,
+    val admin_id: String,
+    val owner_id: String,
+    val fcm_token: String?,
+    val device_name: String,
+    val os_version: String,
+    val device_type: String,
+    val status: String,
+    val pairing_code: String?,
+    val last_seen_at: String?
+)
 
 @Serializable
 data class DeviceStatus(
