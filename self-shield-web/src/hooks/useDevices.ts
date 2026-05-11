@@ -11,6 +11,7 @@ export type Device = {
   app_version: string | null;
   is_device_owner: boolean;
   is_admin_active: boolean;
+  is_admin_enabled: boolean;
   is_accessibility_active: boolean;
   is_vpn_active: boolean;
   last_seen_at: string | null;

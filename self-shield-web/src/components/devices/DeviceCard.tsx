@@ -29,7 +29,7 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
     ? new Date().getTime() - new Date(device.last_seen_at).getTime() < 1000 * 60 * 5 // 5 mins
     : false;
 
-  const protectionStatus = (device.is_device_owner && device.is_admin_active && device.is_accessibility_active && device.is_vpn_active) 
+  const protectionStatus = (device.is_device_owner && device.is_admin_enabled && device.is_accessibility_active && device.is_vpn_active) 
     ? 'Full' 
     : 'Partial';
 
@@ -163,12 +163,12 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/10 border border-border/20">
           <Smartphone className={cn(
             "w-3.5 h-3.5 shrink-0",
-            device.is_admin_active ? "text-primary/70" : "text-muted-foreground/50"
+            device.is_admin_enabled ? "text-primary/70" : "text-muted-foreground/50"
           )} />
           <div className="min-w-0">
             <p className="text-[10px] uppercase font-bold text-muted-foreground/70 tracking-wider leading-none mb-1">Admin Mode</p>
             <p className="text-[13px] font-bold text-foreground leading-none">
-              {device.is_admin_active ? 'Active' : 'Inactive'}
+              {device.is_admin_enabled ? 'Active' : 'Inactive'}
             </p>
           </div>
         </div>

@@ -244,6 +244,12 @@ export default function DeviceDetailPage() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg border">
+                  <span className="font-medium">Device Admin Mode</span>
+                  <span className={cn("font-medium", device.is_admin_enabled ? "text-emerald-500" : "text-amber-500")}>
+                    {device.is_admin_enabled ? 'Active' : 'Disabled'}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg border">
                   <span className="font-medium">Device Owner Mode</span>
                   <span className={device.is_device_owner ? 'text-success font-medium' : 'text-warning font-medium'}>
                     {device.is_device_owner ? 'Enabled' : 'Not Enabled'}

@@ -106,6 +106,7 @@ class DeviceRepository @Inject constructor(
         }
     }
     suspend fun updateStatus(
+        isAdminEnabled: Boolean,
         isAccessibilityActive: Boolean,
         isVpnActive: Boolean
     ): Result<Unit> = withContext(Dispatchers.IO) {
@@ -117,6 +118,7 @@ class DeviceRepository @Inject constructor(
 
             supabase.postgrest.from("devices")
                 .update({
+                    set("is_admin_enabled", isAdminEnabled)
                     set("is_accessibility_active", isAccessibilityActive)
                     set("is_vpn_active", isVpnActive)
                     set("last_seen_at", nowIso)
@@ -150,6 +152,7 @@ data class DeviceUpsert(
     val pairing_code: String?,
     val last_seen_at: String?,
     val is_admin_active: Boolean,
+    val is_admin_enabled: Boolean = false,
     val is_accessibility_active: Boolean = false,
     val is_vpn_active: Boolean = false
 )
@@ -159,6 +162,7 @@ data class DeviceStatus(
     val admin_id: String?,
     val status: String,
     val is_admin_active: Boolean,
+    val is_admin_enabled: Boolean = false,
     val is_accessibility_active: Boolean,
     val is_vpn_active: Boolean
 )

@@ -104,9 +104,9 @@ class MainActivity : ComponentActivity() {
                         ) {
                             MainScreen(
                                 this@MainActivity, 
-                                deviceManager.isPaired(),
+                                authState is AuthState.Authenticated,
                                 onRefresh = { mainViewModel.checkConnection() },
-                                onStatusUpdate = { acc, vpn -> mainViewModel.syncStatus(acc, vpn) }
+                                onStatusUpdate = { admin, acc, vpn -> mainViewModel.syncStatus(admin, acc, vpn) }
                             )
                         }
                     }
@@ -132,7 +132,7 @@ fun MainScreen(
     context: ComponentActivity, 
     isPaired: Boolean, 
     onRefresh: () -> Unit,
-    onStatusUpdate: (Boolean, Boolean) -> Unit
+    onStatusUpdate: (Boolean, Boolean, Boolean) -> Unit
 ) {
     var isDeviceAdminEnabled by remember { mutableStateOf(checkDeviceAdmin(context)) }
     var isAccessibilityEnabled by remember { mutableStateOf(checkAccessibility(context)) }
@@ -155,7 +155,7 @@ fun MainScreen(
     // Sync status to cloud when permissions change
     LaunchedEffect(isDeviceAdminEnabled, isAccessibilityEnabled) {
         if (isPaired) {
-            onStatusUpdate(isAccessibilityEnabled, true) // Assuming VPN active for now
+            onStatusUpdate(isDeviceAdminEnabled, isAccessibilityEnabled, true) // Assuming VPN active for now
         }
     }
 
@@ -337,19 +337,25 @@ fun checkDeviceAdmin(context: Context): Boolean {
 }
 
 fun checkAccessibility(context: Context): Boolean {
-    val serviceId = "${context.packageName}/com.selfshield.service.accessibility.SelfShieldAccessibilityService"
-    val enabled = try {
-        Settings.Secure.getInt(context.contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
-    } catch (e: Settings.SettingNotFoundException) {
-        0
-    }
+    val serviceName = "com.selfshield.service.accessibility.SelfShieldAccessibilityService"
+    val expectedId = "${context.packageName}/$serviceName"
     
-    if (enabled == 1) {
-        val settingValue = Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-        )
-        return settingValue?.contains(serviceId) == true
-    }
+    // Method 1: Check Secure Settings (Very reliable)
+    try {
+        val settingValue = Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+        if (settingValue?.split(':')?.any { it.equals(expectedId, ignoreCase = true) || it.contains(serviceName) } == true) {
+            return true
+        }
+    } catch (e: Exception) {}
+
+    // Method 2: AccessibilityManager list
+    try {
+        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+        if (enabledServices.any { it.resolveInfo.serviceInfo.packageName == context.packageName }) {
+            return true
+        }
+    } catch (e: Exception) {}
+
     return false
 }

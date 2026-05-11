@@ -36,9 +36,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun syncStatus(isAccessibilityActive: Boolean, isVpnActive: Boolean) {
+    fun syncStatus(isAdminEnabled: Boolean, isAccessibilityActive: Boolean, isVpnActive: Boolean) {
         viewModelScope.launch {
-            deviceRepository.updateStatus(isAccessibilityActive, isVpnActive)
+            deviceRepository.updateStatus(isAdminEnabled, isAccessibilityActive, isVpnActive)
         }
     }
 
