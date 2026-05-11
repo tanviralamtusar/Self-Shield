@@ -60,4 +60,14 @@ class DeviceManager @Inject constructor(
     fun isPaired(): Boolean = prefs.getBoolean(KEY_IS_PAIRED, false)
     
     fun getAdminId(): String? = prefs.getString(KEY_ADMIN_ID, null)
+
+    /**
+     * Clear the local pairing state.
+     */
+    fun clearPairing() {
+        prefs.edit()
+            .remove(KEY_IS_PAIRED)
+            .remove(KEY_ADMIN_ID)
+            .apply()
+    }
 }

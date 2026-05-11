@@ -101,7 +101,11 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            MainScreen(this@MainActivity, deviceManager.isPaired())
+                            MainScreen(
+                                this@MainActivity, 
+                                deviceManager.isPaired(),
+                                onRefresh = { mainViewModel.checkConnection() }
+                            )
                         }
                     }
                 }
@@ -122,7 +126,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(context: ComponentActivity, isPaired: Boolean) {
+fun MainScreen(context: ComponentActivity, isPaired: Boolean, onRefresh: () -> Unit) {
     var isDeviceAdminEnabled by remember { mutableStateOf(checkDeviceAdmin(context)) }
     var isAccessibilityEnabled by remember { mutableStateOf(checkAccessibility(context)) }
 
@@ -261,6 +265,7 @@ fun MainScreen(context: ComponentActivity, isPaired: Boolean) {
             onClick = {
                 isDeviceAdminEnabled = checkDeviceAdmin(context)
                 isAccessibilityEnabled = checkAccessibility(context)
+                onRefresh()
             },
             modifier = Modifier.fillMaxWidth(0.7f)
         ) {

@@ -10,27 +10,46 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import com.selfshield.core.data.repository.DeviceRepository
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val deviceRepository: DeviceRepository,
     private val deviceManager: com.selfshield.core.data.identity.DeviceManager
 ) : ViewModel() {
 
-    val authState: StateFlow<AuthState> = authRepository.isAuthenticated.map { loggedIn ->
-        when {
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
+    val authState = _authState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            authRepository.isAuthenticated.collect { loggedIn ->
+                updateAuthState(loggedIn)
+                if (loggedIn) {
+                    checkConnection()
+                }
+            }
+        }
+    }
+
+    fun checkConnection() {
+        viewModelScope.launch {
+            deviceRepository.checkPairingStatus()
+            updateAuthState(authRepository.isUserLoggedIn())
+        }
+    }
+
+    private fun updateAuthState(loggedIn: Boolean) {
+        _authState.value = when {
             !loggedIn -> AuthState.Unauthenticated
             deviceManager.isPaired() -> AuthState.Authenticated
             else -> AuthState.NeedsConnection
         }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = if (authRepository.isUserLoggedIn()) {
-            if (deviceManager.isPaired()) AuthState.Authenticated else AuthState.NeedsConnection
-        } else {
-            AuthState.Unauthenticated
-        }
-    )
+    }
 }
 
 sealed class AuthState {

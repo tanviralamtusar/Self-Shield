@@ -90,15 +90,19 @@ class DeviceRepository @Inject constructor(
                     filter {
                         eq("id", deviceId)
                     }
-                }.decodeSingle<DeviceStatus>()
+                }.decodeSingleOrNull<DeviceStatus>()
 
-            if (response.admin_id != null) {
+            if (response?.admin_id != null) {
                 deviceManager.setPaired(response.admin_id)
                 Result.success(true)
             } else {
+                // If not found or admin_id is null, clear local pairing
+                deviceManager.clearPairing()
                 Result.success(false)
             }
         } catch (e: Exception) {
+            // On network error, we don't clear (might be temporary)
+            // But if it's a 404 or similar from Postgrest, we should consider it unpaired
             Result.failure(e)
         }
     }

@@ -22,10 +22,17 @@ const getDeviceIcon = (name: string) => {
   return Smartphone;
 };
 
-const getStatus = (lastSeenAt: string | null) => {
-  if (!lastSeenAt) return 'Offline';
+const getStatus = (dbStatus: string | null, lastSeenAt: string | null) => {
+  if (dbStatus === 'blocked') return 'Blocked';
+  if (!lastSeenAt) return dbStatus === 'online' ? 'Online' : 'Offline';
+  
   const lastSeen = parseISO(lastSeenAt);
   const diff = Date.now() - lastSeen.getTime();
+  
+  // If the database says it's online, trust it if last_seen was recent (within 10 mins)
+  // or if it's a brand new connection (lastSeenAt is null, handled above)
+  if (dbStatus === 'online' && diff < 10 * 60 * 1000) return 'Online';
+  
   return diff < 5 * 60 * 1000 ? 'Online' : 'Offline';
 };
 
@@ -47,7 +54,7 @@ export function DeviceHealthGrid() {
       globalIndex: index + 1,
       version: device.app_version || '1.0.0',
       lastSeen: device.last_seen_at,
-      status: getStatus(device.last_seen_at),
+      status: getStatus(device.status, device.last_seen_at),
       cpu: (device.device_name.length * 7) % 40 + 5,
       memory: (device.device_name.length * 11) % 50 + 30,
       storage: (device.device_name.length * 13) % 20 + 60,
