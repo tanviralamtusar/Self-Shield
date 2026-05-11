@@ -23,12 +23,23 @@ import androidx.navigation.compose.rememberNavController
 import com.selfshield.admin.SelfShieldDeviceAdminReceiver
 import com.selfshield.core.ui.theme.SelfShieldTheme
 import com.selfshield.feature.onboarding.login.LoginScreen
+import com.selfshield.feature.onboarding.signup.SignupScreen
+import com.selfshield.feature.onboarding.connect.ConnectScreen
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.handleDeeplinks
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    
+    @Inject
+    lateinit var supabaseClient: SupabaseClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleIntent(intent)
         setContent {
             SelfShieldTheme {
                 val navController = rememberNavController()
@@ -37,14 +48,50 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = if (authState == AuthState.Authenticated) "main" else "login"
+                    startDestination = when (authState) {
+                        is AuthState.Authenticated -> "main"
+                        is AuthState.NeedsConnection -> "connect"
+                        else -> "login"
+                    }
                 ) {
                     composable("login") {
-                        LoginScreen(onLoginSuccess = {
-                            navController.navigate("main") {
-                                popUpTo("login") { inclusive = true }
+                        LoginScreen(
+                            onLoginSuccess = {
+                                val target = if (mainViewModel.authState.value is AuthState.Authenticated) "main" else "connect"
+                                navController.navigate(target) {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            },
+                            onNavigateToSignup = {
+                                navController.navigate("signup")
                             }
-                        })
+                        )
+                    }
+                    composable("signup") {
+                        SignupScreen(
+                            onBackToLogin = {
+                                navController.popBackStack()
+                            },
+                            onSignupSuccess = {
+                                navController.navigate("connect") {
+                                    popUpTo("signup") { inclusive = true }
+                                }
+                            }
+                        )
+                    }
+                    composable("connect") {
+                        ConnectScreen(
+                            onConnectSuccess = {
+                                navController.navigate("main") {
+                                    popUpTo("connect") { inclusive = true }
+                                }
+                            },
+                            onSignOut = {
+                                navController.navigate("login") {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }
+                        )
                     }
                     composable("main") {
                         Surface(
@@ -56,6 +103,17 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.let {
+            supabaseClient.handleDeeplinks(it)
         }
     }
 }

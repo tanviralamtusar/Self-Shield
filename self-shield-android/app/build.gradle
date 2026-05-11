@@ -32,6 +32,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -58,6 +59,8 @@ dependencies {
     implementation(project(':service:accessibility'))
     implementation(project(':service:watchdog'))
     implementation(project(':service:messaging'))
+
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -89,4 +92,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
     kapt(libs.androidx.hilt.compiler)
+
+    // Supabase
+    implementation(libs.supabase.auth)
+    implementation(libs.supabase.postgrest)
 }

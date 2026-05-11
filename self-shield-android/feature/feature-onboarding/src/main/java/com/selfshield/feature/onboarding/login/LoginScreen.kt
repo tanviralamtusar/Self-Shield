@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
+    onNavigateToSignup: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -29,7 +30,6 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var isSignupMode by remember { mutableStateOf(false) }
     var isResetMode by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState) {
@@ -52,7 +52,6 @@ fun LoginScreen(
             Text(
                 text = when {
                     isResetMode -> "Reset Password"
-                    isSignupMode -> "Create Account"
                     else -> "Welcome Back"
                 },
                 style = MaterialTheme.typography.headlineLarge,
@@ -64,7 +63,6 @@ fun LoginScreen(
             Text(
                 text = when {
                     isResetMode -> "Enter your email to receive a reset link"
-                    isSignupMode -> "Join Self-Shield to protect your device"
                     else -> "Sign in to your account"
                 },
                 style = MaterialTheme.typography.bodyMedium,
@@ -104,7 +102,7 @@ fun LoginScreen(
                 )
             }
 
-            if (!isSignupMode && !isResetMode) {
+            if (!isResetMode) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
@@ -139,7 +137,6 @@ fun LoginScreen(
                 onClick = { 
                     when {
                         isResetMode -> viewModel.resetPassword(email)
-                        isSignupMode -> viewModel.signUp(email, password)
                         else -> viewModel.signIn(email, password)
                     }
                 },
@@ -157,7 +154,6 @@ fun LoginScreen(
                     Text(
                         when {
                             isResetMode -> "Send Reset Link"
-                            isSignupMode -> "Sign Up"
                             else -> "Sign In"
                         }
                     )
@@ -171,7 +167,7 @@ fun LoginScreen(
                     if (isResetMode) {
                         isResetMode = false
                     } else {
-                        isSignupMode = !isSignupMode 
+                        onNavigateToSignup()
                     }
                 },
                 enabled = uiState !is LoginUiState.Loading
@@ -179,7 +175,6 @@ fun LoginScreen(
                 Text(
                     when {
                         isResetMode -> "Back to Sign In"
-                        isSignupMode -> "Already have an account? Sign In" 
                         else -> "Don't have an account? Sign Up"
                     }
                 )

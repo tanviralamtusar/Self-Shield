@@ -32,7 +32,10 @@ object NetworkModule {
             supabaseKey = SUPABASE_KEY
         ) {
             install(Postgrest)
-            install(Auth)
+            install(Auth) {
+                scheme = "selfshield"
+                host = "auth"
+            }
             install(Realtime)
             install(Storage)
         }
