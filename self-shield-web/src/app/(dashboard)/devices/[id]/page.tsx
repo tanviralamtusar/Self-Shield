@@ -19,6 +19,7 @@ import { Switch } from '@/components/ui/switch';
 import { Search } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
+import { cn } from '@/lib/utils';
 
 function DeviceUsageChart({ deviceId }: { deviceId: string }) {
   const { data: reports, isLoading } = useReports(deviceId, 7);
@@ -232,11 +233,15 @@ export default function DeviceDetailPage() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg border">
                   <span className="font-medium">VPN Blocker</span>
-                  <span className="text-success font-medium">Active</span>
+                  <span className={cn("font-medium", device.is_vpn_active ? "text-emerald-500" : "text-amber-500")}>
+                    {device.is_vpn_active ? 'Active' : 'Disabled'}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg border">
                   <span className="font-medium">Accessibility (In-App)</span>
-                  <span className="text-success font-medium">Active</span>
+                  <span className={cn("font-medium", device.is_accessibility_active ? "text-emerald-500" : "text-amber-500")}>
+                    {device.is_accessibility_active ? 'Active' : 'Disabled'}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg border">
                   <span className="font-medium">Device Owner Mode</span>

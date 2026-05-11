@@ -29,7 +29,9 @@ export function DeviceCard({ device, index }: { device: Device, index?: number }
     ? new Date().getTime() - new Date(device.last_seen_at).getTime() < 1000 * 60 * 5 // 5 mins
     : false;
 
-  const protectionStatus = device.is_device_owner && device.is_admin_active ? 'Full' : 'Partial';
+  const protectionStatus = (device.is_device_owner && device.is_admin_active && device.is_accessibility_active && device.is_vpn_active) 
+    ? 'Full' 
+    : 'Partial';
 
   const handleAction = async (isDelete: boolean) => {
     const actionType = isDelete ? 'delete' : 'unpair';

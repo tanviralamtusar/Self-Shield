@@ -104,7 +104,8 @@ class MainActivity : ComponentActivity() {
                             MainScreen(
                                 this@MainActivity, 
                                 deviceManager.isPaired(),
-                                onRefresh = { mainViewModel.checkConnection() }
+                                onRefresh = { mainViewModel.checkConnection() },
+                                onStatusUpdate = { acc, vpn -> mainViewModel.syncStatus(acc, vpn) }
                             )
                         }
                     }
@@ -126,9 +127,36 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(context: ComponentActivity, isPaired: Boolean, onRefresh: () -> Unit) {
+fun MainScreen(
+    context: ComponentActivity, 
+    isPaired: Boolean, 
+    onRefresh: () -> Unit,
+    onStatusUpdate: (Boolean, Boolean) -> Unit
+) {
     var isDeviceAdminEnabled by remember { mutableStateOf(checkDeviceAdmin(context)) }
     var isAccessibilityEnabled by remember { mutableStateOf(checkAccessibility(context)) }
+    
+    // Refresh status when app comes to foreground
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                isDeviceAdminEnabled = checkDeviceAdmin(context)
+                isAccessibilityEnabled = checkAccessibility(context)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    // Sync status to cloud when permissions change
+    LaunchedEffect(isDeviceAdminEnabled, isAccessibilityEnabled) {
+        if (isPaired) {
+            onStatusUpdate(isAccessibilityEnabled, true) // Assuming VPN active for now
+        }
+    }
 
     val prefs = context.getSharedPreferences("self_shield_prefs", Context.MODE_PRIVATE)
     var isChannelBlockEnabled by remember {
@@ -308,7 +336,19 @@ fun checkDeviceAdmin(context: Context): Boolean {
 }
 
 fun checkAccessibility(context: Context): Boolean {
-    val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-    val enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
-    return enabledServices.any { it.resolveInfo.serviceInfo.packageName == context.packageName }
+    val serviceId = "${context.packageName}/com.selfshield.service.accessibility.SelfShieldAccessibilityService"
+    val enabled = try {
+        Settings.Secure.getInt(context.contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
+    } catch (e: Settings.SettingNotFoundException) {
+        0
+    }
+    
+    if (enabled == 1) {
+        val settingValue = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+        return settingValue?.contains(serviceId) == true
+    }
+    return false
 }

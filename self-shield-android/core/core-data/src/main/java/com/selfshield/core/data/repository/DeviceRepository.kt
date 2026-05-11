@@ -63,7 +63,8 @@ class DeviceRepository @Inject constructor(
                     device_type = "android",
                     status = "online",
                     pairing_code = null,
-                    last_seen_at = nowIso
+                    last_seen_at = nowIso,
+                    is_admin_active = true
                 ))
 
             // 3. Clean up the placeholder if it's a different row
@@ -86,23 +87,45 @@ class DeviceRepository @Inject constructor(
         try {
             val deviceId = deviceManager.getDeviceId()
             val response = supabase.postgrest.from("devices")
-                .select(columns = Columns.raw("admin_id, status")) {
+                .select(columns = Columns.raw("admin_id, status, is_admin_active, is_accessibility_active, is_vpn_active")) {
                     filter {
                         eq("id", deviceId)
                     }
                 }.decodeSingleOrNull<DeviceStatus>()
 
-            if (response?.admin_id != null) {
+            if (response?.admin_id != null && response.is_admin_active) {
                 deviceManager.setPaired(response.admin_id)
                 Result.success(true)
             } else {
-                // If not found or admin_id is null, clear local pairing
+                // If not found, admin_id is null, or admin deactivated us
                 deviceManager.clearPairing()
                 Result.success(false)
             }
         } catch (e: Exception) {
-            // On network error, we don't clear (might be temporary)
-            // But if it's a 404 or similar from Postgrest, we should consider it unpaired
+            Result.failure(e)
+        }
+    }
+    suspend fun updateStatus(
+        isAccessibilityActive: Boolean,
+        isVpnActive: Boolean
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val deviceId = deviceManager.getDeviceId()
+            val nowIso = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").apply {
+                timeZone = java.util.TimeZone.getTimeZone("UTC")
+            }.format(java.util.Date())
+
+            supabase.postgrest.from("devices")
+                .update({
+                    set("is_accessibility_active", isAccessibilityActive)
+                    set("is_vpn_active", isVpnActive)
+                    set("last_seen_at", nowIso)
+                    set("status", "online")
+                }) {
+                    filter { eq("id", deviceId) }
+                }
+            Result.success(Unit)
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }
@@ -125,11 +148,17 @@ data class DeviceUpsert(
     val device_type: String,
     val status: String,
     val pairing_code: String?,
-    val last_seen_at: String?
+    val last_seen_at: String?,
+    val is_admin_active: Boolean,
+    val is_accessibility_active: Boolean = false,
+    val is_vpn_active: Boolean = false
 )
 
 @Serializable
 data class DeviceStatus(
     val admin_id: String?,
-    val status: String
+    val status: String,
+    val is_admin_active: Boolean,
+    val is_accessibility_active: Boolean,
+    val is_vpn_active: Boolean
 )
