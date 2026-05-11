@@ -37,6 +37,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var supabaseClient: SupabaseClient
 
+    @Inject
+    lateinit var deviceManager: com.selfshield.core.data.identity.DeviceManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         handleIntent(intent)
@@ -98,7 +101,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            MainScreen(this@MainActivity)
+                            MainScreen(this@MainActivity, deviceManager.isPaired())
                         }
                     }
                 }
@@ -119,7 +122,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(context: ComponentActivity) {
+fun MainScreen(context: ComponentActivity, isPaired: Boolean) {
     var isDeviceAdminEnabled by remember { mutableStateOf(checkDeviceAdmin(context)) }
     var isAccessibilityEnabled by remember { mutableStateOf(checkAccessibility(context)) }
 
@@ -128,16 +131,59 @@ fun MainScreen(context: ComponentActivity) {
         mutableStateOf(prefs.getBoolean("channel_block_enabled", false))
     }
 
-    // Removed auto-redirection as requested.
-    // User can now manually enable permissions using the buttons below.
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // ========== Connection Status Card ==========
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = if (isPaired) 
+                    MaterialTheme.colorScheme.primaryContainer 
+                else 
+                    MaterialTheme.colorScheme.errorContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = "Cloud Connection",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = if (isPaired) 
+                            MaterialTheme.colorScheme.onPrimaryContainer 
+                        else 
+                            MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    Text(
+                        text = if (isPaired) "Linked to Command Center" else "Not Connected",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (isPaired) 
+                            MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f) 
+                        else 
+                            MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f)
+                    )
+                }
+                Text(
+                    text = if (isPaired) "✅" else "❌",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(
             text = "Self Shield Protection", 
             style = MaterialTheme.typography.headlineMedium,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Plus, Copy, Check } from 'lucide-react';
@@ -13,11 +13,41 @@ export function PairDeviceModal() {
   const [pairingCode, setPairingCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [connected, setConnected] = useState(false);
   const supabase = createClient();
 
+  useEffect(() => {
+    if (!pairingCode || !open) return;
+
+    const channel = supabase
+      .channel('pairing-status')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'devices',
+          filter: `pairing_code=eq.${pairingCode}`
+        },
+        (payload) => {
+          if (payload.new.status === 'online') {
+            setConnected(true);
+            toast.success('Device connected successfully!');
+            // Auto-close after 3 seconds
+            setTimeout(() => setOpen(false), 3000);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [pairingCode, open, supabase]);
 
   const generateCode = async () => {
     setLoading(true);
+    setConnected(false);
     
     try {
       const { data: userData } = await supabase.auth.getUser();
@@ -54,6 +84,7 @@ export function PairDeviceModal() {
       setTimeout(() => {
         setPairingCode(null);
         setCopied(false);
+        setConnected(false);
       }, 300);
     } else {
       generateCode();
@@ -77,9 +108,11 @@ export function PairDeviceModal() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Pair a New Device</DialogTitle>
+          <DialogTitle>{connected ? 'Device Linked!' : 'Pair a New Device'}</DialogTitle>
           <DialogDescription>
-            Enter this 6-digit code in the Self-Shield Android app to link it to your account.
+            {connected 
+              ? 'The device has been successfully connected to your command center.' 
+              : 'Enter this 6-digit code in the Self-Shield Android app to link it to your account.'}
           </DialogDescription>
         </DialogHeader>
         
@@ -88,6 +121,13 @@ export function PairDeviceModal() {
             <div className="flex flex-col items-center space-y-4">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
               <p className="text-sm text-muted-foreground">Generating secure code...</p>
+            </div>
+          ) : connected ? (
+            <div className="flex flex-col items-center space-y-4 animate-in zoom-in duration-300">
+              <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center">
+                <Check className="w-8 h-8 text-emerald-500" />
+              </div>
+              <p className="text-lg font-semibold text-foreground">Connection Established</p>
             </div>
           ) : pairingCode ? (
             <>
