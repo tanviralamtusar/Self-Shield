@@ -1,47 +1,62 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { apiSuccess, apiError } from '@/lib/api-helpers';
+import { apiSuccess, apiError, requireAuth, isAuthError } from '@/lib/api-helpers';
 
 // POST /api/devices/claim — Claim a pending device with pairing code
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { pairing_code, fcm_token, device_name, os_version, model } = body;
+    // 1. Require authentication from the child device calling this
+    const authResult = await requireAuth(supabaseAdmin, request);
+    if (isAuthError(authResult)) return authResult;
+    const { userId: ownerId } = authResult;
 
-    if (!pairing_code) {
-      return apiError('VALIDATION_ERROR', 'pairing_code is required', 422);
+    const body = await request.json();
+    const { pairing_code, device_id, fcm_token, device_name, os_version, model } = body;
+
+    if (!pairing_code || !device_id) {
+      return apiError('VALIDATION_ERROR', 'pairing_code and device_id are required', 422);
     }
 
-    // Find the device with this pairing code
-    const { data: device, error } = await supabaseAdmin
+    // 2. Find the placeholder device entry with this pairing code
+    const { data: placeholder, error: findErr } = await supabaseAdmin
       .from('devices')
-      .select('*')
+      .select('id, admin_id')
       .eq('pairing_code', pairing_code)
       .eq('status', 'pending')
       .single();
 
-    if (error || !device) {
+    if (findErr || !placeholder) {
       return apiError('INVALID_CODE', 'Invalid or expired pairing code', 400);
     }
 
-    // Update the device with FCM token and info
+    // 3. Link the actual device (identified by device_id) to the admin and owner
     const { data: updated, error: updateErr } = await supabaseAdmin
       .from('devices')
-      .update({
+      .upsert({
+        id: device_id,
+        admin_id: placeholder.admin_id,
+        owner_id: ownerId,
         fcm_token: fcm_token,
-        device_name: device_name || device.device_name,
-        os_version: os_version || device.os_version,
-        model: model || device.model,
+        device_name: device_name || 'Android Device',
+        os_version: os_version,
+        model: model,
         status: 'online',
-        pairing_code: null, // Clear the code after successful claim
+        pairing_code: null, // Ensure this row doesn't have a pairing code
         last_seen_at: new Date().toISOString()
-      })
-      .eq('id', device.id)
+      }, { onConflict: 'id' })
       .select()
       .single();
 
     if (updateErr) {
-      console.error('Claim Error:', updateErr);
-      return apiError('DB_ERROR', 'Failed to claim device', 500);
+      console.error('Claim Update Error:', updateErr);
+      return apiError('DB_ERROR', 'Failed to link device to account', 500);
+    }
+
+    // 4. Clean up the placeholder row if it's different from the actual device row
+    if (placeholder.id !== device_id) {
+      await supabaseAdmin
+        .from('devices')
+        .delete()
+        .eq('id', placeholder.id);
     }
 
     return apiSuccess({

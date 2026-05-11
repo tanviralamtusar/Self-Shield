@@ -19,6 +19,7 @@ data class RegisterResponse(
 @Serializable
 data class ClaimRequest(
     val pairing_code: String,
+    val device_id: String,
     val fcm_token: String?,
     val device_name: String,
     val os_version: String,

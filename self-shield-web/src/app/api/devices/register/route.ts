@@ -12,10 +12,7 @@ export async function POST(request: Request) {
       return apiError('VALIDATION_ERROR', 'device_id is required', 422);
     }
 
-    // Generate random 6 digit code
-    const pairing_code = Math.floor(100000 + Math.random() * 900000).toString();
-
-    // Upsert device entry
+    // Upsert device entry (without pairing code)
     const { data, error } = await supabaseAdmin
       .from('devices')
       .upsert({
@@ -23,7 +20,6 @@ export async function POST(request: Request) {
         device_name: device_name || 'New Android Device',
         os_version: os_version || 'Android',
         model: model || 'Unknown',
-        pairing_code: pairing_code,
         status: 'pending'
       }, { onConflict: 'id' })
       .select()
@@ -35,7 +31,6 @@ export async function POST(request: Request) {
     }
 
     return apiSuccess({
-      pairing_code: data.pairing_code,
       status: data.status
     }, 201);
   } catch (err: unknown) {

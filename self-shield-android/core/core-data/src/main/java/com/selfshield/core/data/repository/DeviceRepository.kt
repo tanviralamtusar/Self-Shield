@@ -39,9 +39,11 @@ class DeviceRepository @Inject constructor(
 
     suspend fun claimDevice(pairingCode: String, deviceName: String, model: String, osVersion: String): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
+            val deviceId = deviceManager.getDeviceId()
             val fcmToken = deviceManager.getFcmToken()
             val request = com.selfshield.core.network.model.ClaimRequest(
                 pairing_code = pairingCode,
+                device_id = deviceId,
                 fcm_token = fcmToken,
                 device_name = deviceName,
                 os_version = osVersion,
