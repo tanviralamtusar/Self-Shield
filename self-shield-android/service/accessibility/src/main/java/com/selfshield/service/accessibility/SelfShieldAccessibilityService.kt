@@ -4,12 +4,26 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import com.selfshield.core.data.repository.UsageEventRepository
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Self Shield Accessibility Service
  * Optimized for ultra-fast (0.01s) surgical WhatsApp channel blocking.
  */
+@AndroidEntryPoint
 class SelfShieldAccessibilityService : AccessibilityService() {
+
+    @Inject
+    lateinit var usageEventRepository: UsageEventRepository
+
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     companion object {
         const val PREF_NAME = "self_shield_prefs"
@@ -48,8 +62,43 @@ class SelfShieldAccessibilityService : AccessibilityService() {
 
     private var lastActivityName: String? = null
 
+    private var lastAppPackage: String? = null
+    private var lastUrl: String? = null
+    private val appStartTimes = mutableMapOf<String, Long>()
+
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         val pkg = event.packageName?.toString() ?: return
+
+        // 1. Track App Open/Close
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            if (pkg != lastAppPackage && pkg != "android") {
+                val now = System.currentTimeMillis()
+                
+                // Close previous app
+                lastAppPackage?.let { lastPkg ->
+                    val startTime = appStartTimes[lastPkg]
+                    val duration = if (startTime != null) ((now - startTime) / 1000).toInt() else null
+                    logEvent("app_close", lastPkg, duration)
+                    appStartTimes.remove(lastPkg)
+                }
+
+                // Open new app
+                lastAppPackage = pkg
+                appStartTimes[pkg] = now
+                logEvent("app_open", pkg)
+            }
+        }
+
+        // 2. Track Browser URL
+        if (isBrowser(pkg)) {
+            val url = findBrowserUrl(rootInActiveWindow)
+            if (url != null && url != lastUrl) {
+                lastUrl = url
+                logEvent("site_visit", url)
+            }
+        }
+
+        // WhatsApp Blocking Logic
         if (pkg != PKG_WHATSAPP && pkg != PKG_WHATSAPP_B) return
 
         val prefs = applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -93,6 +142,65 @@ class SelfShieldAccessibilityService : AccessibilityService() {
 
         // NORMAL PATH: Content checking (optimized)
         handleWhatsApp()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
+    }
+
+    private fun logEvent(type: String, target: String, durationSec: Int? = null) {
+        android.util.Log.d("SelfShieldLog", "Logging event: $type on $target")
+        serviceScope.launch {
+            try {
+                usageEventRepository.logEvent(type, target, durationSec)
+                android.util.Log.d("SelfShieldLog", "Event saved to local DB: $type")
+            } catch (e: Exception) {
+                android.util.Log.e("SelfShieldLog", "Error logging event: ${e.message}")
+            }
+        }
+    }
+
+    private fun isBrowser(pkg: String): Boolean {
+        return pkg == "com.android.chrome" || 
+               pkg == "com.microsoft.emmx" || 
+               pkg == "com.sec.android.app.sbrowser" || 
+               pkg == "org.mozilla.firefox" || 
+               pkg == "com.duckduckgo.mobile.android" ||
+               pkg == "com.opera.browser"
+    }
+
+    private fun findBrowserUrl(root: AccessibilityNodeInfo?): String? {
+        if (root == null) return null
+        
+        // This is a common heuristic for browser address bars
+        // We look for nodes that are likely to contain the URL
+        val nodes = root.findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar") ?:
+                    root.findAccessibilityNodeInfosByViewId("com.microsoft.emmx:id/url_bar") ?:
+                    root.findAccessibilityNodeInfosByViewId("com.sec.android.app.sbrowser:id/location_bar_edit_text")
+        
+        if (!nodes.isNullOrEmpty()) {
+            return nodes[0].text?.toString()
+        }
+
+        // Fallback: search recursively for something that looks like a URL
+        return findUrlRecursively(root)
+    }
+
+    private fun findUrlRecursively(node: AccessibilityNodeInfo): String? {
+        if (node.className?.toString()?.contains("EditText", ignoreCase = true) == true) {
+            val text = node.text?.toString()
+            if (text != null && (text.startsWith("http") || text.contains("."))) {
+                return text
+            }
+        }
+        
+        for (i in 0 until node.childCount) {
+            val child = node.getChild(i) ?: continue
+            val result = findUrlRecursively(child)
+            if (result != null) return result
+        }
+        return null
     }
 
     private fun handleWhatsApp() {

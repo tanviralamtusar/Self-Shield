@@ -12,6 +12,14 @@ class SelfShieldApplication : Application(), androidx.work.Configuration.Provide
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
+    @Inject
+    lateinit var syncManager: com.selfshield.core.data.sync.SyncManager
+
+    override fun onCreate() {
+        super.onCreate()
+        syncManager.schedulePeriodicSync()
+    }
+
     override val workManagerConfiguration: androidx.work.Configuration
         get() = androidx.work.Configuration.Builder()
             .setWorkerFactory(workerFactory)
